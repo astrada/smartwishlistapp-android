@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Smart Wish List</string>
+    <string name="action_settings">Settings</string>
+    <string name="qr_code_button">Scan QR code</string>
+
+    <string name="title_activity_notification">Price alerts</string>
+
+    <string name="title_activity_product_info">Product info</string>
+    <string name="title_activity_web_site">WebSiteActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+</resources>
