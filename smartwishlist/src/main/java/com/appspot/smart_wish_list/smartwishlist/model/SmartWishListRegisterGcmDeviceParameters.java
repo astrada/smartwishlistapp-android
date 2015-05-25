@@ -19,7 +19,7 @@
 package com.appspot.smart_wish_list.smartwishlist.model;
 
 /**
- * Model definition for SmartWishListFeedbackData.
+ * Model definition for SmartWishListRegisterGcmDeviceParameters.
  *
  * <p> This is the Java data model class that specifies how to parse/serialize into the JSON that is
  * transmitted over HTTP when working with the smartwishlist. For a detailed explanation see:
@@ -29,58 +29,37 @@ package com.appspot.smart_wish_list.smartwishlist.model;
  * @author Google, Inc.
  */
 @SuppressWarnings("javadoc")
-public final class SmartWishListFeedbackData extends com.google.api.client.json.GenericJson {
+public final class SmartWishListRegisterGcmDeviceParameters extends com.google.api.client.json.GenericJson {
 
   /**
    * The value may be {@code null}.
    */
-  @com.google.api.client.util.Key
-  private java.lang.String description;
-
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key
-  private java.lang.Boolean followup;
+  @com.google.api.client.util.Key("registration_id")
+  private java.lang.String registrationId;
 
   /**
    * @return value or {@code null} for none
    */
-  public java.lang.String getDescription() {
-    return description;
+  public java.lang.String getRegistrationId() {
+    return registrationId;
   }
 
   /**
-   * @param description description or {@code null} for none
+   * @param registrationId registrationId or {@code null} for none
    */
-  public SmartWishListFeedbackData setDescription(java.lang.String description) {
-    this.description = description;
-    return this;
-  }
-
-  /**
-   * @return value or {@code null} for none
-   */
-  public java.lang.Boolean getFollowup() {
-    return followup;
-  }
-
-  /**
-   * @param followup followup or {@code null} for none
-   */
-  public SmartWishListFeedbackData setFollowup(java.lang.Boolean followup) {
-    this.followup = followup;
+  public SmartWishListRegisterGcmDeviceParameters setRegistrationId(java.lang.String registrationId) {
+    this.registrationId = registrationId;
     return this;
   }
 
   @Override
-  public SmartWishListFeedbackData set(String fieldName, Object value) {
-    return (SmartWishListFeedbackData) super.set(fieldName, value);
+  public SmartWishListRegisterGcmDeviceParameters set(String fieldName, Object value) {
+    return (SmartWishListRegisterGcmDeviceParameters) super.set(fieldName, value);
   }
 
   @Override
-  public SmartWishListFeedbackData clone() {
-    return (SmartWishListFeedbackData) super.clone();
+  public SmartWishListRegisterGcmDeviceParameters clone() {
+    return (SmartWishListRegisterGcmDeviceParameters) super.clone();
   }
 
 }

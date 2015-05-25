@@ -8,18 +8,13 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListNotificationTriggerData;
-import com.google.api.client.json.JsonParser;
-
-import java.io.IOException;
 
 
 public class NotificationItemFragment extends ListFragment

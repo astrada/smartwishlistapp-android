@@ -1,12 +1,9 @@
 package net.smartwishlist.smartwishlistapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,9 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListNotificationTriggerData;
 
@@ -110,7 +105,7 @@ public class ProductInfoActivity extends AppCompatActivity {
 
     private class DownloadLeftDrawableTask extends DownloadImageTask {
 
-        private TextView textView;
+        private final TextView textView;
 
         public DownloadLeftDrawableTask(TextView textView) {
             super(null);

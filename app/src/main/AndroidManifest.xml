@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.smartwishlist.smartwishlistapp" >
+    package="net.smartwishlist.smartwishlistapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <permission android:name="net.smartwishlist.smartwishlistapp.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="net.smartwishlist.smartwishlistapp.permission.C2D_MESSAGE" />
 
     <uses-feature android:name="android.hardware.camera2" />
 
@@ -11,7 +17,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -21,16 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <service
-            android:name=".DataPullService"
-            android:exported="false" >
-        </service>
-
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="b9f84dec479e222214d1e5f429ef14c2474fad5f" />
-
         <activity
             android:name=".NotificationActivity"
             android:label="@string/title_activity_notification" >
@@ -43,6 +40,25 @@
             android:name=".WebSiteActivity"
             android:label="@string/title_activity_web_site" >
         </activity>
+
+        <receiver
+            android:name=".GcmBroadcastReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="net.smartwishlist.smartwishlistapp" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".DataPullService"
+            android:exported="false" >
+        </service>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="b9f84dec479e222214d1e5f429ef14c2474fad5f" />
     </application>
 
 </manifest>

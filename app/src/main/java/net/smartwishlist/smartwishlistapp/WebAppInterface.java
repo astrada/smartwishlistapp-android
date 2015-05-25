@@ -11,7 +11,7 @@ public class WebAppInterface {
     private static final String DEFAULT_REGION_KEY = "defaultRegion";
     private static final String HAS_ACCOUNT_KEY = "hasAccount";
 
-    private AppPreferences appPreferences;
+    private final AppPreferences appPreferences;
 
     public WebAppInterface(Context context) {
         appPreferences = new AppPreferences(context);

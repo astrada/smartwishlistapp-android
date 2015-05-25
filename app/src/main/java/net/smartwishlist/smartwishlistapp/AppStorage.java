@@ -131,7 +131,7 @@ public class AppStorage {
     public static class LoadTriggerDataTask
             extends AsyncTask<Long, Void, SmartWishListNotificationTriggerData> {
 
-        private Context context;
+        private final Context context;
 
         public LoadTriggerDataTask(Context context) {
             this.context = context;

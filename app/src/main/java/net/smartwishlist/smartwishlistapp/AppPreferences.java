@@ -14,6 +14,8 @@ public class AppPreferences {
     private static final String LAST_SERVER_POLL_PROP = "LastServerPoll";
     private static final String PENDING_MESSAGES_PROP = "PendingMessages";
     private static final String NOTIFICATION_ENABLED_PROP = "NotificationEnabled";
+    private static final String GCM_REGISTRATION_ID_PROP = "GcmRegistraionId";
+    private static final String APPLICATION_VERSION_PROP = "ApplicationVersion";
 
     private final SharedPreferences sharedPreferences;
     private SharedPreferences.Editor currentEditor;
@@ -78,13 +80,29 @@ public class AppPreferences {
         setBooleanPreference(NOTIFICATION_ENABLED_PROP, flag);
     }
 
+    public String getGcmRegistrationId() {
+        return getStringPreference(GCM_REGISTRATION_ID_PROP);
+    }
+
+    public void setGcmRegistrationId(String gcmRegistrationId) {
+        setStringPreference(GCM_REGISTRATION_ID_PROP, gcmRegistrationId);
+    }
+
+    public int getApplicationVersion() {
+        return getIntPreference(APPLICATION_VERSION_PROP);
+    }
+
+    public void setApplicationVersion(int applicationVersion) {
+        setIntPreference(APPLICATION_VERSION_PROP, applicationVersion);
+    }
+
     @SuppressLint("CommitPrefEdits")
     public void beginEdit() {
         currentEditor = sharedPreferences.edit();
     }
 
-    public void commit() {
-        currentEditor.commit();
+    public void apply() {
+        currentEditor.apply();
         currentEditor = null;
     }
 
@@ -96,7 +114,7 @@ public class AppPreferences {
         if (currentEditor == null) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(key, value);
-            editor.commit();
+            editor.apply();
         } else {
             currentEditor.putString(key, value);
         }
@@ -110,7 +128,7 @@ public class AppPreferences {
         if (currentEditor == null) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putLong(key, Double.doubleToRawLongBits(value));
-            editor.commit();
+            editor.apply();
         } else {
             currentEditor.putLong(key, Double.doubleToRawLongBits(value));
         }
@@ -124,7 +142,7 @@ public class AppPreferences {
         if (currentEditor == null) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt(key, value);
-            editor.commit();
+            editor.apply();
         } else {
             currentEditor.putInt(key, value);
         }
@@ -138,7 +156,7 @@ public class AppPreferences {
         if (currentEditor == null) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(key, value);
-            editor.commit();
+            editor.apply();
         } else {
             currentEditor.putBoolean(key, value);
         }

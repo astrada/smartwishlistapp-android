@@ -1,5 +1,9 @@
 package net.smartwishlist.smartwishlistapp;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.http.HttpTransport;
@@ -21,8 +25,6 @@ public class AppConstants {
 
     public static final String APP_NAME = "SmartWishListApp";
 
-    public static final String VERSION = "0.1";
-
     public static final String LOG_TAG = APP_NAME;
 
     public static final String WEB_SITE_URL = "https://www.smartwishlist.net/";
@@ -32,14 +34,48 @@ public class AppConstants {
     /**
      * Retrieves a Smartwishlist api service handle to access the API.
      */
-    public static Smartwishlist getApiServiceHandle() {
+    public static Smartwishlist getApiServiceHandle(Context context) {
         Smartwishlist.Builder smartwishlist = new Smartwishlist.Builder(AppConstants.HTTP_TRANSPORT,
                 AppConstants.JSON_FACTORY, null);
 
         if (BuildConfig.DEBUG) {
             smartwishlist.setRootUrl(AppSettings.LOCAL_API_URL);
         }
-        smartwishlist.setApplicationName(APP_NAME + " v" + VERSION);
+        String versionName = Version.getAppVersionName(context);
+        smartwishlist.setApplicationName(APP_NAME + " v" + versionName);
         return smartwishlist.build();
+    }
+
+    public static class Version {
+
+        private static String APP_VERSION_NAME = null;
+        private static int APP_VERSION_CODE = 0;
+
+        private Version() {}
+
+        public static String getAppVersionName(Context context) {
+            if (APP_VERSION_NAME == null) {
+                PackageInfo packageInfo = getPackageInfo(context);
+                APP_VERSION_NAME = packageInfo.versionName;
+            }
+            return APP_VERSION_NAME;
+        }
+
+        public static int getAppVersion(Context context) {
+            if (APP_VERSION_CODE == 0) {
+                PackageInfo packageInfo = getPackageInfo(context);
+                APP_VERSION_CODE = packageInfo.versionCode;
+            }
+            return APP_VERSION_CODE;
+        }
+
+        private static PackageInfo getPackageInfo(Context context) {
+            try {
+                return context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                // should never happen
+                throw new RuntimeException("Could not get package name: " + e);
+            }
+        }
     }
 }
