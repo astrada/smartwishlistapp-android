@@ -15,6 +15,8 @@ import android.webkit.WebViewClient;
 
 public class WebSiteActivity extends AppCompatActivity {
 
+    public final static String TARGET_PAGE_EXTRA = "TargetPage";
+
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +30,17 @@ public class WebSiteActivity extends AppCompatActivity {
         webView.addJavascriptInterface(new WebAppInterface(this),
                 AppConstants.JAVASCRIPT_INTERFACE);
         webView.setWebViewClient(new SmartWishListWebViewClient());
+        String url;
         if (BuildConfig.DEBUG) {
-            webView.loadUrl(AppSettings.LOCAL_WEB_SITE_URL);
+            url = BuildConfig.LOCAL_WEB_SITE_URL;
         } else {
-            webView.loadUrl(AppConstants.WEB_SITE_URL);
+            url = AppConstants.WEB_SITE_URL;
         }
+        String page = getIntent().getStringExtra(TARGET_PAGE_EXTRA);
+        if (page != null) {
+            url += page;
+        }
+        webView.loadUrl(url);
     }
 
     @Override
@@ -72,7 +80,7 @@ public class WebSiteActivity extends AppCompatActivity {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            if (BuildConfig.DEBUG && url.startsWith(AppSettings.LOCAL_WEB_SITE_URL)) {
+            if (BuildConfig.DEBUG && url.startsWith(BuildConfig.LOCAL_WEB_SITE_URL)) {
                 return false;
             } else if (url.startsWith(AppConstants.WEB_SITE_URL)) {
                 return false;

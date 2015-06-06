@@ -39,6 +39,10 @@ public class WebAppInterface {
     public void setItemInStorage(String key, String value) {
         switch (key) {
             case CLIENT_ID_KEY:
+                if (value != null && !value.equals(appPreferences.getClientId())) {
+                    // Re-enable notifications when Client ID changes
+                    appPreferences.setNotificationEnabled(true);
+                }
                 appPreferences.setClientId(value);
             case TOKEN_KEY:
                 appPreferences.setToken(value);
@@ -55,9 +59,6 @@ public class WebAppInterface {
     @JavascriptInterface
     public void clearItemsInStorage() {
         Log.d(AppConstants.LOG_TAG, "clearItemsInStorage");
-        appPreferences.setClientId(null);
-        appPreferences.setToken(null);
-        appPreferences.setDefaultRegion(null);
-        appPreferences.setHasAccount(null);
+        appPreferences.resetAll();
     }
 }

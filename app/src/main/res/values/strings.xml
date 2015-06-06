@@ -7,4 +7,7 @@
 
     <string name="title_activity_product_info">Product info</string>
     <string name="title_activity_web_site">WebSiteActivity</string>
+    <string name="title_activity_setup">SetupActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>

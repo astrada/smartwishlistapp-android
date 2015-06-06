@@ -22,20 +22,14 @@ import javax.annotation.Nullable;
 
 public class AppStorage {
 
-    private final double ONE_SECOND_IN_MILLISECONDS = 1000.0;
-
     private final DbOpenHelper dbOpenHelper;
-    private final double yesterdayTimestamp;
 
     public AppStorage(Context context) {
         dbOpenHelper = new DbOpenHelper(context);
-        Calendar yesterday = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        yesterday.add(Calendar.DATE, -1);
-        yesterdayTimestamp = yesterday.getTime().getTime() / ONE_SECOND_IN_MILLISECONDS;
     }
 
     public void insertNotifications(List<SmartWishListNotificationTriggerData> triggers) {
-        Double timestamp = System.currentTimeMillis() / ONE_SECOND_IN_MILLISECONDS;
+        Double timestamp = ApiSignature.getTimestamp();
         SQLiteDatabase sqLiteDatabase = dbOpenHelper.getWritableDatabase();
         sqLiteDatabase.beginTransaction();
         try {
@@ -62,12 +56,12 @@ public class AppStorage {
         }
     }
 
-    public Cursor queryAllCurrentNotifications() {
+    public Cursor queryAllNewNotifications(double timestamp) {
         SQLiteDatabase sqLiteDatabase = dbOpenHelper.getReadableDatabase();
         return sqLiteDatabase.query(NotificationContract.TABLE_NAME,
                 new String[]{NotificationContract._ID, NotificationContract.COLUMN_NAME_JSON},
-                NotificationContract.COLUMN_NAME_TIMESTAMP + " > ?",
-                new String[]{Double.toString(yesterdayTimestamp)},
+                NotificationContract.COLUMN_NAME_TIMESTAMP + " >= ?",
+                new String[]{Double.toString(timestamp)},
                 null, null, null);
     }
 
@@ -87,13 +81,13 @@ public class AppStorage {
         return null;
     }
 
-    public void deleteAllPastNotifications() {
+    public void deleteAllOldNotifications(double timestamp) {
         SQLiteDatabase sqLiteDatabase = dbOpenHelper.getWritableDatabase();
         try {
             sqLiteDatabase.beginTransaction();
             sqLiteDatabase.delete(NotificationContract.TABLE_NAME,
-                    NotificationContract.COLUMN_NAME_TIMESTAMP + " <= ?",
-                    new String[]{Double.toString(yesterdayTimestamp)});
+                    NotificationContract.COLUMN_NAME_TIMESTAMP + " < ?",
+                    new String[]{Double.toString(timestamp)});
             sqLiteDatabase.setTransactionSuccessful();
         } finally {
             sqLiteDatabase.endTransaction();
@@ -117,14 +111,17 @@ public class AppStorage {
 
     public static class NotificationLoader extends CursorLoader {
 
-        public NotificationLoader(Context context) {
+        private final double timestamp;
+
+        public NotificationLoader(Context context, double timestamp) {
             super(context);
+            this.timestamp = timestamp;
         }
 
         @Override
         public Cursor loadInBackground() {
             AppStorage appStorage = new AppStorage(getContext());
-            return appStorage.queryAllCurrentNotifications();
+            return appStorage.queryAllNewNotifications(timestamp);
         }
     }
 
@@ -160,8 +157,8 @@ public class AppStorage {
                         NotificationContract.COLUMN_NAME_PRODUCT_ID + " UNIQUE, " +
                         NotificationContract.COLUMN_NAME_JSON + " TEXT," +
                         NotificationContract.COLUMN_NAME_TIMESTAMP + " FLOAT);" +
-                "CREATE INDEX notification_timestamp ON " +
-                        NotificationContract.TABLE_NAME + " (timestamp);";
+                "CREATE INDEX notification_timestamp ON " + NotificationContract.TABLE_NAME +
+                        " (" + NotificationContract.COLUMN_NAME_TIMESTAMP + ");";
         private static final String SQL_DROP_SCHEMA =
                 "DROP TABLE IF EXISTS " + NotificationContract.TABLE_NAME + ";" +
                 "DROP INDEX IF EXISTS notification_timestamp;";
@@ -180,6 +177,15 @@ public class AppStorage {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            recreateSchema(db, newVersion);
+        }
+
+        @Override
+        public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            recreateSchema(db, newVersion);
+        }
+
+        private void recreateSchema(SQLiteDatabase db, int newVersion) {
             if (newVersion == DATABASE_VERSION) {
                 db.beginTransaction();
                 db.execSQL(SQL_DROP_SCHEMA);
@@ -187,11 +193,6 @@ public class AppStorage {
                 db.setTransactionSuccessful();
                 db.endTransaction();
             }
-        }
-
-        @Override
-        public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            onUpgrade(db, oldVersion, newVersion);
         }
     }
 }

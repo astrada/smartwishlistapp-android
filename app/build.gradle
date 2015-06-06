@@ -10,6 +10,16 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+// Read local properties from ~/.gradle/gradle.properties
+def LOCAL_API_URL = '"' + LocalApiUrlProp + '"' ?: '"Define local API URL"'
+def LOCAL_WEB_SITE_URL = '"' + LocalWebSiteUrlProp + '"' ?: '"Define local web site URL"'
+def DEBUG_CLIENT_ID = '"' + DebugClientIdProp + '"' ?: '"Define debug client ID"'
+def DEBUG_TOKEN = '"' + DebugTokenProp + '"' ?: '"Define debug token"'
+def DEBUG_DEFAULT_REGION = '"' + DebugDefaultRegionProp + '"' ?: '"Define debug default region"'
+def DEBUG_HAS_ACCOUNT = '"' + DebugHasAccountProp + '"' ?: '"Define debug has account flag"'
+def DEBUG_NOTIFICATION_ENABLED = DebugNotificationsEnabledProp ?: 'false'
+def GCM_SENDER_ID = '"' + GcmSenderIdProp + '"' ?: '"Define GCM sender ID"'
+
 repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
@@ -25,10 +35,19 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+
+        buildConfigField 'String', 'LOCAL_API_URL', LOCAL_API_URL
+        buildConfigField 'String', 'LOCAL_WEB_SITE_URL', LOCAL_WEB_SITE_URL
+        buildConfigField 'String', 'DEBUG_CLIENT_ID', DEBUG_CLIENT_ID
+        buildConfigField 'String', 'DEBUG_TOKEN', DEBUG_TOKEN
+        buildConfigField 'String', 'DEBUG_DEFAULT_REGION', DEBUG_DEFAULT_REGION
+        buildConfigField 'String', 'DEBUG_HAS_ACCOUNT', DEBUG_HAS_ACCOUNT
+        buildConfigField 'Boolean', 'DEBUG_NOTIFICATION_ENABLED', DEBUG_NOTIFICATION_ENABLED
+        buildConfigField 'String', 'GCM_SENDER_ID', GCM_SENDER_ID
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -37,8 +56,8 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile 'com.android.support:appcompat-v7:22.1.1'
-    compile 'com.android.support:support-v4:22.1.1'
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:support-v4:22.2.0'
 
     compile project(':smartwishlist')
 
@@ -52,7 +71,7 @@ dependencies {
         exclude(group: 'com.google.android', module: 'android')
     }
 
-    compile "com.google.android.gms:play-services:7.0.0"
+    compile "com.google.android.gms:play-services-gcm:7.5.0"
 
     compile('com.crashlytics.sdk.android:crashlytics:2.2.3@aar') {
         transitive = true;

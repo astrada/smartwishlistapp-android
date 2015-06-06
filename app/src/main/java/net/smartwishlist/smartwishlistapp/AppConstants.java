@@ -27,24 +27,13 @@ public class AppConstants {
 
     public static final String LOG_TAG = APP_NAME;
 
-    public static final String WEB_SITE_URL = "https://www.smartwishlist.net/";
+    public static final String WEB_SITE_URL = "https://www.smartwishlist.net";
+
+    public static final String MY_WISH_LISTS_PAGE = "/mywishlists";
 
     public static final String JAVASCRIPT_INTERFACE = "AndroidAppJsInterface";
 
-    /**
-     * Retrieves a Smartwishlist api service handle to access the API.
-     */
-    public static Smartwishlist getApiServiceHandle(Context context) {
-        Smartwishlist.Builder smartwishlist = new Smartwishlist.Builder(AppConstants.HTTP_TRANSPORT,
-                AppConstants.JSON_FACTORY, null);
-
-        if (BuildConfig.DEBUG) {
-            smartwishlist.setRootUrl(AppSettings.LOCAL_API_URL);
-        }
-        String versionName = Version.getAppVersionName(context);
-        smartwishlist.setApplicationName(APP_NAME + " v" + versionName);
-        return smartwishlist.build();
-    }
+    public static final String CLIENT_ID_TAG = "ClientId";
 
     public static class Version {
 

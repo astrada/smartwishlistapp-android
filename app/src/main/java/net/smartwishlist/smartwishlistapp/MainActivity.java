@@ -1,17 +1,16 @@
 package net.smartwishlist.smartwishlistapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
+import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity {
-
-    private static final int CUSTOM_REQUEST_QR_SCANNER = 0;
 
     private AppInitialization appInitialization;
 
@@ -21,14 +20,20 @@ public class MainActivity extends AppCompatActivity {
 
         appInitialization = new AppInitialization(this);
         appInitialization.initializeApp();
+        if (appInitialization.needSetup()) {
+            Intent intent = new Intent(this, SetupActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         setContentView(R.layout.activity_main);
+        initializeInterface();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        appInitialization.getGcmInitialization().checkPlayServices();
+    private void initializeInterface() {
+        boolean enabled = appInitialization.getPreferences().getNotificationEnabled();
+        ToggleButton toggleButton = (ToggleButton) findViewById(R.id.notificationToggleButton);
+        toggleButton.setChecked(enabled);
     }
 
     @Override
@@ -53,31 +58,33 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onClickQrCode(View view) {
-        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-        intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-        startActivityForResult(intent, CUSTOM_REQUEST_QR_SCANNER);
+    public void onClickNotificationSwitch(View view) {
+        boolean isOn = ((ToggleButton) view).isChecked();
+        appInitialization.toggleNotifications(isOn);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == CUSTOM_REQUEST_QR_SCANNER) {
-            if (resultCode == RESULT_OK) {
-                appInitialization.storeStateFromQrCode(intent);
-            } else {
-                // TODO
-                Log.d(AppConstants.LOG_TAG, "QR code not detected");
-            }
-        }
-    }
-
-    public void onClickStartService(View view) {
-        Intent serviceIntent = new Intent(this, DataPullService.class);
-        startService(serviceIntent);
-    }
-
-    public void onClickStartSite(View view) {
+    public void onClickShowWishLists(View view) {
         Intent intent = new Intent(this, WebSiteActivity.class);
+        intent.putExtra(WebSiteActivity.TARGET_PAGE_EXTRA, AppConstants.MY_WISH_LISTS_PAGE);
         startActivity(intent);
+    }
+
+    public void onClickReset(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // TODO
+        builder.setMessage("Are you sure?")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        appInitialization.getPreferences().resetAll();
+                        Intent intent = new Intent(MainActivity.this, SetupActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        builder.show();
     }
 }

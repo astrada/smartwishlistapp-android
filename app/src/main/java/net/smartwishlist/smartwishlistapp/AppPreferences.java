@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.crashlytics.android.Crashlytics;
+
 public class AppPreferences {
 
     private static final String PREFS_NAME = AppConstants.APP_NAMESPACE + ".prefs";
@@ -12,10 +14,10 @@ public class AppPreferences {
     private static final String DEFAULT_REGION_PROP = "DefaultRegion";
     private static final String HAS_ACCOUNT_PROP = "HasAccount";
     private static final String LAST_SERVER_POLL_PROP = "LastServerPoll";
+    private static final String LAST_VIEWED_NOTIFICATIONS_PROP = "LastViewedNotifications";
     private static final String PENDING_MESSAGES_PROP = "PendingMessages";
     private static final String NOTIFICATION_ENABLED_PROP = "NotificationEnabled";
-    private static final String GCM_REGISTRATION_ID_PROP = "GcmRegistraionId";
-    private static final String APPLICATION_VERSION_PROP = "ApplicationVersion";
+    private static final String GCM_TOKEN_SENT_PROP = "GcmTokenSent";
 
     private final SharedPreferences sharedPreferences;
     private SharedPreferences.Editor currentEditor;
@@ -30,6 +32,9 @@ public class AppPreferences {
 
     public void setClientId(String clientId) {
         setStringPreference(CLIENT_ID_PROP, clientId);
+        if (!BuildConfig.DEBUG) {
+            Crashlytics.setString(AppConstants.CLIENT_ID_TAG, BuildConfig.DEBUG_CLIENT_ID);
+        }
     }
 
     public String getToken() {
@@ -64,6 +69,14 @@ public class AppPreferences {
         setDoublePreference(LAST_SERVER_POLL_PROP, timestamp);
     }
 
+    public double getLastViewedNotifications() {
+        return getDoublePreference(LAST_VIEWED_NOTIFICATIONS_PROP);
+    }
+
+    public void setLastViewedNotifications(double timestamp) {
+        setDoublePreference(LAST_VIEWED_NOTIFICATIONS_PROP, timestamp);
+    }
+
     public int getPendingMessages() {
         return getIntPreference(PENDING_MESSAGES_PROP);
     }
@@ -80,20 +93,12 @@ public class AppPreferences {
         setBooleanPreference(NOTIFICATION_ENABLED_PROP, flag);
     }
 
-    public String getGcmRegistrationId() {
-        return getStringPreference(GCM_REGISTRATION_ID_PROP);
+    public Boolean isGcmTokenSent() {
+        return getBooleanPreference(GCM_TOKEN_SENT_PROP);
     }
 
-    public void setGcmRegistrationId(String gcmRegistrationId) {
-        setStringPreference(GCM_REGISTRATION_ID_PROP, gcmRegistrationId);
-    }
-
-    public int getApplicationVersion() {
-        return getIntPreference(APPLICATION_VERSION_PROP);
-    }
-
-    public void setApplicationVersion(int applicationVersion) {
-        setIntPreference(APPLICATION_VERSION_PROP, applicationVersion);
+    public void setGcmTokenSent(Boolean flag) {
+        setBooleanPreference(GCM_TOKEN_SENT_PROP, flag);
     }
 
     @SuppressLint("CommitPrefEdits")
@@ -104,6 +109,16 @@ public class AppPreferences {
     public void apply() {
         currentEditor.apply();
         currentEditor = null;
+    }
+
+    public void resetAll() {
+        beginEdit();
+        setClientId(null);
+        setToken(null);
+        setDefaultRegion(null);
+        setHasAccount(null);
+        setNotificationEnabled(false);
+        apply();
     }
 
     private String getStringPreference(String key) {

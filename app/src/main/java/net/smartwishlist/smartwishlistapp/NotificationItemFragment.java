@@ -22,6 +22,7 @@ public class NotificationItemFragment extends ListFragment
 
     private OnItemSelectedListener onItemSelectedListener;
     private NotificationSimpleCursorAdapter adapter;
+    private double timestamp;
 
     public NotificationItemFragment() {
     }
@@ -57,12 +58,16 @@ public class NotificationItemFragment extends ListFragment
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new AppStorage.NotificationLoader(getActivity());
+        timestamp = ApiSignature.getTimestamp();
+        AppPreferences preferences = new AppPreferences(getActivity());
+        return new AppStorage.NotificationLoader(getActivity(), preferences.getLastViewedNotifications());
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         adapter.swapCursor(cursor);
+        AppPreferences preferences = new AppPreferences(getActivity());
+        preferences.setLastViewedNotifications(timestamp);
     }
 
     @Override
