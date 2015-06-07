@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.appspot.smart_wish_list.smartwishlist.Smartwishlist;
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListAppNotificationData;
-import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListAppNotificationParameters;
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListCheckResult;
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListRegisterGcmDeviceParameters;
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListUserData;
@@ -26,49 +25,6 @@ public class ApiService {
         String versionName = AppConstants.Version.getAppVersionName(context);
         smartwishlist.setApplicationName(AppConstants.APP_NAME + " v" + versionName);
         return smartwishlist.build();
-    }
-
-    public static class SaveUserTask extends AsyncTask<Boolean, Void, Boolean> {
-
-        private final Smartwishlist service;
-        private final AppPreferences preferences;
-        private boolean appEnabled;
-
-        public SaveUserTask(Context context) {
-            preferences = new AppPreferences(context);
-            service = ApiService.getApiServiceHandle(context);
-        }
-
-        protected Boolean doInBackground(Boolean... booleans) {
-            try {
-                String clientId = preferences.getClientId();
-                String token = preferences.getToken();
-                if (clientId == null || token == null) {
-                    return false;
-                }
-                double timestamp = ApiSignature.getTimestamp();
-                appEnabled = booleans[0];
-                String signature = ApiSignature.generateRequestSignature(
-                        token, Boolean.toString(appEnabled), timestamp);
-                SmartWishListUserData data = new SmartWishListUserData();
-                data.setAppEnabled(appEnabled);
-                Smartwishlist.Users.Save saveUser = service.users().save(clientId, timestamp,
-                        signature, data);
-                saveUser.setIsApp(true);
-                saveUser.execute();
-                return true;
-            } catch (IOException e) {
-                AppLogging.logException(e);
-                return false;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Boolean success) {
-            if (success) {
-                preferences.setNotificationEnabled(appEnabled);
-            }
-        }
     }
 
     public static abstract class ListAppNotificationsTask
@@ -97,14 +53,10 @@ public class ApiService {
                     return null;
                 }
                 timestamp = ApiSignature.getTimestamp();
-                double since = preferences.getLastServerPoll();
                 String signature = ApiSignature.generateRequestSignature(
-                        token, String.format(Locale.US, "%.3f", since), timestamp);
-                SmartWishListAppNotificationParameters parameters =
-                        new SmartWishListAppNotificationParameters();
-                parameters.setSince(since);
+                        token, "", timestamp);
                 Smartwishlist.AppNotifications.List request = service.appNotifications().list(
-                        clientId, timestamp, signature, parameters);
+                        clientId, timestamp, signature);
                 request.setIsApp(true);
                 result = request.execute();
                 preferences.setLastServerPoll(timestamp);

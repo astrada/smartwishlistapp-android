@@ -47,11 +47,4 @@ public class AppInitialization {
         gcmInitialization = new GcmInitialization(activity, preferences);
         gcmInitialization.initializeGcm();
     }
-
-    public void toggleNotifications(boolean on) {
-        if (on != preferences.getNotificationEnabled()) {
-            ApiService.SaveUserTask task = new ApiService.SaveUserTask(activity);
-            task.execute(on);
-        }
-    }
 }

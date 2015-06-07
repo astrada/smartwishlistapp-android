@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickNotificationSwitch(View view) {
         boolean isOn = ((ToggleButton) view).isChecked();
-        appInitialization.toggleNotifications(isOn);
+        appInitialization.getPreferences().setNotificationEnabled(isOn);
     }
 
     public void onClickShowWishLists(View view) {

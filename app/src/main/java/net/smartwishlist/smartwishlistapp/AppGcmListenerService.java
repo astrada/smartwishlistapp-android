@@ -7,25 +7,38 @@ import android.util.Log;
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListAppNotificationData;
 import com.google.android.gms.gcm.GcmListenerService;
 
-public class DataPullService extends GcmListenerService {
-
-    private static final String TAG = "DataPullService";
+public class AppGcmListenerService extends GcmListenerService {
 
     @Override
     public void onMessageReceived(String from, Bundle data) {
-        String message = data.getString("message");
-        Log.d(TAG, "From: " + from);
-        Log.d(TAG, "Message: " + message);
-
-        FetchAppNotificationsTask task = new FetchAppNotificationsTask();
-        task.execute();
+        if (data != null && !data.isEmpty()) {
+            String message = data.getString("type");
+            if (message != null) {
+                switch (message) {
+                    case "price-alert":
+                        AppPreferences preferences = new AppPreferences(this);
+                        if (preferences.getNotificationEnabled()) {
+                            FetchAppNotificationsTask task = new FetchAppNotificationsTask();
+                            task.execute();
+                        }
+                        break;
+                    default:
+                        AppLogging.logError("Unexpected GCM message type: " + message);
+                }
+            } else {
+                AppLogging.logError("Unexpected GCM message from: " + from +
+                        " data: " + data.toString());
+            }
+        } else {
+            AppLogging.logError("Unexpected GCM message from: " + from);
+        }
     }
 
     private class FetchAppNotificationsTask
             extends ApiService.ListAppNotificationsTask {
 
         public FetchAppNotificationsTask() {
-            super(DataPullService.this);
+            super(AppGcmListenerService.this);
         }
 
         @Override
