@@ -33,7 +33,6 @@ public class GcmRegistrationIntentService extends IntentService {
                         GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
                 sendRegistrationToServer(token);
                 subscribeTopics(token);
-                preferences.setGcmTokenSent(true);
             }
         } catch (Exception e) {
             Log.d(TAG, "Failed to complete token refresh", e);

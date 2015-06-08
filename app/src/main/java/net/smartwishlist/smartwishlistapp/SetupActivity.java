@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 public class SetupActivity extends AppCompatActivity {
 
@@ -106,8 +107,10 @@ public class SetupActivity extends AppCompatActivity {
                 ApiService.CheckClientIdTask task = new ApiService.CheckClientIdTask(activity);
                 task.execute(clientId);
             } else {
-                // TODO
-                Log.d(AppConstants.LOG_TAG, "Invalid QR code");
+                Toast toast = Toast.makeText(activity,
+                        "Invalid QR code, please retry",
+                        Toast.LENGTH_LONG);
+                toast.show();
             }
         }
     }

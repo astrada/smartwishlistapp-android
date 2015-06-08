@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,10 +31,26 @@ public class MainActivity extends AppCompatActivity {
         initializeInterface();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        checkConnectivity();
+    }
+
     private void initializeInterface() {
         boolean enabled = appInitialization.getPreferences().getNotificationEnabled();
         ToggleButton toggleButton = (ToggleButton) findViewById(R.id.notificationToggleButton);
         toggleButton.setChecked(enabled);
+    }
+
+    private void checkConnectivity() {
+        if (!ApiService.isConnected(this)) {
+            Toast toast = Toast.makeText(this,
+                    "WARNING! No Internet connection detected!",
+                    Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
 
     @Override
