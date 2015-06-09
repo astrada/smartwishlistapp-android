@@ -13,7 +13,6 @@ public class AppPreferences {
     private static final String TOKEN_PROP = "Token";
     private static final String DEFAULT_REGION_PROP = "DefaultRegion";
     private static final String HAS_ACCOUNT_PROP = "HasAccount";
-    private static final String LAST_SERVER_POLL_PROP = "LastServerPoll";
     private static final String LAST_VIEWED_NOTIFICATIONS_PROP = "LastViewedNotifications";
     private static final String PENDING_MESSAGES_PROP = "PendingMessages";
     private static final String NOTIFICATION_ENABLED_PROP = "NotificationEnabled";
@@ -59,14 +58,6 @@ public class AppPreferences {
 
     public void setHasAccount(String hasAccount) {
         setStringPreference(HAS_ACCOUNT_PROP, hasAccount);
-    }
-
-    public double getLastServerPoll() {
-        return getDoublePreference(LAST_SERVER_POLL_PROP);
-    }
-
-    public void setLastServerPoll(double timestamp) {
-        setDoublePreference(LAST_SERVER_POLL_PROP, timestamp);
     }
 
     public double getLastViewedNotifications() {

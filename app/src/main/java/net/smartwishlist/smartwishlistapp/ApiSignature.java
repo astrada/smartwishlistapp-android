@@ -8,8 +8,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class ApiSignature {
 
-    private static final double ONE_SECOND_IN_MILLISECONDS = 1000.0;
-
     public static String generateRequestSignature(String token, String payload, double timestamp) {
         try {
             String value = String.format(Locale.US, "%s%.3f", payload, timestamp);
@@ -25,7 +23,7 @@ public class ApiSignature {
     }
 
     public static double getTimestamp() {
-        return System.currentTimeMillis() / ONE_SECOND_IN_MILLISECONDS;
+        return System.currentTimeMillis() / AppConstants.ONE_SECOND_IN_MILLISECONDS;
     }
 
     private static String toHex(byte[] bytes) {

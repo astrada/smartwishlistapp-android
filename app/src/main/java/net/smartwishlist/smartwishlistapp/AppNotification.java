@@ -8,9 +8,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListAppNotificationData;
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListItemData;
@@ -25,17 +25,17 @@ public class AppNotification {
 
     private static final String NOTIFICATION_CLICKED_ACTION = "NOTIFICATION_CLICKED";
     private static final String NOTIFICATION_DELETED_ACTION = "NOTIFICATION_DELETED";
+    private static final String NOTIFICATION_BUY_ACTION = "NOTIFICATION_BUY";
+    private static final String URL_EXTRA = "URL";
 
     private final Context context;
     private final NotificationManager notificationManager;
-    private final Resources resources;
     private final AppPreferences preferences;
 
     public AppNotification(Context context) {
         this.context = context;
         notificationManager =
                 (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-        resources = context.getResources();
         preferences = new AppPreferences(context);
     }
 
@@ -53,6 +53,7 @@ public class AppNotification {
         if (triggers.size() == 0) {
             return null;
         }
+        Resources resources = context.getResources();
         int messageCount = preferences.getPendingMessages() + triggers.size();
         String firstMessage = createMessage(triggers.get(0));
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
@@ -61,10 +62,21 @@ public class AppNotification {
                         R.mipmap.ic_launcher))
                 .setColor(AppConstants.LOGO_COLOR)
                 .setContentIntent(getContentIntent())
-                .setDeleteIntent(getDeleteIntent());
+                .setDeleteIntent(getDeleteIntent())
+                .setAutoCancel(true);
         if (messageCount == 1) {
             builder.setContentTitle("Price alert")
                     .setContentText(firstMessage);
+            if (triggers.size() == 1) {
+                SmartWishListNotificationTriggerData data = triggers.get(0);
+                if (data != null) {
+                    String url = data.getItem().getProductUrl();
+                    if (url != null) {
+                        builder.addAction(R.drawable.ic_add_shopping_cart_black_24dp,
+                                "Buy", getBuyIntent(url));
+                    }
+                }
+            }
         } else {
             builder.setNumber(messageCount)
                     .setContentTitle(String.format("%d price alerts", messageCount))
@@ -104,6 +116,16 @@ public class AppNotification {
         return pendingIntent;
     }
 
+    private PendingIntent getBuyIntent(String url) {
+        Intent intent = new Intent(NOTIFICATION_BUY_ACTION);
+        intent.putExtra(URL_EXTRA, url);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+        BroadcastReceiver broadcastReceiver = new NotificationBroadcastReceiver();
+        context.registerReceiver(broadcastReceiver, new IntentFilter(NOTIFICATION_BUY_ACTION));
+        return pendingIntent;
+    }
+
     @Nullable
     private static String createMessage(SmartWishListNotificationTriggerData data) {
         SmartWishListItemData item = data.getItem();
@@ -120,11 +142,14 @@ public class AppNotification {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(NOTIFICATION_CLICKED_ACTION)) {
-                Intent resultIntent = new Intent(context, NotificationActivity.class);
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-                stackBuilder.addParentStack(NotificationActivity.class);
-                stackBuilder.addNextIntent(resultIntent);
-                stackBuilder.startActivities();
+                Intent detailIntent = new Intent(context, NotificationActivity.class);
+                detailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(detailIntent);
+            } else if (intent.getAction().equals(NOTIFICATION_BUY_ACTION)) {
+                Intent buyIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(intent.getStringExtra(URL_EXTRA)));
+                buyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(buyIntent);
             }
             preferences.setPendingMessages(0);
             notificationManager.cancel(NOTIFICATION_ID);

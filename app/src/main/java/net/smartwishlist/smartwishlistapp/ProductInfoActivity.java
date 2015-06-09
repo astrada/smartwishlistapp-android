@@ -95,7 +95,8 @@ public class ProductInfoActivity extends AppCompatActivity {
             productSoldByAmazon.setChecked(data.getItem().getSoldByAmazon());
             DateFormat dateFormat = SimpleDateFormat.getDateInstance();
             productAdded.setText(dateFormat.format(
-                    new Date(Math.round(data.getCreationDate() * 1000.0))));
+                    new Date(Math.round(data.getCreationDate() *
+                            AppConstants.ONE_SECOND_IN_MILLISECONDS))));
             buyButton.setTag(data.getItem().getProductUrl());
 
             DownloadLeftDrawableTask task = new DownloadLeftDrawableTask(productTitle);

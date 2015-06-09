@@ -55,4 +55,16 @@
         android:textColor="#a94442"
         android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/fetchDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/title"
+        android:layout_alignLeft="@id/title"
+        android:layout_below="@id/price"
+        android:layout_toLeftOf="@id/infoButton"
+        android:layout_toStartOf="@id/infoButton"
+        android:paddingTop="4dp"
+        android:textSize="14sp" />
+
 </RelativeLayout>

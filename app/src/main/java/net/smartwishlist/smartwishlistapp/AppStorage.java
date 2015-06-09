@@ -14,9 +14,7 @@ import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListNotification
 import com.google.api.client.json.JsonParser;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.annotation.Nullable;
 
@@ -59,7 +57,8 @@ public class AppStorage {
     public Cursor queryAllNewNotifications(double timestamp) {
         SQLiteDatabase sqLiteDatabase = dbOpenHelper.getReadableDatabase();
         return sqLiteDatabase.query(NotificationContract.TABLE_NAME,
-                new String[]{NotificationContract._ID, NotificationContract.COLUMN_NAME_JSON},
+                new String[]{NotificationContract._ID,
+                        NotificationContract.COLUMN_NAME_JSON},
                 NotificationContract.COLUMN_NAME_TIMESTAMP + " >= ?",
                 new String[]{Double.toString(timestamp)},
                 null, null, null);

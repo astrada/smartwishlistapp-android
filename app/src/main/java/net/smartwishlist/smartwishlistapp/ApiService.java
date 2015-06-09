@@ -191,9 +191,7 @@ public class ApiService {
             Smartwishlist.AppNotifications.List request = getService().appNotifications().list(
                     clientId, timestamp, signature);
             request.setIsApp(true);
-            SmartWishListAppNotificationData result = request.execute();
-            getPreferences().setLastServerPoll(timestamp);
-            return result;
+            return request.execute();
         }
     }
 }

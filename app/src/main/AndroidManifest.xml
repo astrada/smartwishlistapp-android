@@ -32,15 +32,27 @@
         </activity>
         <activity
             android:name=".NotificationActivity"
-            android:label="@string/title_activity_notification" >
+            android:label="@string/title_activity_notification"
+            android:launchMode="singleTask"
+            android:taskAffinity=""
+            android:excludeFromRecents="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".ProductInfoActivity"
             android:label="@string/title_activity_product_info" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".NotificationActivity" />
         </activity>
         <activity
             android:name=".WebSiteActivity"
             android:label="@string/title_activity_web_site" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
 
         <receiver

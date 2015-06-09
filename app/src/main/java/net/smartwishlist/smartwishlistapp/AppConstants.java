@@ -9,8 +9,6 @@ import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 
-import com.appspot.smart_wish_list.smartwishlist.Smartwishlist;
-
 public class AppConstants {
 
     public static final JsonFactory JSON_FACTORY = new AndroidJsonFactory();
@@ -34,6 +32,8 @@ public class AppConstants {
     public static final String JAVASCRIPT_INTERFACE = "AndroidAppJsInterface";
 
     public static final String CLIENT_ID_TAG = "ClientId";
+
+    public static final double ONE_SECOND_IN_MILLISECONDS = 1000.0;
 
     public static class Version {
 

@@ -2,7 +2,6 @@ package net.smartwishlist.smartwishlistapp;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListAppNotificationData;
 import com.google.android.gms.gcm.GcmListenerService;
@@ -43,9 +42,12 @@ public class AppGcmListenerService extends GcmListenerService {
 
         @Override
         protected void onPostExecute(SmartWishListAppNotificationData smartWishListAppNotificationData) {
-            if (smartWishListAppNotificationData == null
-                    || smartWishListAppNotificationData.getErrorCode() != AppConstants.NO_ERRORS) {
-                Log.d(AppConstants.LOG_TAG, "Error!");
+            if (smartWishListAppNotificationData == null) {
+                AppLogging.logError("FetchAppNotificationsTask: no results");
+                return;
+            } else if (smartWishListAppNotificationData.getErrorCode() != AppConstants.NO_ERRORS) {
+                AppLogging.logError("FetchAppNotificationsTask: error code: " +
+                        smartWishListAppNotificationData.getErrorCode());
                 return;
             }
 

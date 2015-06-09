@@ -16,6 +16,10 @@ import android.widget.TextView;
 
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListNotificationTriggerData;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class NotificationItemFragment extends ListFragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -93,13 +97,18 @@ public class NotificationItemFragment extends ListFragment
             if (trigger != null) {
                 ImageView thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
                 TextView title = (TextView) view.findViewById(R.id.title);
-                TextView description = (TextView) view.findViewById(R.id.price);
+                TextView price = (TextView) view.findViewById(R.id.price);
+                TextView fetchDate = (TextView) view.findViewById(R.id.fetchDate);
                 ImageButton imageButton = (ImageButton) view.findViewById(R.id.infoButton);
 
                 DownloadImageTask task = new DownloadImageTask(thumbnail);
                 task.execute(trigger.getItem().getImageUrl());
                 title.setText(trigger.getItem().getTitle());
-                description.setText(trigger.getItem().getFormattedPrice());
+                price.setText(trigger.getItem().getFormattedPrice());
+                DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance();
+                fetchDate.setText(dateFormat.format(
+                        new Date(Math.round(trigger.getItem().getLastUpdate() *
+                                AppConstants.ONE_SECOND_IN_MILLISECONDS))));
                 imageButton.setTag(cursor.getLong(0));
             }
         }
