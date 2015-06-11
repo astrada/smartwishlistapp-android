@@ -6,7 +6,7 @@
     android:padding="16dp"
     android:descendantFocusability="blocksDescendants">
 
-    <ImageView
+    <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/thumbnail"
         android:layout_width="64dp"
         android:layout_height="64dp"

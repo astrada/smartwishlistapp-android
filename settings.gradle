@@ -1,1 +1,1 @@
-include ':app', ':smartwishlist'
+include ':app', ':smartwishlist', ':volley'

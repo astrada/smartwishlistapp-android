@@ -10,10 +10,10 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.NetworkImageView;
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListNotificationTriggerData;
 
 import java.text.DateFormat;
@@ -95,14 +95,16 @@ public class NotificationItemFragment extends ListFragment
             SmartWishListNotificationTriggerData trigger =
                     AppStorage.parseNotificationTriggerData(json);
             if (trigger != null) {
-                ImageView thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+                NetworkImageView thumbnail = (NetworkImageView) view.findViewById(R.id.thumbnail);
                 TextView title = (TextView) view.findViewById(R.id.title);
                 TextView price = (TextView) view.findViewById(R.id.price);
                 TextView fetchDate = (TextView) view.findViewById(R.id.fetchDate);
                 ImageButton imageButton = (ImageButton) view.findViewById(R.id.infoButton);
 
-                DownloadImageTask task = new DownloadImageTask(thumbnail);
-                task.execute(trigger.getItem().getImageUrl());
+                thumbnail.setImageUrl(trigger.getItem().getImageUrl(),
+                        AppContextSingleton.getInstance(context).getImageLoader());
+                thumbnail.setDefaultImageResId(R.drawable.not_available_image);
+                thumbnail.setErrorImageResId(R.drawable.not_available_image);
                 title.setText(trigger.getItem().getTitle());
                 price.setText(trigger.getItem().getFormattedPrice());
                 DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance();

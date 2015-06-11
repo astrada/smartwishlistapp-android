@@ -60,6 +60,7 @@ dependencies {
     compile 'com.android.support:support-v4:22.2.0'
 
     compile project(':smartwishlist')
+    compile project(':volley')
 
     compile(group: 'com.google.api-client', name: 'google-api-client', version: '1.20.0') {
         exclude(group: 'xpp3', module: 'xpp3')

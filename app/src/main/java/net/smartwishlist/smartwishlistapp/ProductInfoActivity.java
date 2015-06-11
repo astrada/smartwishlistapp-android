@@ -12,8 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListNotificationTriggerData;
 
 import java.text.DateFormat;
@@ -78,7 +82,7 @@ public class ProductInfoActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(SmartWishListNotificationTriggerData data) {
-            TextView productTitle = (TextView) findViewById(R.id.productTitle);
+            final TextView productTitle = (TextView) findViewById(R.id.productTitle);
             TextView productPrice = (TextView) findViewById(R.id.productPrice);
             TextView productTargetPrice = (TextView) findViewById(R.id.productTargetPrice);
             CheckBox productAvailability = (CheckBox) findViewById(R.id.productAvailability);
@@ -99,24 +103,23 @@ public class ProductInfoActivity extends AppCompatActivity {
                             AppConstants.ONE_SECOND_IN_MILLISECONDS))));
             buyButton.setTag(data.getItem().getProductUrl());
 
-            DownloadLeftDrawableTask task = new DownloadLeftDrawableTask(productTitle);
-            task.execute(data.getItem().getImageUrl());
-        }
-    }
-
-    private class DownloadLeftDrawableTask extends DownloadImageTask {
-
-        private final TextView textView;
-
-        public DownloadLeftDrawableTask(TextView textView) {
-            super(null);
-            this.textView = textView;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), bitmap);
-            textView.setCompoundDrawablesWithIntrinsicBounds(bitmapDrawable, null, null, null);
+            ImageRequest request = new ImageRequest(data.getItem().getImageUrl(),
+                    new Response.Listener<Bitmap>() {
+                        @Override
+                        public void onResponse(Bitmap bitmap) {
+                            BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(),
+                                    bitmap);
+                            productTitle.setCompoundDrawablesWithIntrinsicBounds(
+                                    bitmapDrawable, null, null, null);
+                        }
+                    }, 0, 0, ImageView.ScaleType.CENTER_INSIDE, null,
+                    new Response.ErrorListener() {
+                        public void onErrorResponse(VolleyError error) {
+                            productTitle.setCompoundDrawablesWithIntrinsicBounds(
+                                    R.drawable.not_available_image, 0, 0, 0);
+                        }
+                    });
+            AppContextSingleton.getInstance(ProductInfoActivity.this).addToRequestQueue(request);
         }
     }
 }
