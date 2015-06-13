@@ -7,12 +7,37 @@
     android:orientation="vertical"
     tools:context="net.smartwishlist.smartwishlistapp.SetupActivity">
 
-    <Button
-        android:layout_width="wrap_content"
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/scanQrCodeButton"
-        android:text="@string/qr_code_button"
-        android:onClick="onClickQrCode"/>
+        android:text="You can link this app to an existing wish list." />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/scanQrCodeButton"
+            android:text="@string/qr_code_button"
+            android:onClick="onClickQrCode" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:contentDescription="Help"
+            android:src="@drawable/ic_help_outline_black_24dp"
+            android:onClick="onClickHelp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="30dp"
+        android:text="You can start from scratch creating a new wish list." />
 
     <Button
         android:layout_width="wrap_content"

@@ -20,7 +20,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -32,10 +32,10 @@
         </activity>
         <activity
             android:name=".NotificationActivity"
+            android:excludeFromRecents="true"
             android:label="@string/title_activity_notification"
             android:launchMode="singleTask"
-            android:taskAffinity=""
-            android:excludeFromRecents="true">
+            android:taskAffinity="" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -53,6 +53,17 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".SetupActivity"
+            android:label="@string/title_activity_setup" >
+        </activity>
+        <activity
+            android:name=".HelpActivity"
+            android:label="@string/title_activity_help" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.smartwishlist.smartwishlistapp.SetupActivity" />
         </activity>
 
         <receiver
@@ -75,9 +86,9 @@
         </service>
         <service
             android:name=".GcmInstanceIDListenerService"
-            android:exported="false">
+            android:exported="false" >
             <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID"/>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
         <service
@@ -88,11 +99,6 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="b9f84dec479e222214d1e5f429ef14c2474fad5f" />
-
-        <activity
-            android:name=".SetupActivity"
-            android:label="@string/title_activity_setup" >
-        </activity>
     </application>
 
 </manifest>

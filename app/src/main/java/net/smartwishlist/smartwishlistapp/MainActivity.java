@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                         appInitialization.getPreferences().resetAll();
                         Intent intent = new Intent(MainActivity.this, SetupActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

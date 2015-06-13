@@ -4,10 +4,8 @@
     <string name="qr_code_button">Scan QR code</string>
 
     <string name="title_activity_notification">Price alerts</string>
-
     <string name="title_activity_product_info">Product info</string>
-    <string name="title_activity_web_site">WebSiteActivity</string>
-    <string name="title_activity_setup">SetupActivity</string>
-
-    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_web_site">www.smartwishlist.net</string>
+    <string name="title_activity_setup">Setup</string>
+    <string name="title_activity_help">Help</string>
 </resources>
