@@ -1,7 +1,6 @@
 package net.smartwishlist.smartwishlistapp;
 
 import android.content.Context;
-import android.util.Log;
 import android.webkit.JavascriptInterface;
 
 public class WebAppInterface {
@@ -29,7 +28,7 @@ public class WebAppInterface {
             case HAS_ACCOUNT_KEY:
                 return appPreferences.getHasAccount();
             default:
-                Log.d(AppConstants.LOG_TAG, "getItemFromStorage: " + key);
+                AppLogging.logError("getItemFromStorage: Unexpected key: " + key);
                 break;
         }
         return null;
@@ -51,14 +50,13 @@ public class WebAppInterface {
             case HAS_ACCOUNT_KEY:
                 appPreferences.setHasAccount(value);
             default:
-                Log.d(AppConstants.LOG_TAG, "setItemInStorage: " + key + "=" + value);
+                AppLogging.logError("setItemInStorage: Unexpected key: " + key + "=" + value);
                 break;
         }
     }
 
     @JavascriptInterface
     public void clearItemsInStorage() {
-        Log.d(AppConstants.LOG_TAG, "clearItemsInStorage");
         appPreferences.resetAll();
     }
 }

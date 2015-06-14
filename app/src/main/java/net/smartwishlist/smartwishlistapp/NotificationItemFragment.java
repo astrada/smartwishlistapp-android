@@ -20,7 +20,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 public class NotificationItemFragment extends ListFragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -64,7 +63,8 @@ public class NotificationItemFragment extends ListFragment
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         timestamp = ApiSignature.getTimestamp();
         AppPreferences preferences = new AppPreferences(getActivity());
-        return new AppStorage.NotificationLoader(getActivity(), preferences.getLastViewedNotifications());
+        return new AppStorage.NotificationLoader(getActivity(),
+                preferences.getLastViewedNotifications());
     }
 
     @Override
@@ -102,7 +102,7 @@ public class NotificationItemFragment extends ListFragment
                 ImageButton imageButton = (ImageButton) view.findViewById(R.id.infoButton);
 
                 thumbnail.setImageUrl(trigger.getItem().getImageUrl(),
-                        AppContextSingleton.getInstance(context).getImageLoader());
+                        NetworkImageManager.getInstance(context).getImageLoader());
                 thumbnail.setDefaultImageResId(R.drawable.not_available_image);
                 thumbnail.setErrorImageResId(R.drawable.not_available_image);
                 title.setText(trigger.getItem().getTitle());

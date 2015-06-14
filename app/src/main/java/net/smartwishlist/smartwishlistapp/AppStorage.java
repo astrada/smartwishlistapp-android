@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.provider.BaseColumns;
 import android.support.v4.content.CursorLoader;
-import android.util.Log;
 
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListNotificationTriggerData;
 import com.google.api.client.json.JsonParser;
@@ -27,6 +26,8 @@ public class AppStorage {
     }
 
     public void insertNotifications(List<SmartWishListNotificationTriggerData> triggers) {
+        if (triggers == null) return;
+
         Double timestamp = ApiSignature.getTimestamp();
         SQLiteDatabase sqLiteDatabase = dbOpenHelper.getWritableDatabase();
         sqLiteDatabase.beginTransaction();
@@ -40,8 +41,7 @@ public class AppStorage {
                     contentValues.put(NotificationContract.COLUMN_NAME_JSON,
                             AppConstants.JSON_FACTORY.toString(trigger));
                 } catch (IOException e) {
-                    // TODO
-                    Log.d(AppConstants.LOG_TAG, e.getMessage());
+                    AppLogging.logException(e);
                 }
                 contentValues.put(NotificationContract.COLUMN_NAME_TIMESTAMP, timestamp);
                 sqLiteDatabase.insertWithOnConflict(NotificationContract.TABLE_NAME, null,
@@ -73,8 +73,8 @@ public class AppStorage {
         if (cursor != null) {
             cursor.moveToFirst();
             String json = cursor.getString(0);
-            SmartWishListNotificationTriggerData result1 = parseNotificationTriggerData(json);
-            if (result1 != null) return result1;
+            SmartWishListNotificationTriggerData result = parseNotificationTriggerData(json);
+            if (result != null) return result;
             cursor.close();
         }
         return null;
@@ -102,8 +102,7 @@ public class AppStorage {
             jsonParser.parse(result);
             return result;
         } catch (IOException e) {
-            // TODO
-            Log.d(AppConstants.LOG_TAG, e.getMessage());
+            AppLogging.logException(e);
         }
         return null;
     }

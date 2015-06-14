@@ -11,14 +11,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 // Read local properties from ~/.gradle/gradle.properties
-def LOCAL_API_URL = '"' + LocalApiUrlProp + '"' ?: '"Define local API URL"'
-def LOCAL_WEB_SITE_URL = '"' + LocalWebSiteUrlProp + '"' ?: '"Define local web site URL"'
-def DEBUG_CLIENT_ID = '"' + DebugClientIdProp + '"' ?: '"Define debug client ID"'
-def DEBUG_TOKEN = '"' + DebugTokenProp + '"' ?: '"Define debug token"'
-def DEBUG_DEFAULT_REGION = '"' + DebugDefaultRegionProp + '"' ?: '"Define debug default region"'
-def DEBUG_HAS_ACCOUNT = '"' + DebugHasAccountProp + '"' ?: '"Define debug has account flag"'
+def LOCAL_API_URL = "\"$LocalApiUrlProp\"" ?: '"Define local API URL"'
+def LOCAL_WEB_SITE_URL = "\"$LocalWebSiteUrlProp\"" ?: '"Define local web site URL"'
+def DEBUG_CLIENT_ID = "\"$DebugClientIdProp\"" ?: '"Define debug client ID"'
+def DEBUG_TOKEN = "\"$DebugTokenProp\"" ?: '"Define debug token"'
+def DEBUG_DEFAULT_REGION = "\"$DebugDefaultRegionProp\"" ?: '"Define debug default region"'
+def DEBUG_HAS_ACCOUNT = "\"$DebugHasAccountProp\"" ?: '"Define debug has account flag"'
 def DEBUG_NOTIFICATION_ENABLED = DebugNotificationsEnabledProp ?: 'false'
-def GCM_SENDER_ID = '"' + GcmSenderIdProp + '"' ?: '"Define GCM sender ID"'
+def GCM_SENDER_ID = "\"$GcmSenderIdProp\"" ?: '"Define GCM sender ID"'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }

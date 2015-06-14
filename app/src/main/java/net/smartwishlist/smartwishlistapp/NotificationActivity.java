@@ -4,13 +4,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListNotificationTriggerData;
-
 
 public class NotificationActivity extends AppCompatActivity
         implements NotificationItemFragment.OnItemSelectedListener {
@@ -47,8 +43,7 @@ public class NotificationActivity extends AppCompatActivity
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(intent);
             } else {
-                // TODO
-                Log.d(AppConstants.LOG_TAG, "No product URL");
+                AppLogging.logError("OpenProductUrlTask: No product URL. data=" + data.toString());
             }
         }
     }

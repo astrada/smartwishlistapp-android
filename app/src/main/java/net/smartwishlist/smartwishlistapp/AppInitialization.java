@@ -9,7 +9,8 @@ import io.fabric.sdk.android.Fabric;
 public class AppInitialization {
 
     private final Activity activity;
-    private AppPreferences preferences;
+    private final AppPreferences preferences;
+    private GcmInitialization gcmInitialization;
 
     public AppInitialization(Activity activity) {
         this.activity = activity;
@@ -18,6 +19,10 @@ public class AppInitialization {
 
     public AppPreferences getPreferences() {
         return preferences;
+    }
+
+    public GcmInitialization getGcmInitialization() {
+        return gcmInitialization;
     }
 
     public void initializeApp() {
@@ -35,8 +40,7 @@ public class AppInitialization {
         } else if (!needSetup()) {
             Crashlytics.setString(AppConstants.CLIENT_ID_TAG, preferences.getClientId());
         }
-        GcmInitialization gcmInitialization = new GcmInitialization(activity, preferences);
-        gcmInitialization.initializeGcm();
+        gcmInitialization = new GcmInitialization(activity, preferences);
     }
 
     public boolean needSetup() {

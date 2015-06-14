@@ -9,24 +9,24 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
-public class AppContextSingleton {
+public class NetworkImageManager {
     private static final int CACHE_MAX_SIZE = 20;
 
-    private static AppContextSingleton instance;
+    private static NetworkImageManager instance;
     private static Context applicationContext;
 
     private RequestQueue requestQueue;
     private final ImageLoader imageLoader;
 
-    private AppContextSingleton(Context context) {
+    private NetworkImageManager(Context context) {
         applicationContext = context.getApplicationContext();
         requestQueue = getRequestQueue();
         imageLoader = new ImageLoader(requestQueue, new LruImageCache());
     }
 
-    public static synchronized AppContextSingleton getInstance(Context context) {
+    public static synchronized NetworkImageManager getInstance(Context context) {
         if (instance == null) {
-            instance = new AppContextSingleton(context);
+            instance = new NetworkImageManager(context);
         }
         return instance;
     }

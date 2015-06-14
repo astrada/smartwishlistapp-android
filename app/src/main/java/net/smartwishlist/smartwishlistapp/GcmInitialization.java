@@ -5,9 +5,13 @@ import android.content.Intent;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.iid.InstanceID;
+
+import java.io.IOException;
 
 public class GcmInitialization {
 
+    private static final String TAG = "GcmInitialization";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     private final Activity activity;
@@ -18,10 +22,23 @@ public class GcmInitialization {
         this.preferences = preferences;
     }
 
-    public void initializeGcm() {
+    public void initializeGcmToken() {
         if (!preferences.isGcmTokenSent() && checkPlayServices()) {
             Intent intent = new Intent(activity, GcmRegistrationIntentService.class);
             activity.startService(intent);
+        }
+    }
+
+    public boolean deleteGcmToken() {
+        try {
+            synchronized (TAG) {
+                InstanceID.getInstance(activity).deleteInstanceID();
+                preferences.setGcmTokenSent(false);
+                return true;
+            }
+        } catch (IOException e) {
+            AppLogging.logException(e);
+            return false;
         }
     }
 

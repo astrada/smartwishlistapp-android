@@ -50,7 +50,7 @@ public class AppNotification {
     private NotificationCompat.Builder createBuilder(SmartWishListAppNotificationData smartWishListAppNotificationData) {
         List<SmartWishListNotificationTriggerData> triggers =
                 smartWishListAppNotificationData.getTriggers();
-        if (triggers.size() == 0) {
+        if (triggers == null || triggers.size() == 0) {
             return null;
         }
         Resources resources = context.getResources();

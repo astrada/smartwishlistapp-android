@@ -73,7 +73,7 @@ public class ApiService {
                 if (isCancelled()) break;
 
                 try {
-                    return doInBackgroundOnce(params);
+                    return tryInBackground(params);
                 } catch (IOException e) {
                     if (i == MAX_ATTEMPTS) {
                         AppLogging.logException(e);
@@ -91,7 +91,7 @@ public class ApiService {
         }
 
         @SuppressWarnings("unchecked")
-        protected abstract Result doInBackgroundOnce(Params... params) throws IOException;
+        protected abstract Result tryInBackground(Params... params) throws IOException;
 
         protected boolean isConnected() {
             return ApiService.isConnected(context);
@@ -105,7 +105,7 @@ public class ApiService {
             super(context);
         }
 
-        protected SmartWishListCheckResult doInBackgroundOnce(String... strings)
+        protected SmartWishListCheckResult tryInBackground(String... strings)
                 throws IOException {
             Smartwishlist.Client.CheckId checkId = getService().client().checkId(strings[0]);
             checkId.setIsApp(true);
@@ -138,7 +138,7 @@ public class ApiService {
         }
 
         @Override
-        protected Boolean doInBackgroundOnce(String... strings) throws IOException {
+        protected Boolean tryInBackground(String... strings) throws IOException {
             String clientId = getPreferences().getClientId();
             String token = getPreferences().getToken();
             double timestamp = ApiSignature.getTimestamp();
@@ -178,7 +178,7 @@ public class ApiService {
         }
 
         @Override
-        protected SmartWishListAppNotificationData doInBackgroundOnce(Void... voids)
+        protected SmartWishListAppNotificationData tryInBackground(Void... voids)
                 throws IOException {
             String clientId = getPreferences().getClientId();
             String token = getPreferences().getToken();

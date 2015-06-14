@@ -6,9 +6,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -24,7 +21,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 public class ProductInfoActivity extends AppCompatActivity {
 
     @Override
@@ -38,7 +34,6 @@ public class ProductInfoActivity extends AppCompatActivity {
             ShowProductInfoTask task = new ShowProductInfoTask();
             task.execute(id);
         }
-
     }
 
     public void onClickBuyButton(View view) {
@@ -47,8 +42,7 @@ public class ProductInfoActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(intent);
         } else {
-            // TODO
-            Log.d(AppConstants.LOG_TAG, "No product URL");
+            AppLogging.logError("ProductInfoActivity.onClickBuyButton: No product URL");
         }
     }
 
@@ -97,7 +91,7 @@ public class ProductInfoActivity extends AppCompatActivity {
                                     R.drawable.not_available_image, 0, 0, 0);
                         }
                     });
-            AppContextSingleton.getInstance(ProductInfoActivity.this).addToRequestQueue(request);
+            NetworkImageManager.getInstance(ProductInfoActivity.this).addToRequestQueue(request);
         }
     }
 }

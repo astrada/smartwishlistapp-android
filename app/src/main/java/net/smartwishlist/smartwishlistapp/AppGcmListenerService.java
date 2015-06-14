@@ -11,18 +11,25 @@ public class AppGcmListenerService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
         if (data != null && !data.isEmpty()) {
-            String message = data.getString("type");
-            if (message != null) {
-                switch (message) {
+            String messageType = data.getString("type");
+            if (messageType != null) {
+                switch (messageType) {
                     case "price-alert":
                         AppPreferences preferences = new AppPreferences(this);
                         if (preferences.getNotificationEnabled()) {
-                            FetchAppNotificationsTask task = new FetchAppNotificationsTask();
-                            task.execute();
+                            String clientId = data.getString("client-id");
+                            if (clientId != null && clientId.equals(preferences.getClientId())) {
+                                FetchAppNotificationsTask task = new FetchAppNotificationsTask();
+                                task.execute();
+                            } else {
+                                AppLogging.logError("Unexpected client ID. Received=" + clientId +
+                                        " Expected=" + preferences.getClientId());
+                            }
                         }
                         break;
                     default:
-                        AppLogging.logError("Unexpected GCM message type: " + message);
+                        AppLogging.logError("Unexpected GCM message from: " + from +
+                                " type: " + messageType);
                 }
             } else {
                 AppLogging.logError("Unexpected GCM message from: " + from +
@@ -68,10 +75,10 @@ public class AppGcmListenerService extends GcmListenerService {
         }
 
         @Override
-        protected Void doInBackground(SmartWishListAppNotificationData... smartWishListAppNotificationDatas) {
+        protected Void doInBackground(SmartWishListAppNotificationData... smartWishListAppNotificationData) {
             AppStorage appStorage = new AppStorage(getApplicationContext());
             appStorage.deleteAllOldNotifications(preferences.getLastViewedNotifications());
-            appStorage.insertNotifications(smartWishListAppNotificationDatas[0].getTriggers());
+            appStorage.insertNotifications(smartWishListAppNotificationData[0].getTriggers());
             return null;
         }
     }

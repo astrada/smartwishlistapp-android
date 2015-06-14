@@ -38,7 +38,6 @@ public class AppConstants {
     public static class Version {
 
         private static String APP_VERSION_NAME = null;
-        private static int APP_VERSION_CODE = 0;
 
         private Version() {}
 
@@ -48,14 +47,6 @@ public class AppConstants {
                 APP_VERSION_NAME = packageInfo.versionName;
             }
             return APP_VERSION_NAME;
-        }
-
-        public static int getAppVersion(Context context) {
-            if (APP_VERSION_CODE == 0) {
-                PackageInfo packageInfo = getPackageInfo(context);
-                APP_VERSION_CODE = packageInfo.versionCode;
-            }
-            return APP_VERSION_CODE;
         }
 
         private static PackageInfo getPackageInfo(Context context) {

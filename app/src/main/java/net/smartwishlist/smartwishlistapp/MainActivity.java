@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SetupActivity.class);
             startActivity(intent);
             finish();
+        } else {
+            appInitialization.getGcmInitialization().initializeGcmToken();
         }
 
         setContentView(R.layout.activity_main);
@@ -92,10 +94,18 @@ public class MainActivity extends AppCompatActivity {
         builder.setMessage("Are you sure?")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        appInitialization.getPreferences().resetAll();
-                        Intent intent = new Intent(MainActivity.this, SetupActivity.class);
-                        startActivity(intent);
-                        finish();
+                        if (appInitialization.getGcmInitialization().deleteGcmToken()) {
+                            appInitialization.getPreferences().resetAll();
+                            Intent intent = new Intent(MainActivity.this, SetupActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast toast = Toast.makeText(MainActivity.this,
+                                    "Error during client reset. Please retry.",
+                                    Toast.LENGTH_SHORT);
+                            toast.show();
+                            dialog.dismiss();
+                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
