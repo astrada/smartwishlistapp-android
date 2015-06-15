@@ -50,7 +50,7 @@ public class NotificationItemFragment extends ListFragment
             onItemSelectedListener = (OnItemSelectedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                + " must implement NotificationItemFragment.OnItemSelectedListener");
+                    + " must implement NotificationItemFragment.OnItemSelectedListener");
         }
     }
 

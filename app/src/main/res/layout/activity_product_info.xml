@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:labelFor="@+id/productPrice"
             android:textSize="16sp"
-            android:text="Current price: " />
+            android:text="@string/current_price_label" />
 
         <TextView
             android:id="@+id/productPrice"
@@ -36,7 +36,6 @@
             android:textSize="16sp"
             android:textColor="#a94442"
             android:textStyle="bold" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -49,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:labelFor="@+id/productTargetPrice"
-            android:text="Target price: "
+            android:text="@string/target_price_label"
             android:textSize="16sp" />
 
         <TextView
@@ -66,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="false"
-        android:text="Available"
+        android:text="@string/available_label"
         android:textSize="16sp"
         android:padding="4dp" />
 
@@ -75,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="false"
-        android:text="Sold by Amazon"
+        android:text="@string/sold_by_amazon_label"
         android:textSize="16sp"
         android:padding="4dp" />
 
@@ -90,7 +89,7 @@
             android:layout_height="wrap_content"
             android:labelFor="@+id/productAdded"
             android:textSize="16sp"
-            android:text="Added: " />
+            android:text="@string/added_label" />
 
         <TextView
             android:id="@+id/productAdded"
@@ -105,7 +104,7 @@
         android:id="@+id/buyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Buy"
+        android:text="@string/buy"
         android:onClick="onClickBuyButton" />
 
 </LinearLayout>

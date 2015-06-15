@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:paddingBottom="10dp"
-        android:text="To get the QR code, you should open www.smartwishlist.net on your desktop/laptop, then go to Notifications (top menu bar). If you didn't yet activate Android App, you should clicking on the plus button in Android App panel, and finally you should click on 'Show QR Code' link." />
+        android:text="@string/help_text" />
 
     <ImageView
         android:id="@+id/screenshot"
@@ -24,6 +24,5 @@
         android:padding="1dp"
         android:cropToPadding="true"
         android:background="#000000"
-        android:contentDescription="Screenshot" />
-
+        android:contentDescription="@string/screenshot_description" />
 </LinearLayout>

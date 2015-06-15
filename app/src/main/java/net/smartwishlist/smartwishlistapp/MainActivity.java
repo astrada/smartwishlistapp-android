@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkConnectivity() {
         if (!ApiService.isConnected(this)) {
             Toast toast = Toast.makeText(this,
-                    "WARNING! No Internet connection detected!",
+                    R.string.no_internet_connection,
                     Toast.LENGTH_LONG);
             toast.show();
         }
@@ -91,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
     public void onClickReset(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // TODO
-        builder.setMessage("Are you sure?")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setMessage(getString(R.string.confirmation))
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (appInitialization.getGcmInitialization().deleteGcmToken()) {
                             appInitialization.getPreferences().resetAll();
@@ -101,14 +101,14 @@ public class MainActivity extends AppCompatActivity {
                             finish();
                         } else {
                             Toast toast = Toast.makeText(MainActivity.this,
-                                    "Error during client reset. Please retry.",
+                                    R.string.error_during_reset,
                                     Toast.LENGTH_SHORT);
                             toast.show();
                             dialog.dismiss();
                         }
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
                     }

@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Notifications"
+            android:text="@string/notifications_label"
             android:layout_weight="1" />
 
         <ToggleButton
@@ -33,14 +33,14 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="My Wish Lists"
+            android:text="@string/my_wish_list_label"
             android:layout_weight="1" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/showWishListsButton"
-            android:text="Open"
+            android:text="@string/my_wish_list_button"
             android:onClick="onClickShowWishLists"/>
     </LinearLayout>
 
@@ -52,14 +52,14 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Reset and relink wish list"
+            android:text="@string/reset_label"
             android:layout_weight="1" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/setupButton"
-            android:text="Reset"
+            android:text="@string/reset_button"
             android:onClick="onClickReset"/>
     </LinearLayout>
 

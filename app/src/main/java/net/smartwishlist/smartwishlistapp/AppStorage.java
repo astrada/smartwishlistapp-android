@@ -155,11 +155,11 @@ public class AppStorage {
                         NotificationContract.COLUMN_NAME_PRODUCT_ID + " UNIQUE, " +
                         NotificationContract.COLUMN_NAME_JSON + " TEXT," +
                         NotificationContract.COLUMN_NAME_TIMESTAMP + " FLOAT);" +
-                "CREATE INDEX notification_timestamp ON " + NotificationContract.TABLE_NAME +
+                        "CREATE INDEX notification_timestamp ON " + NotificationContract.TABLE_NAME +
                         " (" + NotificationContract.COLUMN_NAME_TIMESTAMP + ");";
         private static final String SQL_DROP_SCHEMA =
                 "DROP TABLE IF EXISTS " + NotificationContract.TABLE_NAME + ";" +
-                "DROP INDEX IF EXISTS notification_timestamp;";
+                        "DROP INDEX IF EXISTS notification_timestamp;";
 
         DbOpenHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);

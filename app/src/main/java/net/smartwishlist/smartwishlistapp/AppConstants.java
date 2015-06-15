@@ -39,7 +39,8 @@ public class AppConstants {
 
         private static String APP_VERSION_NAME = null;
 
-        private Version() {}
+        private Version() {
+        }
 
         public static String getAppVersionName(Context context) {
             if (APP_VERSION_NAME == null) {

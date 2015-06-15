@@ -29,7 +29,7 @@ public class SetupActivity extends AppCompatActivity {
                 QrCodeInitialization qrCodeInitialization = new QrCodeInitialization();
                 if (qrCodeInitialization.storeStateFromQrCode(intent)) {
                     Toast toast = Toast.makeText(this,
-                            "QR code found. Now this app will receive notifications for your wish list.",
+                            R.string.qr_code_found,
                             Toast.LENGTH_SHORT);
                     toast.show();
                     Intent mainActivityIntent = new Intent(this, MainActivity.class);
@@ -39,7 +39,7 @@ public class SetupActivity extends AppCompatActivity {
                 }
             }
             Toast toast = Toast.makeText(this,
-                    "QR code not found. Please retry.",
+                    R.string.qr_code_not_found,
                     Toast.LENGTH_SHORT);
             toast.show();
         }
@@ -86,9 +86,9 @@ public class SetupActivity extends AppCompatActivity {
                     preferences.setDefaultRegion(defaultRegion);
                     preferences.setNotificationEnabled(true);
                     if (hasAccount.equals("1")) {
-                        preferences.setHasAccount("true");
+                        preferences.setHasAccount(Boolean.toString(true));
                     } else {
-                        preferences.setHasAccount("false");
+                        preferences.setHasAccount(Boolean.toString(false));
                     }
                     preferences.apply();
                     ApiService.CheckClientIdTask task =

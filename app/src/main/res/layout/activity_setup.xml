@@ -1,6 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -10,7 +12,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="You can link this app to an existing wish list." />
+        android:text="@string/scan_qr_code_help" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +32,7 @@
             android:paddingLeft="10dp"
             android:paddingEnd="10dp"
             android:paddingRight="10dp"
-            android:contentDescription="Help"
+            android:contentDescription="@string/help_description"
             android:src="@drawable/ic_help_outline_black_24dp"
             android:onClick="onClickHelp" />
     </LinearLayout>
@@ -39,13 +41,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="30dp"
-        android:text="You can start from scratch creating a new wish list." />
+        android:text="@string/start_site_help" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/startSiteButton"
-        android:text="Start site"
+        android:text="@string/start_site_button"
         android:onClick="onClickStartSite"/>
-
 </LinearLayout>

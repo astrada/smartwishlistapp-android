@@ -13,7 +13,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:contentDescription="Product image" />
+        android:contentDescription="@string/product_image_description" />
 
     <ImageButton
         android:id="@+id/infoButton"
@@ -24,8 +24,8 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:background="@drawable/ic_product_info"
-        android:contentDescription="Product info"
+        android:background="@drawable/ic_info_outline_black_24dp"
+        android:contentDescription="@string/product_info_description"
         android:onClick="onClickInfoButton" />
 
     <TextView

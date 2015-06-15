@@ -22,7 +22,7 @@ public class ApiService {
 
     public static boolean isConnected(Context context) {
         ConnectivityManager cm =
-                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
@@ -40,7 +40,7 @@ public class ApiService {
     }
 
     public static abstract class ApiTaskWithExponentialBackOff<Params, Result>
-        extends AsyncTask<Params, Void, Result> {
+            extends AsyncTask<Params, Void, Result> {
 
         private final Context context;
         private final AppPreferences preferences;
@@ -124,7 +124,7 @@ public class ApiService {
             AppPreferences preferences = new AppPreferences(getContext());
             preferences.resetAll();
             Toast toast = Toast.makeText(getContext(),
-                    "Invalid client ID, please retry.",
+                    R.string.invalid_client_id,
                     Toast.LENGTH_LONG);
             toast.show();
         }
@@ -161,7 +161,7 @@ public class ApiService {
             if (aBoolean == null) {
                 getPreferences().setGcmTokenSent(false);
                 Toast toast = Toast.makeText(getContext(),
-                        "Could not register device to receive notifications, please restart the app.",
+                        R.string.gcm_registration_failed,
                         Toast.LENGTH_LONG);
                 toast.show();
             } else {

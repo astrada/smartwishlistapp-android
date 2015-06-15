@@ -26,7 +26,7 @@ public class AppNotification {
     private static final String NOTIFICATION_CLICKED_ACTION = "NOTIFICATION_CLICKED";
     private static final String NOTIFICATION_DELETED_ACTION = "NOTIFICATION_DELETED";
     private static final String NOTIFICATION_BUY_ACTION = "NOTIFICATION_BUY";
-    private static final String URL_EXTRA = "URL";
+    private static final String URL_EXTRA = "url";
 
     private final Context context;
     private final NotificationManager notificationManager;
@@ -35,7 +35,7 @@ public class AppNotification {
     public AppNotification(Context context) {
         this.context = context;
         notificationManager =
-                (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         preferences = new AppPreferences(context);
     }
 
@@ -47,7 +47,8 @@ public class AppNotification {
     }
 
     @Nullable
-    private NotificationCompat.Builder createBuilder(SmartWishListAppNotificationData smartWishListAppNotificationData) {
+    private NotificationCompat.Builder createBuilder(
+            SmartWishListAppNotificationData smartWishListAppNotificationData) {
         List<SmartWishListNotificationTriggerData> triggers =
                 smartWishListAppNotificationData.getTriggers();
         if (triggers == null || triggers.size() == 0) {
@@ -65,7 +66,7 @@ public class AppNotification {
                 .setDeleteIntent(getDeleteIntent())
                 .setAutoCancel(true);
         if (messageCount == 1) {
-            builder.setContentTitle("Price alert")
+            builder.setContentTitle(resources.getString(R.string.price_alert))
                     .setContentText(firstMessage);
             if (triggers.size() == 1) {
                 SmartWishListNotificationTriggerData data = triggers.get(0);
@@ -73,24 +74,28 @@ public class AppNotification {
                     String url = data.getItem().getProductUrl();
                     if (url != null) {
                         builder.addAction(R.drawable.ic_add_shopping_cart_black_24dp,
-                                "Buy", getBuyIntent(url));
+                                resources.getString(R.string.buy), getBuyIntent(url));
                     }
                 }
             }
         } else {
             builder.setNumber(messageCount)
-                    .setContentTitle(String.format("%d price alerts", messageCount))
+                    .setContentTitle(resources.getQuantityString(R.plurals.price_alerts,
+                            messageCount,
+                            messageCount))
                     .setContentText(firstMessage + ",...");
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-            inboxStyle.setBigContentTitle("Price alerts:");
+            inboxStyle.setBigContentTitle(resources.getString(R.string.price_alerts_title));
             inboxStyle.addLine(firstMessage);
             int last = Math.min(triggers.size(), MAX_MESSAGES);
             for (int i = 1; i < last; i++) {
                 inboxStyle.addLine(createMessage(triggers.get(i)));
             }
             if (messageCount > last) {
-                inboxStyle.setSummaryText(String.format("+%d more",
-                        messageCount - last));
+                int more_alerts = messageCount - last;
+                inboxStyle.setSummaryText(resources.getQuantityString(R.plurals.more_alerts,
+                        more_alerts,
+                        more_alerts));
             }
             builder.setStyle(inboxStyle);
         }
