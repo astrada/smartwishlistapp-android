@@ -36,31 +36,31 @@ public class ProductInfoActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickBuyButton(View view) {
+    public void openBuyLink(View view) {
         String url = (String) view.getTag();
         if (url != null) {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(intent);
         } else {
-            AppLogging.logError("ProductInfoActivity.onClickBuyButton: No product URL");
+            AppLogging.logError("ProductInfoActivity.openBuyLink: No product URL");
         }
     }
 
     private class ShowProductInfoTask extends AppStorage.LoadTriggerDataTask {
 
         public ShowProductInfoTask() {
-            super(ProductInfoActivity.this);
+            super(getApplicationContext());
         }
 
         @Override
         protected void onPostExecute(SmartWishListNotificationTriggerData data) {
-            final TextView productTitle = (TextView) findViewById(R.id.productTitle);
-            TextView productPrice = (TextView) findViewById(R.id.productPrice);
-            TextView productTargetPrice = (TextView) findViewById(R.id.productTargetPrice);
-            CheckBox productAvailability = (CheckBox) findViewById(R.id.productAvailability);
-            CheckBox productSoldByAmazon = (CheckBox) findViewById(R.id.productSoldByAmazon);
-            TextView productAdded = (TextView) findViewById(R.id.productAdded);
-            Button buyButton = (Button) findViewById(R.id.buyButton);
+            final TextView productTitle = (TextView) findViewById(R.id.product_title);
+            TextView productPrice = (TextView) findViewById(R.id.product_price);
+            TextView productTargetPrice = (TextView) findViewById(R.id.product_target_price);
+            CheckBox productAvailability = (CheckBox) findViewById(R.id.product_availability);
+            CheckBox productSoldByAmazon = (CheckBox) findViewById(R.id.product_sold_by_amazon);
+            TextView productAdded = (TextView) findViewById(R.id.product_added_date);
+            Button buyButton = (Button) findViewById(R.id.button_buy);
 
             productTitle.setText(data.getItem().getTitle());
             productPrice.setText(data.getItem().getFormattedPrice());

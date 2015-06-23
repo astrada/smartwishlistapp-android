@@ -8,6 +8,7 @@
     <string name="title_activity_web_site">www.smartwishlist.net</string>
     <string name="title_activity_setup">Inizia</string>
     <string name="title_activity_help">Aiuto</string>
+    <string name="title_activity_settings">Impostazioni</string>
 
     <string name="invalid_client_id">Client ID non valido, si prega di riprovare.</string>
     <string name="gcm_registration_failed">Impossibile registrare il dispositivo per ricevere le notifiche, si prega di riavviare l\'app.</string>
@@ -31,7 +32,6 @@
     <string name="qr_code_not_found">QR code non trovato. Si prega di riprovare.</string>
     <string name="screenshot_description">Screenshot</string>
     <string name="help_text">Per trovare il QR code, bisogna aprire il sito www.smartwishlist.net da desktop/portatile, selezionare la voce \'Notifications\' (dal menù in alto). Se non si è ancora attivata l\'app Android, è necessario premere il pulsante con il più nel pannello \'Android App\'. Per visualizzare il codice è necessario aprire il link \'Show QR Code\'.</string>
-    <string name="notifications_label">Notifiche</string>
     <string name="my_wish_list_label">Wish List</string>
     <string name="my_wish_list_button">Apri</string>
     <string name="reset_label">Reinizializza e collega una nuova Wish List</string>
@@ -43,8 +43,10 @@
     <string name="added_label">Aggiunto il:</string>
     <string name="scan_qr_code_help">E\' possibile collegare la app a una wish list già esistente.</string>
     <string name="help_description">Aiuto</string>
-    <string name="start_site_help">E\' possibile creare una nuova wish list con il sito web.</string>
-    <string name="start_site_button">Apri sito</string>
+    <string name="open_site_help">E\' possibile creare una nuova wish list con il sito web.</string>
+    <string name="open_site_button">Apri sito</string>
     <string name="product_image_description">Foto del prodotto</string>
     <string name="product_info_description">Informazioni sul prodotto</string>
+    <string name="pref_notification_enabled">Notifiche</string>
+    <string name="pref_notification_enabled_summary">Abilita la ricezione delle notifiche riguardo ai prezzi dei prodotti</string>
 </resources>

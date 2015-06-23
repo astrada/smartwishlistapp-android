@@ -1,5 +1,6 @@
 package net.smartwishlist.smartwishlistapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +17,7 @@ public class SetupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setup);
     }
 
-    public void onClickQrCode(View view) {
+    public void scanQrCode(View view) {
         Intent intent = new Intent("com.google.zxing.client.android.SCAN");
         intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
         startActivityForResult(intent, CUSTOM_REQUEST_QR_SCANNER);
@@ -45,12 +46,12 @@ public class SetupActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickStartSite(View view) {
+    public void openWebSite(View view) {
         Intent intent = new Intent(this, WebSiteActivity.class);
         startActivity(intent);
     }
 
-    public void onClickHelp(View view) {
+    public void openHelp(View view) {
         Intent intent = new Intent(this, HelpActivity.class);
         startActivity(intent);
     }
@@ -79,7 +80,8 @@ public class SetupActivity extends AppCompatActivity {
                     String defaultRegion = scanResult.substring(DEFAULT_REGION_OFFSET,
                             HAS_ACCOUNT_OFFSET).toUpperCase();
                     String hasAccount = scanResult.substring(HAS_ACCOUNT_OFFSET);
-                    AppPreferences preferences = new AppPreferences(SetupActivity.this);
+                    Context context = getApplicationContext();
+                    AppPreferences preferences = new AppPreferences(context);
                     preferences.beginEdit();
                     preferences.setClientId(clientId);
                     preferences.setToken(token);
@@ -91,8 +93,9 @@ public class SetupActivity extends AppCompatActivity {
                         preferences.setHasAccount(Boolean.toString(false));
                     }
                     preferences.apply();
+                    AppLogging.logDebug("storeStateFromQrCode: clientId=[" + clientId + "]");
                     ApiService.CheckClientIdTask task =
-                            new ApiService.CheckClientIdTask(SetupActivity.this);
+                            new ApiService.CheckClientIdTask(context);
                     task.execute(clientId);
                     return true;
                 } else {

@@ -30,13 +30,11 @@ public class AppNotification {
 
     private final Context context;
     private final NotificationManager notificationManager;
-    private final AppPreferences preferences;
 
     public AppNotification(Context context) {
         this.context = context;
         notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        preferences = new AppPreferences(context);
     }
 
     public void show(SmartWishListAppNotificationData smartWishListAppNotificationData) {
@@ -55,6 +53,7 @@ public class AppNotification {
             return null;
         }
         Resources resources = context.getResources();
+        AppPreferences preferences = new AppPreferences(context);
         int messageCount = preferences.getPendingMessages() + triggers.size();
         String firstMessage = createMessage(triggers.get(0));
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
@@ -156,6 +155,7 @@ public class AppNotification {
                 buyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(buyIntent);
             }
+            AppPreferences preferences = new AppPreferences(context);
             preferences.setPendingMessages(0);
             notificationManager.cancel(NOTIFICATION_ID);
             context.unregisterReceiver(this);

@@ -20,9 +20,9 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/scanQrCodeButton"
+            android:id="@+id/button_scan_qr_code"
             android:text="@string/qr_code_button"
-            android:onClick="onClickQrCode" />
+            android:onClick="scanQrCode" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -34,19 +34,19 @@
             android:paddingRight="10dp"
             android:contentDescription="@string/help_description"
             android:src="@drawable/ic_help_outline_black_24dp"
-            android:onClick="onClickHelp" />
+            android:onClick="openHelp" />
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="30dp"
-        android:text="@string/start_site_help" />
+        android:text="@string/open_site_help" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/startSiteButton"
-        android:text="@string/start_site_button"
-        android:onClick="onClickStartSite"/>
+        android:id="@+id/button_open_site"
+        android:text="@string/open_site_button"
+        android:onClick="openWebSite"/>
 </LinearLayout>

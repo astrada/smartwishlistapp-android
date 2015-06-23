@@ -26,6 +26,14 @@ repositories {
 
 
 android {
+    signingConfigs {
+        config {
+            keyAlias "$KeyAlias"
+            keyPassword "$KeyPassword"
+            storeFile file("$StoreFile")
+            storePassword "$StorePassword"
+        }
+    }
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
 
@@ -49,6 +57,7 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }

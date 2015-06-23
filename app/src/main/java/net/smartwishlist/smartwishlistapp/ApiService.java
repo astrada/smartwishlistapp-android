@@ -43,21 +43,15 @@ public class ApiService {
             extends AsyncTask<Params, Void, Result> {
 
         private final Context context;
-        private final AppPreferences preferences;
         private final Smartwishlist service;
 
         protected ApiTaskWithExponentialBackOff(Context context) {
             this.context = context;
-            this.preferences = new AppPreferences(context);
             this.service = ApiService.getApiServiceHandle(context);
         }
 
         protected Context getContext() {
             return context;
-        }
-
-        protected AppPreferences getPreferences() {
-            return preferences;
         }
 
         protected Smartwishlist getService() {
@@ -109,6 +103,7 @@ public class ApiService {
                 throws IOException {
             Smartwishlist.Client.CheckId checkId = getService().client().checkId(strings[0]);
             checkId.setIsApp(true);
+            AppLogging.logDebug("CheckClientIdTask.tryInBackground: URL=[" + checkId.buildHttpRequestUrl().toString() + "]");
             return checkId.execute();
         }
 
@@ -139,8 +134,9 @@ public class ApiService {
 
         @Override
         protected Boolean tryInBackground(String... strings) throws IOException {
-            String clientId = getPreferences().getClientId();
-            String token = getPreferences().getToken();
+            AppPreferences preferences = new AppPreferences(getContext());
+            String clientId = preferences.getClientId();
+            String token = preferences.getToken();
             double timestamp = ApiSignature.getTimestamp();
             String registrationId = strings[0];
             String signature = ApiSignature.generateRequestSignature(
@@ -158,14 +154,15 @@ public class ApiService {
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
+            AppPreferences preferences = new AppPreferences(getContext());
             if (aBoolean == null) {
-                getPreferences().setGcmTokenSent(false);
+                preferences.setGcmTokenSent(false);
                 Toast toast = Toast.makeText(getContext(),
                         R.string.gcm_registration_failed,
                         Toast.LENGTH_LONG);
                 toast.show();
             } else {
-                getPreferences().setGcmTokenSent(aBoolean);
+                preferences.setGcmTokenSent(aBoolean);
             }
         }
     }
@@ -180,8 +177,9 @@ public class ApiService {
         @Override
         protected SmartWishListAppNotificationData tryInBackground(Void... voids)
                 throws IOException {
-            String clientId = getPreferences().getClientId();
-            String token = getPreferences().getToken();
+            AppPreferences preferences = new AppPreferences(getContext());
+            String clientId = preferences.getClientId();
+            String token = preferences.getToken();
             if (clientId == null || token == null) {
                 return null;
             }

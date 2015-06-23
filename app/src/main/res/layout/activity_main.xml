@@ -16,32 +16,15 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/notifications_label"
-            android:layout_weight="1" />
-
-        <ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/notificationToggleButton"
-            android:onClick="onClickNotificationSwitch" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:text="@string/my_wish_list_label"
             android:layout_weight="1" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/showWishListsButton"
+            android:id="@+id/button_open_wish_lists"
             android:text="@string/my_wish_list_button"
-            android:onClick="onClickShowWishLists"/>
+            android:onClick="openMyWishLists"/>
     </LinearLayout>
 
 
@@ -58,9 +41,9 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/setupButton"
+            android:id="@+id/button_reset"
             android:text="@string/reset_button"
-            android:onClick="onClickReset"/>
+            android:onClick="reset"/>
     </LinearLayout>
 
 </LinearLayout>

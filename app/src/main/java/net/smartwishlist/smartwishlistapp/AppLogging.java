@@ -21,4 +21,12 @@ public class AppLogging {
             Crashlytics.log(Log.ERROR, AppConstants.LOG_TAG, message);
         }
     }
+
+    public static void logDebug(String message) {
+        if (BuildConfig.DEBUG) {
+            Log.d(AppConstants.LOG_TAG, message);
+        } else {
+            Crashlytics.log(Log.DEBUG, AppConstants.LOG_TAG, message);
+        }
+    }
 }

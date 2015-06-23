@@ -9,6 +9,9 @@ import javax.crypto.spec.SecretKeySpec;
 public class ApiSignature {
 
     public static String generateRequestSignature(String token, String payload, double timestamp) {
+        if (token == null) {
+            throw new NullPointerException("ApiSignature.generateRequestSignature: token cannot be null");
+        }
         try {
             String value = String.format(Locale.US, "%s%.3f", payload, timestamp);
             byte[] keyBytes = token.getBytes();

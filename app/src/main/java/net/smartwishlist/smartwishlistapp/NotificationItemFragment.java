@@ -62,15 +62,16 @@ public class NotificationItemFragment extends ListFragment
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         timestamp = ApiSignature.getTimestamp();
-        AppPreferences preferences = new AppPreferences(getActivity());
-        return new AppStorage.NotificationLoader(getActivity(),
+        Context context = getActivity().getApplicationContext();
+        AppPreferences preferences = new AppPreferences(context);
+        return new AppStorage.NotificationLoader(context,
                 preferences.getLastViewedNotifications());
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         adapter.swapCursor(cursor);
-        AppPreferences preferences = new AppPreferences(getActivity());
+        AppPreferences preferences = new AppPreferences(getActivity().getApplicationContext());
         preferences.setLastViewedNotifications(timestamp);
     }
 
@@ -98,8 +99,8 @@ public class NotificationItemFragment extends ListFragment
                 NetworkImageView thumbnail = (NetworkImageView) view.findViewById(R.id.thumbnail);
                 TextView title = (TextView) view.findViewById(R.id.title);
                 TextView price = (TextView) view.findViewById(R.id.price);
-                TextView fetchDate = (TextView) view.findViewById(R.id.fetchDate);
-                ImageButton imageButton = (ImageButton) view.findViewById(R.id.infoButton);
+                TextView fetchDate = (TextView) view.findViewById(R.id.fetch_date);
+                ImageButton imageButton = (ImageButton) view.findViewById(R.id.button_info);
 
                 thumbnail.setImageUrl(trigger.getItem().getImageUrl(),
                         NetworkImageManager.getInstance(context).getImageLoader());

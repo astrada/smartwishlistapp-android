@@ -1,6 +1,6 @@
 package net.smartwishlist.smartwishlistapp;
 
-import android.app.Activity;
+import android.content.Context;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -8,26 +8,17 @@ import io.fabric.sdk.android.Fabric;
 
 public class AppInitialization {
 
-    private final Activity activity;
+    private final Context context;
     private final AppPreferences preferences;
-    private GcmInitialization gcmInitialization;
 
-    public AppInitialization(Activity activity) {
-        this.activity = activity;
-        preferences = new AppPreferences(activity);
-    }
-
-    public AppPreferences getPreferences() {
-        return preferences;
-    }
-
-    public GcmInitialization getGcmInitialization() {
-        return gcmInitialization;
+    public AppInitialization(Context context) {
+        this.context = context;
+        preferences = new AppPreferences(context);
     }
 
     public void initializeApp() {
         if (!BuildConfig.DEBUG) {
-            Fabric.with(activity, new Crashlytics());
+            Fabric.with(context, new Crashlytics());
         }
         if (BuildConfig.DEBUG) {
             preferences.beginEdit();
@@ -40,7 +31,6 @@ public class AppInitialization {
         } else if (!needSetup()) {
             Crashlytics.setString(AppConstants.CLIENT_ID_TAG, preferences.getClientId());
         }
-        gcmInitialization = new GcmInitialization(activity, preferences);
     }
 
     public boolean needSetup() {

@@ -1,6 +1,7 @@
 package net.smartwishlist.smartwishlistapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -14,25 +15,22 @@ public class GcmInitialization {
     private static final String TAG = "GcmInitialization";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
-    private final Activity activity;
-    private final AppPreferences preferences;
-
-    public GcmInitialization(Activity activity, AppPreferences preferences) {
-        this.activity = activity;
-        this.preferences = preferences;
+    public GcmInitialization() {
     }
 
-    public void initializeGcmToken() {
-        if (!preferences.isGcmTokenSent() && checkPlayServices()) {
+    public void initializeGcmToken(Activity activity) {
+        AppPreferences preferences = new AppPreferences(activity.getApplicationContext());
+        if (!preferences.isGcmTokenSent() && checkPlayServices(activity)) {
             Intent intent = new Intent(activity, GcmRegistrationIntentService.class);
             activity.startService(intent);
         }
     }
 
-    public boolean deleteGcmToken() {
+    public boolean deleteGcmToken(Context context) {
         try {
             synchronized (TAG) {
-                InstanceID.getInstance(activity).deleteInstanceID();
+                InstanceID.getInstance(context).deleteInstanceID();
+                AppPreferences preferences = new AppPreferences(context);
                 preferences.setGcmTokenSent(false);
                 return true;
             }
@@ -42,7 +40,7 @@ public class GcmInitialization {
         }
     }
 
-    private boolean checkPlayServices() {
+    private static boolean checkPlayServices(Activity activity) {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {

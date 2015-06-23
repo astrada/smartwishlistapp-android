@@ -20,11 +20,11 @@ public class WebSiteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_site);
 
-        WebView webView = (WebView) findViewById(R.id.mainWebView);
+        WebView webView = (WebView) findViewById(R.id.web_view);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAllowFileAccess(false);
-        webView.addJavascriptInterface(new WebAppInterface(this),
+        webView.addJavascriptInterface(new WebAppInterface(getApplicationContext()),
                 AppConstants.JAVASCRIPT_INTERFACE);
         webView.setWebViewClient(new SmartWishListWebViewClient());
         String url;
@@ -42,7 +42,7 @@ public class WebSiteActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        WebView webView = (WebView) findViewById(R.id.mainWebView);
+        WebView webView = (WebView) findViewById(R.id.web_view);
         if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
             webView.goBack();
             return true;
@@ -57,7 +57,12 @@ public class WebSiteActivity extends AppCompatActivity {
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (BuildConfig.DEBUG && url.startsWith(BuildConfig.LOCAL_WEB_SITE_URL)) {
                 return false;
-            } else if (url.startsWith(AppConstants.WEB_SITE_URL)) {
+            } else if (url.startsWith(AppConstants.WEB_SITE_URL) ||
+                    url.startsWith(AppConstants.GOOGLE_API_URL) ||
+                    url.startsWith(AppConstants.GOOGLE_ACCOUNTS_URL) ||
+                    url.startsWith(AppConstants.GOOGLE_STATIC_URL) ||
+                    url.startsWith(AppConstants.GOOGLE_OAUTH_URL) ||
+                    url.startsWith(AppConstants.SMART_WISH_LIST_API)) {
                 return false;
             } else {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));

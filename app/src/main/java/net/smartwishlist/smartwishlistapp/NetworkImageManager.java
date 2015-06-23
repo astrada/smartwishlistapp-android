@@ -13,8 +13,8 @@ public class NetworkImageManager {
     private static final int CACHE_MAX_SIZE = 20;
 
     private static NetworkImageManager instance;
-    private static Context applicationContext;
 
+    private final Context applicationContext;
     private RequestQueue requestQueue;
     private final ImageLoader imageLoader;
 

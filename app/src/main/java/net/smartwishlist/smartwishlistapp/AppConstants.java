@@ -27,11 +27,23 @@ public class AppConstants {
 
     public static final String WEB_SITE_URL = "https://www.smartwishlist.net";
 
+    public static final String GOOGLE_API_URL = "https://apis.google.com";
+
+    public static final String GOOGLE_ACCOUNTS_URL = "https://accounts.google.com";
+
+    public static final String GOOGLE_STATIC_URL = "https://ssl.gstatic.com";
+
+    public static final String GOOGLE_OAUTH_URL = "https://oauth.googleusercontent.com";
+
+    public static final String SMART_WISH_LIST_API = "https://smart-wish-list.appspot.com";
+
     public static final String MY_WISH_LISTS_PAGE = "/mywishlists";
 
     public static final String JAVASCRIPT_INTERFACE = "AndroidAppJsInterface";
 
     public static final String CLIENT_ID_TAG = "ClientId";
+
+    public static final String RESET_CLIENT_ID_TAG = "ResetClientId";
 
     public static final double ONE_SECOND_IN_MILLISECONDS = 1000.0;
 

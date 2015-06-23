@@ -1,5 +1,6 @@
 package net.smartwishlist.smartwishlistapp;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -15,7 +16,7 @@ public class AppGcmListenerService extends GcmListenerService {
             if (messageType != null) {
                 switch (messageType) {
                     case "price-alert":
-                        AppPreferences preferences = new AppPreferences(this);
+                        AppPreferences preferences = new AppPreferences(getApplicationContext());
                         if (preferences.getNotificationEnabled()) {
                             String clientId = data.getString("client-id");
                             if (clientId != null && clientId.equals(preferences.getClientId())) {
@@ -44,7 +45,7 @@ public class AppGcmListenerService extends GcmListenerService {
             extends ApiService.ListAppNotificationsTask {
 
         public FetchAppNotificationsTask() {
-            super(AppGcmListenerService.this);
+            super(getApplicationContext());
         }
 
         @Override
@@ -58,7 +59,7 @@ public class AppGcmListenerService extends GcmListenerService {
                 return;
             }
 
-            StoreNotificationsTask task = new StoreNotificationsTask(getPreferences());
+            StoreNotificationsTask task = new StoreNotificationsTask();
             task.execute(smartWishListAppNotificationData);
 
             AppNotification appNotification = new AppNotification(getApplicationContext());
@@ -68,15 +69,14 @@ public class AppGcmListenerService extends GcmListenerService {
 
     private class StoreNotificationsTask extends AsyncTask<SmartWishListAppNotificationData, Void, Void> {
 
-        private final AppPreferences preferences;
-
-        public StoreNotificationsTask(AppPreferences preferences) {
-            this.preferences = preferences;
+        public StoreNotificationsTask() {
         }
 
         @Override
         protected Void doInBackground(SmartWishListAppNotificationData... smartWishListAppNotificationData) {
-            AppStorage appStorage = new AppStorage(getApplicationContext());
+            Context context = getApplicationContext();
+            AppStorage appStorage = new AppStorage(context);
+            AppPreferences preferences = new AppPreferences(context);
             appStorage.deleteAllOldNotifications(preferences.getLastViewedNotifications());
             appStorage.insertNotifications(smartWishListAppNotificationData[0].getTriggers());
             return null;

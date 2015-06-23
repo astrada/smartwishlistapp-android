@@ -13,6 +13,8 @@
 -keepattributes SourceFile,LineNumberTable
 
 # Needed by WebView with JS
--keepclassmembers class fqcn.of.javascript.interface.for.webview {
-   public *;
+-keepclassmembers class net.smartwishlist.smartwishlistapp.WebAppInterface {
+    public *;
 }
+
+-dontwarn sun.misc.Unsafe

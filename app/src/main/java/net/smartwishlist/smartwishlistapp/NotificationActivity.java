@@ -23,7 +23,7 @@ public class NotificationActivity extends AppCompatActivity
         task.execute(id);
     }
 
-    public void onClickInfoButton(View view) {
+    public void openProductInfo(View view) {
         long id = (long) view.getTag();
         Intent intent = new Intent(this, ProductInfoActivity.class);
         intent.putExtra(AppStorage.NotificationContract._ID, id);
@@ -33,7 +33,7 @@ public class NotificationActivity extends AppCompatActivity
     private class OpenProductUrlTask extends AppStorage.LoadTriggerDataTask {
 
         public OpenProductUrlTask() {
-            super(NotificationActivity.this);
+            super(getApplicationContext());
         }
 
         @Override

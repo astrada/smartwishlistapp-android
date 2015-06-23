@@ -3,26 +3,26 @@ package net.smartwishlist.smartwishlistapp;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.crashlytics.android.Crashlytics;
 
 public class AppPreferences {
 
-    private static final String PREFS_NAME = AppConstants.APP_NAMESPACE + ".prefs";
-    private static final String CLIENT_ID_PROP = "ClientId";
-    private static final String TOKEN_PROP = "Token";
-    private static final String DEFAULT_REGION_PROP = "DefaultRegion";
-    private static final String HAS_ACCOUNT_PROP = "HasAccount";
-    private static final String LAST_VIEWED_NOTIFICATIONS_PROP = "LastViewedNotifications";
-    private static final String PENDING_MESSAGES_PROP = "PendingMessages";
-    private static final String NOTIFICATION_ENABLED_PROP = "NotificationEnabled";
-    private static final String GCM_TOKEN_SENT_PROP = "GcmTokenSent";
+    private static final String CLIENT_ID_PROP = "clientId";
+    private static final String TOKEN_PROP = "token";
+    private static final String DEFAULT_REGION_PROP = "defaultRegion";
+    private static final String HAS_ACCOUNT_PROP = "hasAccount";
+    private static final String LAST_VIEWED_NOTIFICATIONS_PROP = "lastViewedNotifications";
+    private static final String PENDING_MESSAGES_PROP = "pendingMessages";
+    private static final String NOTIFICATION_ENABLED_PROP = "notificationEnabled";
+    private static final String GCM_TOKEN_SENT_PROP = "gcmTokenSent";
 
     private final SharedPreferences sharedPreferences;
     private SharedPreferences.Editor currentEditor;
 
     public AppPreferences(Context context) {
-        sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public String getClientId() {
@@ -32,7 +32,11 @@ public class AppPreferences {
     public void setClientId(String clientId) {
         setStringPreference(CLIENT_ID_PROP, clientId);
         if (!BuildConfig.DEBUG) {
-            Crashlytics.setString(AppConstants.CLIENT_ID_TAG, BuildConfig.DEBUG_CLIENT_ID);
+            if (clientId != null) {
+                Crashlytics.setString(AppConstants.CLIENT_ID_TAG, clientId);
+            } else {
+                Crashlytics.setBool(AppConstants.RESET_CLIENT_ID_TAG, true);
+            }
         }
     }
 

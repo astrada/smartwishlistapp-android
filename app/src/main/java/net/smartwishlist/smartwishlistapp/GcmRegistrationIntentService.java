@@ -32,7 +32,8 @@ public class GcmRegistrationIntentService extends IntentService {
     }
 
     private void sendRegistrationToServer(String token) {
-        ApiService.RegisterGcmDeviceTask task = new ApiService.RegisterGcmDeviceTask(getApplicationContext());
+        ApiService.RegisterGcmDeviceTask task =
+                new ApiService.RegisterGcmDeviceTask(getApplicationContext());
         task.execute(token);
     }
 }

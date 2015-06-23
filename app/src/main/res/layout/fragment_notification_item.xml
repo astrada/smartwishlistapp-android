@@ -16,7 +16,7 @@
         android:contentDescription="@string/product_image_description" />
 
     <ImageButton
-        android:id="@+id/infoButton"
+        android:id="@+id/button_info"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_alignParentRight="true"
@@ -26,7 +26,7 @@
         android:layout_marginStart="16dp"
         android:background="@drawable/ic_info_outline_black_24dp"
         android:contentDescription="@string/product_info_description"
-        android:onClick="onClickInfoButton" />
+        android:onClick="openProductInfo" />
 
     <TextView
         android:id="@+id/title"
@@ -37,8 +37,8 @@
         android:layout_marginLeft="16dp"
         android:layout_toRightOf="@id/thumbnail"
         android:layout_toEndOf="@id/thumbnail"
-        android:layout_toLeftOf="@id/infoButton"
-        android:layout_toStartOf="@id/infoButton"
+        android:layout_toLeftOf="@id/button_info"
+        android:layout_toStartOf="@id/button_info"
         android:textSize="16sp" />
 
     <TextView
@@ -48,22 +48,22 @@
         android:layout_alignStart="@id/title"
         android:layout_alignLeft="@id/title"
         android:layout_below="@id/title"
-        android:layout_toLeftOf="@id/infoButton"
-        android:layout_toStartOf="@id/infoButton"
+        android:layout_toLeftOf="@id/button_info"
+        android:layout_toStartOf="@id/button_info"
         android:paddingTop="4dp"
         android:textSize="14sp"
         android:textColor="#a94442"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/fetchDate"
+        android:id="@+id/fetch_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@id/title"
         android:layout_alignLeft="@id/title"
         android:layout_below="@id/price"
-        android:layout_toLeftOf="@id/infoButton"
-        android:layout_toStartOf="@id/infoButton"
+        android:layout_toLeftOf="@id/button_info"
+        android:layout_toStartOf="@id/button_info"
         android:paddingTop="4dp"
         android:textSize="14sp" />
 

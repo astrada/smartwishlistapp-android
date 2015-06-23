@@ -10,14 +10,15 @@ public class WebAppInterface {
     private static final String DEFAULT_REGION_KEY = "defaultRegion";
     private static final String HAS_ACCOUNT_KEY = "hasAccount";
 
-    private final AppPreferences appPreferences;
+    private final Context context;
 
     public WebAppInterface(Context context) {
-        appPreferences = new AppPreferences(context);
+        this.context = context;
     }
 
     @JavascriptInterface
     public String getItemFromStorage(String key) {
+        AppPreferences appPreferences = new AppPreferences(context);
         switch (key) {
             case CLIENT_ID_KEY:
                 return appPreferences.getClientId();
@@ -36,6 +37,8 @@ public class WebAppInterface {
 
     @JavascriptInterface
     public void setItemInStorage(String key, String value) {
+        AppPreferences appPreferences = new AppPreferences(context);
+        AppLogging.logDebug("setItemInStorage: [" + key + "]=[" + value + "]");
         switch (key) {
             case CLIENT_ID_KEY:
                 if (value != null && !value.equals(appPreferences.getClientId())) {
@@ -57,6 +60,7 @@ public class WebAppInterface {
 
     @JavascriptInterface
     public void clearItemsInStorage() {
+        AppPreferences appPreferences = new AppPreferences(context);
         appPreferences.resetAll();
     }
 }
