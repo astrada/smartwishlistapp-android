@@ -83,21 +83,9 @@ public class MainActivity extends AppCompatActivity {
         builder.setMessage(getString(R.string.confirmation))
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Context context = getApplicationContext();
                         GcmInitialization gcmInitialization = new GcmInitialization();
-                        if (gcmInitialization.deleteGcmToken(context)) {
-                            AppPreferences preferences = new AppPreferences(context);
-                            preferences.resetAll();
-                            Intent intent = new Intent(MainActivity.this, SetupActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            Toast toast = Toast.makeText(MainActivity.this,
-                                    R.string.error_during_reset,
-                                    Toast.LENGTH_SHORT);
-                            toast.show();
-                            dialog.dismiss();
-                        }
+                        gcmInitialization.deleteGcmToken(MainActivity.this);
+                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

@@ -3,6 +3,8 @@ package net.smartwishlist.smartwishlistapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -26,18 +28,9 @@ public class GcmInitialization {
         }
     }
 
-    public boolean deleteGcmToken(Context context) {
-        try {
-            synchronized (TAG) {
-                InstanceID.getInstance(context).deleteInstanceID();
-                AppPreferences preferences = new AppPreferences(context);
-                preferences.setGcmTokenSent(false);
-                return true;
-            }
-        } catch (IOException e) {
-            AppLogging.logException(e);
-            return false;
-        }
+    public void deleteGcmToken(Activity activity) {
+        DeleteGcmTokenTask task = new DeleteGcmTokenTask(activity);
+        task.execute();
     }
 
     private static boolean checkPlayServices(Activity activity) {
@@ -53,5 +46,47 @@ public class GcmInitialization {
             return false;
         }
         return true;
+    }
+
+    private class DeleteGcmTokenTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final Activity activity;
+        private final Context context;
+
+        public DeleteGcmTokenTask(Activity activity) {
+            this.activity = activity;
+            context = activity.getApplicationContext();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            try {
+                synchronized (TAG) {
+                    InstanceID.getInstance(context).deleteInstanceID();
+                    AppPreferences preferences = new AppPreferences(context);
+                    preferences.setGcmTokenSent(false);
+                    return true;
+                }
+            } catch (IOException e) {
+                AppLogging.logException(e);
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            if (aBoolean) {
+                AppPreferences preferences = new AppPreferences(context);
+                preferences.resetAll();
+                Intent intent = new Intent(activity, SetupActivity.class);
+                activity.startActivity(intent);
+                activity.finish();
+            } else {
+                Toast toast = Toast.makeText(context,
+                        R.string.error_during_reset,
+                        Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        }
     }
 }

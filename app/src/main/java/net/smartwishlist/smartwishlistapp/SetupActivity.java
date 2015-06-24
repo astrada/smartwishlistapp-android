@@ -49,6 +49,7 @@ public class SetupActivity extends AppCompatActivity {
     public void openWebSite(View view) {
         Intent intent = new Intent(this, WebSiteActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void openHelp(View view) {
