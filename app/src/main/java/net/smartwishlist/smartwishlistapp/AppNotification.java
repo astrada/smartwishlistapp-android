@@ -1,5 +1,6 @@
 package net.smartwishlist.smartwishlistapp;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -8,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
@@ -20,26 +20,25 @@ import java.util.List;
 
 public class AppNotification {
 
-    private static final int NOTIFICATION_ID = 1;
+    public static final int NOTIFICATION_ID = 1;
     private static final int MAX_MESSAGES = 4;
 
-    private static final String NOTIFICATION_CLICKED_ACTION = "NOTIFICATION_CLICKED";
-    private static final String NOTIFICATION_DELETED_ACTION = "NOTIFICATION_DELETED";
-    private static final String NOTIFICATION_BUY_ACTION = "NOTIFICATION_BUY";
-    private static final String URL_EXTRA = "url";
+    public static final String NOTIFICATION_CLICKED_ACTION = "NOTIFICATION_CLICKED";
+    public static final String NOTIFICATION_DELETED_ACTION = "NOTIFICATION_DELETED";
+    public static final String NOTIFICATION_BUY_ACTION = "NOTIFICATION_BUY";
+    public static final String URL_EXTRA = "url";
 
     private final Context context;
-    private final NotificationManager notificationManager;
 
     public AppNotification(Context context) {
         this.context = context;
-        notificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     public void show(SmartWishListAppNotificationData smartWishListAppNotificationData) {
         NotificationCompat.Builder builder = createBuilder(smartWishListAppNotificationData);
         if (builder != null) {
+            NotificationManager notificationManager =
+                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(NOTIFICATION_ID, builder.build());
         }
     }
@@ -63,6 +62,7 @@ public class AppNotification {
                 .setColor(AppConstants.LOGO_COLOR)
                 .setContentIntent(getContentIntent())
                 .setDeleteIntent(getDeleteIntent())
+                .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true);
         if (messageCount == 1) {
             builder.setContentTitle(resources.getString(R.string.price_alert))
@@ -139,26 +139,6 @@ public class AppNotification {
                     item.getTitle());
         } else {
             return null;
-        }
-    }
-
-    private class NotificationBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(NOTIFICATION_CLICKED_ACTION)) {
-                Intent detailIntent = new Intent(context, NotificationActivity.class);
-                detailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(detailIntent);
-            } else if (intent.getAction().equals(NOTIFICATION_BUY_ACTION)) {
-                Intent buyIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(intent.getStringExtra(URL_EXTRA)));
-                buyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(buyIntent);
-            }
-            AppPreferences preferences = new AppPreferences(context);
-            preferences.setPendingMessages(0);
-            notificationManager.cancel(NOTIFICATION_ID);
-            context.unregisterReceiver(this);
         }
     }
 }

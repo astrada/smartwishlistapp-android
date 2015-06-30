@@ -83,6 +83,15 @@
                 <category android:name="net.smartwishlist.smartwishlistapp" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:exported="false"
+            android:name=".NotificationBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="NOTIFICATION_CLICKED" />
+                <action android:name="NOTIFICATION_DELETED" />
+                <action android:name="NOTIFICATION_BUY" />
+            </intent-filter>
+        </receiver>
 
         <service
             android:name=".AppGcmListenerService"
