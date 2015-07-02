@@ -34,18 +34,22 @@ public class GcmInitialization {
     }
 
     private static boolean checkPlayServices(Activity activity) {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, activity,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            } else {
-                AppLogging.logError("This device is not supported.");
-                activity.finish();
+        if (BuildConfig.DEBUG) {
+            return true;
+        } else {
+            int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
+            if (resultCode != ConnectionResult.SUCCESS) {
+                if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                    GooglePlayServicesUtil.getErrorDialog(resultCode, activity,
+                            PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                } else {
+                    AppLogging.logError("This device is not supported.");
+                    activity.finish();
+                }
+                return false;
             }
-            return false;
+            return true;
         }
-        return true;
     }
 
     private class DeleteGcmTokenTask extends AsyncTask<Void, Void, Boolean> {

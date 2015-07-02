@@ -3,15 +3,35 @@ package net.smartwishlist.smartwishlistapp;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.Json;
 import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+
+import java.util.SimpleTimeZone;
 
 public class AppConstants {
 
-    public static final JsonFactory JSON_FACTORY = new AndroidJsonFactory();
+    private static final String TAG = "AppConstants";
+
+    private static JsonFactory JSON_FACTORY = null;
+
+    public static JsonFactory getJsonFactory() {
+        synchronized (TAG) {
+            if (JSON_FACTORY == null) {
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                    JSON_FACTORY = new AndroidJsonFactory();
+                } else {
+                    JSON_FACTORY = new GsonFactory();
+                }
+            }
+            return JSON_FACTORY;
+        }
+    }
 
     public static final HttpTransport HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
 

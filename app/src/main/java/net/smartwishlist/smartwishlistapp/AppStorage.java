@@ -39,7 +39,7 @@ public class AppStorage {
                                 trigger.getItem().getAsin());
                 try {
                     contentValues.put(NotificationContract.COLUMN_NAME_JSON,
-                            AppConstants.JSON_FACTORY.toString(trigger));
+                            AppConstants.getJsonFactory().toString(trigger));
                 } catch (IOException e) {
                     AppLogging.logException(e);
                 }
@@ -54,6 +54,7 @@ public class AppStorage {
         }
     }
 
+    @SuppressWarnings("TryFinallyCanBeTryWithResources")
     public Cursor queryAllNewNotifications(double timestamp) {
         SQLiteDatabase sqLiteDatabase = dbOpenHelper.getReadableDatabase();
         return sqLiteDatabase.query(NotificationContract.TABLE_NAME,
@@ -64,6 +65,7 @@ public class AppStorage {
                 null, null, null);
     }
 
+    @SuppressWarnings("TryFinallyCanBeTryWithResources")
     public SmartWishListNotificationTriggerData queryNotificationById(long id) {
         SQLiteDatabase sqLiteDatabase = dbOpenHelper.getReadableDatabase();
         Cursor cursor = sqLiteDatabase.query(NotificationContract.TABLE_NAME,
@@ -71,11 +73,14 @@ public class AppStorage {
                 NotificationContract._ID + " = ?", new String[]{Long.toString(id)},
                 null, null, null);
         if (cursor != null) {
-            cursor.moveToFirst();
-            String json = cursor.getString(0);
-            SmartWishListNotificationTriggerData result = parseNotificationTriggerData(json);
-            if (result != null) return result;
-            cursor.close();
+            try {
+                cursor.moveToFirst();
+                String json = cursor.getString(0);
+                SmartWishListNotificationTriggerData result = parseNotificationTriggerData(json);
+                if (result != null) return result;
+            } finally {
+                cursor.close();
+            }
         }
         return null;
     }
@@ -98,7 +103,7 @@ public class AppStorage {
     public static SmartWishListNotificationTriggerData parseNotificationTriggerData(String json) {
         SmartWishListNotificationTriggerData result = new SmartWishListNotificationTriggerData();
         try {
-            JsonParser jsonParser = AppConstants.JSON_FACTORY.createJsonParser(json);
+            JsonParser jsonParser = AppConstants.getJsonFactory().createJsonParser(json);
             jsonParser.parse(result);
             return result;
         } catch (IOException e) {
