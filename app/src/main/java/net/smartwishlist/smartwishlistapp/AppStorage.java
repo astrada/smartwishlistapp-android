@@ -54,7 +54,6 @@ public class AppStorage {
         }
     }
 
-    @SuppressWarnings("TryFinallyCanBeTryWithResources")
     public Cursor queryAllNewNotifications(double timestamp) {
         SQLiteDatabase sqLiteDatabase = dbOpenHelper.getReadableDatabase();
         return sqLiteDatabase.query(NotificationContract.TABLE_NAME,
@@ -62,10 +61,9 @@ public class AppStorage {
                         NotificationContract.COLUMN_NAME_JSON},
                 NotificationContract.COLUMN_NAME_TIMESTAMP + " >= ?",
                 new String[]{Double.toString(timestamp)},
-                null, null, null);
+                null, null, NotificationContract.COLUMN_NAME_TIMESTAMP + " DESC");
     }
 
-    @SuppressWarnings("TryFinallyCanBeTryWithResources")
     public SmartWishListNotificationTriggerData queryNotificationById(long id) {
         SQLiteDatabase sqLiteDatabase = dbOpenHelper.getReadableDatabase();
         Cursor cursor = sqLiteDatabase.query(NotificationContract.TABLE_NAME,
