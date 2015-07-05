@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Smart Wish List</string>
     <string name="action_settings">Settings</string>
-    <string name="qr_code_button">Scan QR code</string>
 
     <string name="title_activity_notification">Price alerts</string>
     <string name="title_activity_product_info">Product info</string>
@@ -10,6 +9,7 @@
     <string name="title_activity_help">Help</string>
     <string name="title_activity_settings">Settings</string>
 
+    <string name="qr_code_button">Scan QR code</string>
     <string name="invalid_client_id">Invalid client ID, please retry.</string>
     <string name="gcm_registration_failed">Could not register device to receive notifications, please restart the app.</string>
     <string name="price_alert">Price alert</string>
@@ -27,25 +27,26 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="error_during_reset">Error during client reset. Please retry.</string>
-    <string name="qr_code_found">QR code found. Now this app will receive notifications for your wish list.</string>
+    <string name="qr_code_found">QR code found. Now this app will receive notifications for your Wish List.</string>
     <string name="qr_code_not_found">QR code not found. Please retry.</string>
     <string name="screenshot_description">Screenshot</string>
     <string name="help_text">To get the QR code, you should open www.smartwishlist.net on your desktop/laptop, then go to \'Notifications\' (top menu bar). If you didn\'t yet activate Android App, you should click on the plus button in \'Android App\' panel, and finally you should click on \'Show QR Code\' link.</string>
     <string name="my_wish_list_label">My Wish Lists</string>
     <string name="my_wish_list_button">Open</string>
-    <string name="reset_label">Reset and link to a new Wish List</string>
+    <string name="reset_label">Link this app to a new Wish List</string>
     <string name="reset_button">Reset</string>
     <string name="current_price_label">Current price:</string>
     <string name="target_price_label">Target price:</string>
     <string name="available_label">Available</string>
     <string name="sold_by_amazon_label">Sold by Amazon</string>
     <string name="added_label">Added:</string>
-    <string name="scan_qr_code_help">You can link this app to an existing wish list.</string>
+    <string name="scan_qr_code_help">You can link this app to an existing Wish List.</string>
     <string name="help_description">Help</string>
-    <string name="open_site_help">You can start from scratch creating a new wish list via web site.</string>
+    <string name="open_site_help">You can create a new Wish List from the web site.</string>
     <string name="open_site_button">Open web site</string>
     <string name="product_image_description">Product image</string>
     <string name="product_info_description">Product info</string>
     <string name="pref_notification_enabled">Notifications</string>
     <string name="pref_notification_enabled_summary">Receive price drop notifications</string>
+    <string name="refresh_button">Refresh</string>
 </resources>

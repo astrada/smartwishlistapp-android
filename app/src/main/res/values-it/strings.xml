@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Smart Wish List</string>
     <string name="action_settings">Impostazioni</string>
-    <string name="qr_code_button">Leggi QR code</string>
 
     <string name="title_activity_notification">Avvisi</string>
     <string name="title_activity_product_info">Informazioni</string>
@@ -10,6 +9,7 @@
     <string name="title_activity_help">Aiuto</string>
     <string name="title_activity_settings">Impostazioni</string>
 
+    <string name="qr_code_button">Leggi QR code</string>
     <string name="invalid_client_id">Client ID non valido, si prega di riprovare.</string>
     <string name="gcm_registration_failed">Impossibile registrare il dispositivo per ricevere le notifiche, si prega di riavviare l\'app.</string>
     <string name="price_alert">Avviso</string>
@@ -28,25 +28,26 @@
     <string name="ok">OK</string>
     <string name="cancel">Annulla</string>
     <string name="error_during_reset">Errore durante il reset. Si prega di riprovare.</string>
-    <string name="qr_code_found">QR code trovato. Da ora l\'app riceverà le notifiche relative alla tua wish list.</string>
+    <string name="qr_code_found">QR code trovato. Da ora l\'app riceverà le notifiche relative alla tua Wish List.</string>
     <string name="qr_code_not_found">QR code non trovato. Si prega di riprovare.</string>
     <string name="screenshot_description">Screenshot</string>
-    <string name="help_text">Per trovare il QR code, bisogna aprire il sito www.smartwishlist.net da desktop/portatile, selezionare la voce \'Notifications\' (dal menù in alto). Se non si è ancora attivata l\'app Android, è necessario premere il pulsante con il più nel pannello \'Android App\'. Per visualizzare il codice è necessario aprire il link \'Show QR Code\'.</string>
+    <string name="help_text">Per trovare il QR code: aprire il sito www.smartwishlist.net da desktop/portatile, selezionare la voce \'Notifications\' (dal menù in alto). Se non si è ancora attivata l\'app Android, è necessario premere il pulsante con il più nel pannello \'Android App\'. Per visualizzare il codice, aprire il link \'Show QR Code\'.</string>
     <string name="my_wish_list_label">Wish List</string>
     <string name="my_wish_list_button">Apri</string>
-    <string name="reset_label">Reinizializza e collega una nuova Wish List</string>
+    <string name="reset_label">Collega l\'app a una nuova Wish List</string>
     <string name="reset_button">Reset</string>
     <string name="current_price_label">Prezzo corrente:</string>
     <string name="target_price_label">Prezzo desiderato:</string>
     <string name="available_label">Disponibile</string>
     <string name="sold_by_amazon_label">Venduto da Amazon</string>
     <string name="added_label">Aggiunto il:</string>
-    <string name="scan_qr_code_help">E\' possibile collegare la app a una wish list già esistente.</string>
+    <string name="scan_qr_code_help">E\' possibile collegare la app a una Wish List già esistente.</string>
     <string name="help_description">Aiuto</string>
-    <string name="open_site_help">E\' possibile creare una nuova wish list con il sito web.</string>
-    <string name="open_site_button">Apri sito</string>
+    <string name="open_site_help">E\' possibile creare una nuova Wish List con il sito web.</string>
+    <string name="open_site_button">Apri sito web</string>
     <string name="product_image_description">Foto del prodotto</string>
     <string name="product_info_description">Informazioni sul prodotto</string>
     <string name="pref_notification_enabled">Notifiche</string>
     <string name="pref_notification_enabled_summary">Abilita la ricezione delle notifiche riguardo ai prezzi dei prodotti</string>
+    <string name="refresh_button">Refresh</string>
 </resources>
