@@ -18,10 +18,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!BuildConfig.DEBUG) {
-            Button refresh = (Button) findViewById(R.id.button_refresh);
-            refresh.setVisibility(View.INVISIBLE);
-        }
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         AppInitialization appInitialization = new AppInitialization(getApplicationContext());
         appInitialization.initializeApp();
@@ -35,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_main);
+        if (!BuildConfig.DEBUG) {
+            Button refresh = (Button) findViewById(R.id.button_refresh);
+            refresh.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
