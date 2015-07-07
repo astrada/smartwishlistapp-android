@@ -12,6 +12,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.volley.toolbox.StringRequest;
+
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -30,10 +34,44 @@ public class MainActivity extends AppCompatActivity {
             gcmInitialization.initializeGcmToken(this);
         }
 
+        receiveData();
+
         setContentView(R.layout.activity_main);
         if (!BuildConfig.DEBUG) {
             Button refresh = (Button) findViewById(R.id.button_refresh);
             refresh.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void receiveData() {
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && "text/plain".equals(type)) {
+            String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+            if (sharedText != null) {
+                int urlStart = sharedText.indexOf("http");
+                if (urlStart > -1) {
+                    String keywords = sharedText.substring(urlStart);
+                    AppPreferences preferences = new AppPreferences(getApplicationContext());
+                    String clientId = preferences.getClientId();
+                    String token = preferences.getToken();
+                    if (clientId == null || token == null) {
+                        return;
+                    }
+                    double timestamp = ApiSignature.getTimestamp();
+                    String signature = ApiSignature.generateRequestSignature(
+                            token, keywords, timestamp);
+                    String url = String.format(Locale.US,
+                            "%s?clientId=%s&keywords=%s&timestamp=%.3f&signature=%s",
+                            AppConstants.SEARCH_RESULTS_PAGE, clientId, keywords, timestamp,
+                            signature);
+                    Intent webSiteActivityIntent = new Intent(this, WebSiteActivity.class);
+                    webSiteActivityIntent.putExtra(WebSiteActivity.TARGET_PAGE_EXTRA, url);
+                    startActivity(webSiteActivityIntent);
+                }
+            }
         }
     }
 

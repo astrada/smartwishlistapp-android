@@ -59,6 +59,8 @@ public class AppConstants {
 
     public static final String MY_WISH_LISTS_PAGE = "/mywishlists";
 
+    public static final String SEARCH_RESULTS_PAGE = "/search-results";
+
     public static final String JAVASCRIPT_INTERFACE = "AndroidAppJsInterface";
 
     public static final String CLIENT_ID_TAG = "ClientId";
