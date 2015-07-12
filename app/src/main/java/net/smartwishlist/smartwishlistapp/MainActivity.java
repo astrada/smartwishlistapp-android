@@ -2,6 +2,7 @@ package net.smartwishlist.smartwishlistapp;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
@@ -12,11 +13,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.android.volley.toolbox.StringRequest;
-
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String ACTION_TYPE_TEXT_PLAIN = "text/plain";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,29 +49,37 @@ public class MainActivity extends AppCompatActivity {
         String action = intent.getAction();
         String type = intent.getType();
 
-        if (Intent.ACTION_SEND.equals(action) && "text/plain".equals(type)) {
+        if (Intent.ACTION_SEND.equals(action) && ACTION_TYPE_TEXT_PLAIN.equals(type)) {
             String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
-            if (sharedText != null) {
+            if (sharedText != null && sharedText.matches(".*http.?://www.amazon\\..*")) {
                 int urlStart = sharedText.indexOf("http");
-                if (urlStart > -1) {
-                    String keywords = sharedText.substring(urlStart);
-                    AppPreferences preferences = new AppPreferences(getApplicationContext());
-                    String clientId = preferences.getClientId();
-                    String token = preferences.getToken();
-                    if (clientId == null || token == null) {
-                        return;
-                    }
-                    double timestamp = ApiSignature.getTimestamp();
-                    String signature = ApiSignature.generateRequestSignature(
-                            token, keywords, timestamp);
-                    String url = String.format(Locale.US,
-                            "%s?clientId=%s&keywords=%s&timestamp=%.3f&signature=%s",
-                            AppConstants.SEARCH_RESULTS_PAGE, clientId, keywords, timestamp,
-                            signature);
-                    Intent webSiteActivityIntent = new Intent(this, WebSiteActivity.class);
-                    webSiteActivityIntent.putExtra(WebSiteActivity.TARGET_PAGE_EXTRA, url);
-                    startActivity(webSiteActivityIntent);
+                String keywords = sharedText.substring(urlStart);
+                AppPreferences preferences = new AppPreferences(getApplicationContext());
+                String clientId = preferences.getClientId();
+                String token = preferences.getToken();
+                if (clientId == null || token == null) {
+                    Toast toast = Toast.makeText(this, R.string.invalid_client_id,
+                            Toast.LENGTH_LONG);
+                    toast.show();
+                    return;
                 }
+                double timestamp = ApiSignature.getTimestamp();
+                String signature = ApiSignature.generateRequestSignature(
+                        token, keywords, timestamp);
+                Uri.Builder uriBuilder =
+                        Uri.parse(AppConstants.SEARCH_RESULTS_PAGE).buildUpon();
+                uriBuilder.appendQueryParameter("clientId", clientId);
+                uriBuilder.appendQueryParameter("keywords", keywords);
+                uriBuilder.appendQueryParameter("timestamp",
+                        String.format(Locale.US, "%.3f", timestamp));
+                uriBuilder.appendQueryParameter("signature", signature);
+                String url = uriBuilder.build().toString();
+                Intent webSiteActivityIntent = new Intent(this, WebSiteActivity.class);
+                webSiteActivityIntent.putExtra(WebSiteActivity.TARGET_PAGE_EXTRA, url);
+                startActivity(webSiteActivityIntent);
+            } else {
+                Toast toast = Toast.makeText(this, R.string.action_send_error, Toast.LENGTH_LONG);
+                toast.show();
             }
         }
     }

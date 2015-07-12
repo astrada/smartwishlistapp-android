@@ -88,7 +88,7 @@ public class GcmInitialization {
             } else {
                 Toast toast = Toast.makeText(context,
                         R.string.error_during_reset,
-                        Toast.LENGTH_SHORT);
+                        Toast.LENGTH_LONG);
                 toast.show();
             }
         }

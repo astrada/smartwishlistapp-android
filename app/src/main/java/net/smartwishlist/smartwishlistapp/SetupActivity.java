@@ -41,7 +41,7 @@ public class SetupActivity extends AppCompatActivity {
             }
             Toast toast = Toast.makeText(this,
                     R.string.qr_code_not_found,
-                    Toast.LENGTH_SHORT);
+                    Toast.LENGTH_LONG);
             toast.show();
         }
     }
