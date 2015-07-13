@@ -19,6 +19,12 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
                     Uri.parse(intent.getStringExtra(AppNotification.URL_EXTRA)));
             buyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(buyIntent);
+            String productId = intent.getStringExtra(AppNotification.PRODUCT_ID_EXTRA);
+            if (productId != null) {
+                AppStorage.DeleteTriggerDataTask task =
+                        new AppStorage.DeleteTriggerDataTask(context);
+                task.execute(productId);
+            }
         }
         AppPreferences preferences = new AppPreferences(context);
         preferences.setPendingMessages(0);

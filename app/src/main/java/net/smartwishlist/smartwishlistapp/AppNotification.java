@@ -27,6 +27,7 @@ public class AppNotification {
     public static final String NOTIFICATION_DELETED_ACTION = "NOTIFICATION_DELETED";
     public static final String NOTIFICATION_BUY_ACTION = "NOTIFICATION_BUY";
     public static final String URL_EXTRA = "url";
+    public static final String PRODUCT_ID_EXTRA = "productId";
 
     private final Context context;
 
@@ -71,9 +72,11 @@ public class AppNotification {
                 SmartWishListNotificationTriggerData data = triggers.get(0);
                 if (data != null) {
                     String url = data.getItem().getProductUrl();
+                    String productId = data.getItem().getRegion() +
+                            data.getItem().getAsin();
                     if (url != null) {
                         builder.addAction(R.drawable.ic_add_shopping_cart_black_24dp,
-                                resources.getString(R.string.buy), getBuyIntent(url));
+                                resources.getString(R.string.buy), getBuyIntent(url, productId));
                     }
                 }
             }
@@ -120,9 +123,10 @@ public class AppNotification {
         return pendingIntent;
     }
 
-    private PendingIntent getBuyIntent(String url) {
+    private PendingIntent getBuyIntent(String url, String productId) {
         Intent intent = new Intent(NOTIFICATION_BUY_ACTION);
         intent.putExtra(URL_EXTRA, url);
+        intent.putExtra(PRODUCT_ID_EXTRA, productId);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
         BroadcastReceiver broadcastReceiver = new NotificationBroadcastReceiver();

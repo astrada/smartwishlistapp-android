@@ -97,6 +97,20 @@ public class AppStorage {
         }
     }
 
+    public void deleteNotificationByProductId(String productId) {
+        SQLiteDatabase sqLiteDatabase = dbOpenHelper.getWritableDatabase();
+        try {
+            sqLiteDatabase.beginTransaction();
+            sqLiteDatabase.delete(NotificationContract.TABLE_NAME,
+                    NotificationContract.COLUMN_NAME_PRODUCT_ID + " = ?",
+                    new String[]{productId});
+            sqLiteDatabase.setTransactionSuccessful();
+        } finally {
+            sqLiteDatabase.endTransaction();
+            sqLiteDatabase.close();
+        }
+    }
+
     @Nullable
     public static SmartWishListNotificationTriggerData parseNotificationTriggerData(String json) {
         SmartWishListNotificationTriggerData result = new SmartWishListNotificationTriggerData();
@@ -139,6 +153,23 @@ public class AppStorage {
         protected SmartWishListNotificationTriggerData doInBackground(Long... longs) {
             AppStorage appStorage = new AppStorage(context);
             return appStorage.queryNotificationById(longs[0]);
+        }
+    }
+
+    public static class DeleteTriggerDataTask
+            extends AsyncTask<String, Void, Void> {
+
+        private final Context context;
+
+        public DeleteTriggerDataTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            AppStorage appStorage = new AppStorage(context);
+            appStorage.deleteNotificationByProductId(strings[0]);
+            return null;
         }
     }
 
