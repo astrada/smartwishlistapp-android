@@ -1,5 +1,5 @@
-Smart Wish List
-===============
+Smart Wish List Android App
+===========================
 
 This is the Android client for
 [SmartWishList.net](https://www.smartwishlist.net).
@@ -12,8 +12,7 @@ You can install this app from [Google Play Store](https://play.google.com/store/
 How to build
 ------------
 
-This app was developed with [Android Studio](http://developer.android.com/sdk/index.html).
-
+This app was developed with [Android Studio](http://developer.android.com/sdk/index.html) IDE.
 
 ### Dependencies
 
