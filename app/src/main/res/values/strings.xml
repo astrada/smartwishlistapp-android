@@ -30,7 +30,7 @@
     <string name="qr_code_found">QR code found. Now this app will receive notifications for your Wish List.</string>
     <string name="qr_code_not_found">QR code not found. Please retry.</string>
     <string name="screenshot_description">Screenshot</string>
-    <string name="help_text">To get the QR code, you should open www.smartwishlist.net on your desktop/laptop, then go to \'Notifications\' (top menu bar). If you didn\'t yet activate Android App, you should click on the plus button in \'Android App\' panel, and finally you should click on \'Show QR Code\' link.</string>
+    <string name="help_text">To get the QR code, you should open www.smartwishlist.net on your desktop/laptop, then go to \'Notifications\' (top menu bar). If you did not yet activate Android App, you should click on the plus button in \'Android App\' panel, and finally you should click on \'Show QR Code\' link.</string>
     <string name="my_wish_list_label">My Wish Lists</string>
     <string name="my_wish_list_button">Open</string>
     <string name="reset_label">Link this app to a new Wish List</string>

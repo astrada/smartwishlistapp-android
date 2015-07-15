@@ -2,6 +2,7 @@ package net.smartwishlist.smartwishlistapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -15,6 +16,11 @@ public class SetupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
+
+        if (!hasCamera()) {
+            View qrCodeLayout = findViewById(R.id.qr_code_layout);
+            qrCodeLayout.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void scanQrCode(View view) {
@@ -55,6 +61,12 @@ public class SetupActivity extends AppCompatActivity {
     public void openHelp(View view) {
         Intent intent = new Intent(this, HelpActivity.class);
         startActivity(intent);
+    }
+
+    private boolean hasCamera() {
+        PackageManager packageManager = getApplicationContext().getPackageManager();
+        return packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) ||
+                packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT);
     }
 
     private class QrCodeInitialization {
