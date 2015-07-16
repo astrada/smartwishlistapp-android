@@ -46,12 +46,16 @@ public class WebAppInterface {
                     appPreferences.setNotificationEnabled(true);
                 }
                 appPreferences.setClientId(value);
+                break;
             case TOKEN_KEY:
                 appPreferences.setToken(value);
+                break;
             case DEFAULT_REGION_KEY:
                 appPreferences.setDefaultRegion(value);
+                break;
             case HAS_ACCOUNT_KEY:
                 appPreferences.setHasAccount(value);
+                break;
             default:
                 AppLogging.logError("setItemInStorage: Unexpected key: " + key + "=" + value);
                 break;
