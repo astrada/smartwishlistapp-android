@@ -129,6 +129,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void openSearchPage(View view) {
+        Intent intent = new Intent(this, WebSiteActivity.class);
+        intent.putExtra(WebSiteActivity.TARGET_PAGE_EXTRA, AppConstants.SEARCH_PAGE);
+        startActivity(intent);
+    }
+
     public void reset(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.confirmation))

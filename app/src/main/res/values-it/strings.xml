@@ -51,4 +51,6 @@
     <string name="pref_notification_enabled_summary">Abilita la ricezione delle notifiche riguardo ai prezzi dei prodotti</string>
     <string name="refresh_button">Refresh</string>
     <string name="action_send_error">Impossibile trovare un link al prodotto Amazon.</string>
+    <string name="search_label">Cerca prodotti</string>
+    <string name="search_button">Cerca</string>
 </resources>

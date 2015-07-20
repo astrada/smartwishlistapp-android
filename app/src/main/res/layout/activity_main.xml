@@ -27,6 +27,23 @@
             android:onClick="openMyWishLists"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/search_label"
+            android:layout_weight="1" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_open_search"
+            android:text="@string/search_button"
+            android:onClick="openSearchPage"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,5 +70,4 @@
         android:text="@string/refresh_button"
         android:onClick="refresh"
         android:layout_gravity="end" />
-
 </LinearLayout>
