@@ -1,16 +1,25 @@
 package net.smartwishlist.smartwishlistapp;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
+
+import java.util.List;
 
 public class SetupActivity extends AppCompatActivity {
 
     private static final int CUSTOM_REQUEST_QR_SCANNER = 0;
+    private static final String BS_PACKAGE = "com.google.zxing.client.android";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +33,47 @@ public class SetupActivity extends AppCompatActivity {
     }
 
     public void scanQrCode(View view) {
-        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-        intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-        startActivityForResult(intent, CUSTOM_REQUEST_QR_SCANNER);
+        Intent intent = new Intent(BS_PACKAGE + ".SCAN");
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        if (!isQrCodeReaderInstalled(intent)) {
+            showDownloadDialog();
+        } else {
+            intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+            startActivityForResult(intent, CUSTOM_REQUEST_QR_SCANNER);
+        }
+    }
+
+    private Boolean isQrCodeReaderInstalled(Intent intent) {
+        PackageManager pm = getPackageManager();
+        List<ResolveInfo> availableApps = pm.queryIntentActivities(intent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+        return availableApps != null && availableApps.size() > 0;
+    }
+
+    private void showDownloadDialog() {
+        AlertDialog.Builder downloadDialog = new AlertDialog.Builder(this);
+        downloadDialog.setTitle(getString(R.string.qr_code_title));
+        downloadDialog.setMessage(getString(R.string.qr_code_message));
+        downloadDialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Uri uri = Uri.parse("market://details?id=" + BS_PACKAGE);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                try {
+                    startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    AppLogging.logException(e);
+                    Toast toast = Toast.makeText(SetupActivity.this,
+                            R.string.qr_code_error, Toast.LENGTH_LONG);
+                    toast.show();
+                    Button scan = (Button) findViewById(R.id.button_scan_qr_code);
+                    scan.setEnabled(false);
+                }
+            }
+        });
+        downloadDialog.setNegativeButton(android.R.string.no, null);
+        downloadDialog.setCancelable(true);
+        downloadDialog.show();
     }
 
     @Override
@@ -37,7 +84,7 @@ public class SetupActivity extends AppCompatActivity {
                 if (qrCodeInitialization.storeStateFromQrCode(intent)) {
                     Toast toast = Toast.makeText(this,
                             R.string.qr_code_found,
-                            Toast.LENGTH_SHORT);
+                            Toast.LENGTH_LONG);
                     toast.show();
                     Intent mainActivityIntent = new Intent(this, MainActivity.class);
                     startActivity(mainActivityIntent);

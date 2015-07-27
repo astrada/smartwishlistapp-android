@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -60,6 +61,9 @@ public class ProductInfoActivity extends AppCompatActivity {
             CheckBox productAvailability = (CheckBox) findViewById(R.id.product_availability);
             CheckBox productSoldByAmazon = (CheckBox) findViewById(R.id.product_sold_by_amazon);
             TextView productAdded = (TextView) findViewById(R.id.product_added_date);
+            TextView priceDrop = (TextView) findViewById(R.id.price_drop);
+            TextView store = (TextView) findViewById(R.id.store);
+            LinearLayout priceDropLayout = (LinearLayout) findViewById(R.id.price_drop_layout);
             Button buyButton = (Button) findViewById(R.id.button_buy);
 
             productTitle.setText(data.getItem().getTitle());
@@ -73,6 +77,27 @@ public class ProductInfoActivity extends AppCompatActivity {
             productAdded.setText(dateFormat.format(
                     new Date(Math.round(data.getCreationDate() *
                             AppConstants.ONE_SECOND_IN_MILLISECONDS))));
+            if (data.getPriceDrop() != null &&
+                    data.getPriceDrop() != 0.0) {
+                priceDropLayout.setVisibility(View.VISIBLE);
+                TextView priceDropLabel = (TextView) findViewById(R.id.price_drop_label);
+                if (data.getPriceDrop() > 0.0) {
+                    priceDropLabel.setText(R.string.price_drop_label);
+                    priceDrop.setText(formatPriceDrop(
+                            data.getPriceDrop(),
+                            data.getPriceDropPercentage(),
+                            data.getItem().getCurrency()));
+                } else {
+                    priceDropLabel.setText(R.string.price_increase_label);
+                    priceDrop.setText(formatPriceDrop(
+                            -data.getPriceDrop(),
+                            -data.getPriceDropPercentage(),
+                            data.getItem().getCurrency()));
+                }
+            } else {
+                priceDropLayout.setVisibility(View.INVISIBLE);
+            }
+            store.setText(data.getItem().getRegion());
             buyButton.setTag(data.getItem().getProductUrl());
 
             ImageRequest request = new ImageRequest(data.getItem().getImageUrl(),
@@ -93,5 +118,17 @@ public class ProductInfoActivity extends AppCompatActivity {
                     });
             NetworkImageManager.getInstance(ProductInfoActivity.this).addToRequestQueue(request);
         }
+    }
+
+    private static String formatPriceDrop(Double priceDrop, Double priceDropPercentage,
+                                          String currency) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(String.format("%s %,.2f",
+                currency,
+                priceDrop));
+        if (priceDropPercentage != null) {
+            builder.append(String.format(" (%,.2f%%)", priceDropPercentage));
+        }
+        return builder.toString();
     }
 }

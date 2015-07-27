@@ -11,19 +11,22 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(AppNotification.NOTIFICATION_CLICKED_ACTION)) {
-            Intent detailIntent = new Intent(context, NotificationActivity.class);
-            detailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(detailIntent);
+            startProductInfoActivity(context);
         } else if (intent.getAction().equals(AppNotification.NOTIFICATION_BUY_ACTION)) {
-            Intent buyIntent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(intent.getStringExtra(AppNotification.URL_EXTRA)));
-            buyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(buyIntent);
-            String productId = intent.getStringExtra(AppNotification.PRODUCT_ID_EXTRA);
-            if (productId != null) {
-                AppStorage.DeleteTriggerDataTask task =
-                        new AppStorage.DeleteTriggerDataTask(context);
-                task.execute(productId);
+            String url = intent.getStringExtra(AppNotification.URL_EXTRA);
+            if (url != null) {
+                Intent buyIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(url));
+                buyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(buyIntent);
+                String productId = intent.getStringExtra(AppNotification.PRODUCT_ID_EXTRA);
+                if (productId != null) {
+                    AppStorage.DeleteTriggerDataTask task =
+                            new AppStorage.DeleteTriggerDataTask(context);
+                    task.execute(productId);
+                }
+            } else {
+                startProductInfoActivity(context);
             }
         }
         AppPreferences preferences = new AppPreferences(context);
@@ -36,5 +39,11 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
         } catch (IllegalArgumentException e) {
             // Ignore exception if broadcast receiver was not registered programmatically
         }
+    }
+
+    private static void startProductInfoActivity(Context context) {
+        Intent detailIntent = new Intent(context, NotificationActivity.class);
+        detailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(detailIntent);
     }
 }

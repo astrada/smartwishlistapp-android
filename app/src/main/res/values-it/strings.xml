@@ -25,8 +25,6 @@
     </plurals>
     <string name="no_internet_connection">Attenzione! Non è stata rilevata nessuna connessione Internet!</string>
     <string name="confirmation">Si è sicuri di voler procedere?</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Annulla</string>
     <string name="error_during_reset">Errore durante il reset. Si prega di riprovare.</string>
     <string name="qr_code_found">QR code trovato. Da ora l\'app riceverà le notifiche relative alla tua Wish List.</string>
     <string name="qr_code_not_found">QR code non trovato. Si prega di riprovare.</string>
@@ -53,4 +51,10 @@
     <string name="action_send_error">Impossibile trovare un link al prodotto Amazon.</string>
     <string name="search_label">Cerca prodotti</string>
     <string name="search_button">Cerca</string>
+    <string name="price_drop_label">Diminuzione di prezzo:</string>
+    <string name="price_increase_label">Aumento di prezzo:</string>
+    <string name="store_label">Negozio:</string>
+    <string name="qr_code_title">Lettore di QR code</string>
+    <string name="qr_code_message">Questa applicazione richiede un lettore di QR code. Si vuole installarlo?</string>
+    <string name="qr_code_error">Impossibile installare un lettore di QR code!</string>
 </resources>

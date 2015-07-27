@@ -24,8 +24,6 @@
     </plurals>
     <string name="no_internet_connection">Warning! No Internet connection detected!</string>
     <string name="confirmation">Are you sure?</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
     <string name="error_during_reset">Error during client reset. Please retry.</string>
     <string name="qr_code_found">QR code found. Now this app will receive notifications for your Wish List.</string>
     <string name="qr_code_not_found">QR code not found. Please retry.</string>
@@ -52,4 +50,10 @@
     <string name="action_send_error">Cannot find a link to an Amazon product.</string>
     <string name="search_label">Search products</string>
     <string name="search_button">Search</string>
+    <string name="price_drop_label">Price drop:</string>
+    <string name="price_increase_label">Price increase:</string>
+    <string name="store_label">Store:</string>
+    <string name="qr_code_title">QR code reader</string>
+    <string name="qr_code_message">This application requires a QR code reader. Would you like to install it?</string>
+    <string name="qr_code_error">Cannot install QR code reader!</string>
 </resources>

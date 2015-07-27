@@ -138,14 +138,14 @@ public class MainActivity extends AppCompatActivity {
     public void reset(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.confirmation))
-                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         GcmInitialization gcmInitialization = new GcmInitialization();
                         gcmInitialization.deleteGcmToken(MainActivity.this);
                         dialog.dismiss();
                     }
                 })
-                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
                     }
