@@ -10,9 +10,19 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        AppPreferences preferences = new AppPreferences(context);
+        preferences.setPendingMessages(0);
+        try {
+            context.unregisterReceiver(this);
+        } catch (IllegalArgumentException e) {
+            // Ignore exception if broadcast receiver was not registered programmatically
+        }
         if (intent.getAction().equals(AppNotification.NOTIFICATION_CLICKED_ACTION)) {
             startProductInfoActivity(context);
         } else if (intent.getAction().equals(AppNotification.NOTIFICATION_BUY_ACTION)) {
+            NotificationManager notificationManager =
+                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(AppNotification.NOTIFICATION_ID);
             String url = intent.getStringExtra(AppNotification.URL_EXTRA);
             if (url != null) {
                 Intent buyIntent = new Intent(Intent.ACTION_VIEW,
@@ -28,16 +38,6 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
             } else {
                 startProductInfoActivity(context);
             }
-        }
-        AppPreferences preferences = new AppPreferences(context);
-        preferences.setPendingMessages(0);
-        NotificationManager notificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(AppNotification.NOTIFICATION_ID);
-        try {
-            context.unregisterReceiver(this);
-        } catch (IllegalArgumentException e) {
-            // Ignore exception if broadcast receiver was not registered programmatically
         }
     }
 

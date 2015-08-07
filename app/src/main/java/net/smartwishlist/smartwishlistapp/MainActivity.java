@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         if (!BuildConfig.DEBUG) {
             Button refresh = (Button) findViewById(R.id.button_refresh);
-            refresh.setVisibility(View.INVISIBLE);
+            refresh.setVisibility(View.GONE);
         }
     }
 

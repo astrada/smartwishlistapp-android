@@ -28,7 +28,7 @@ public class SetupActivity extends AppCompatActivity {
 
         if (!hasCamera()) {
             View qrCodeLayout = findViewById(R.id.qr_code_layout);
-            qrCodeLayout.setVisibility(View.INVISIBLE);
+            qrCodeLayout.setVisibility(View.GONE);
         }
     }
 

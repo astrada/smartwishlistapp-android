@@ -95,7 +95,7 @@ public class ProductInfoActivity extends AppCompatActivity {
                             data.getItem().getCurrency()));
                 }
             } else {
-                priceDropLayout.setVisibility(View.INVISIBLE);
+                priceDropLayout.setVisibility(View.GONE);
             }
             store.setText(data.getItem().getRegion());
             buyButton.setTag(data.getItem().getProductUrl());
