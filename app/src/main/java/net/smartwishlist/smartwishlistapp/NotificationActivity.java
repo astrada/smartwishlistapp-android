@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListNotificationTriggerData;
 
@@ -25,9 +26,25 @@ public class NotificationActivity extends AppCompatActivity
 
     public void openProductInfo(View view) {
         long id = (long) view.getTag();
-        Intent intent = new Intent(this, ProductInfoActivity.class);
-        intent.putExtra(AppStorage.NotificationContract._ID, id);
-        startActivity(intent);
+        FrameLayout detailsFrame = (FrameLayout) findViewById(R.id.details_frame);
+        if (detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE) {
+            ProductInfoFragment fragment =
+                    (ProductInfoFragment) getSupportFragmentManager().findFragmentById(R.id.details_frame);
+            if (fragment == null) {
+                fragment = new ProductInfoFragment();
+                Bundle args = new Bundle();
+                args.putLong(AppStorage.NotificationContract._ID, id);
+                fragment.setArguments(args);
+                getSupportFragmentManager().beginTransaction().replace(R.id.details_frame,
+                        fragment).commit();
+            } else {
+                fragment.updateContent(id);
+            }
+        } else {
+            Intent intent = new Intent(this, ProductInfoActivity.class);
+            intent.putExtra(AppStorage.NotificationContract._ID, id);
+            startActivity(intent);
+        }
     }
 
     private class OpenProductUrlTask extends AppStorage.LoadTriggerDataTask {

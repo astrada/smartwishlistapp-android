@@ -1,0 +1,3 @@
+<resources>
+    <item name="activity_notification" type="layout">@layout/activity_notification_two_panes</item>
+</resources>
