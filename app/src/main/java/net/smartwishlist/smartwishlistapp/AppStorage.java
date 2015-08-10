@@ -19,17 +19,27 @@ import javax.annotation.Nullable;
 
 public class AppStorage {
 
-    private final DbOpenHelper dbOpenHelper;
+    private static AppStorage instance;
 
-    public AppStorage(Context context) {
+    private final DbOpenHelper dbOpenHelper;
+    private SQLiteDatabase currentConnection;
+
+    private AppStorage(Context context) {
         dbOpenHelper = new DbOpenHelper(context);
+    }
+
+    public static synchronized AppStorage getInstance(Context context) {
+        if (instance == null) {
+            instance = new AppStorage(context);
+        }
+        return instance;
     }
 
     public void insertNotifications(List<SmartWishListNotificationTriggerData> triggers) {
         if (triggers == null) return;
 
         Double timestamp = ApiSignature.getTimestamp();
-        SQLiteDatabase sqLiteDatabase = dbOpenHelper.getWritableDatabase();
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         sqLiteDatabase.beginTransaction();
         try {
             for (SmartWishListNotificationTriggerData trigger : triggers) {
@@ -54,8 +64,8 @@ public class AppStorage {
         }
     }
 
-    public Cursor queryAllNewNotifications(double timestamp) {
-        SQLiteDatabase sqLiteDatabase = dbOpenHelper.getReadableDatabase();
+    private Cursor queryAllNewNotifications(double timestamp) {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         return sqLiteDatabase.query(NotificationContract.TABLE_NAME,
                 new String[]{NotificationContract._ID,
                         NotificationContract.COLUMN_NAME_JSON},
@@ -64,8 +74,9 @@ public class AppStorage {
                 null, null, NotificationContract.COLUMN_NAME_TIMESTAMP + " DESC");
     }
 
-    public SmartWishListNotificationTriggerData queryNotificationById(long id) {
-        SQLiteDatabase sqLiteDatabase = dbOpenHelper.getReadableDatabase();
+    @Nullable
+    private SmartWishListNotificationTriggerData queryNotificationById(long id) {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         Cursor cursor = sqLiteDatabase.query(NotificationContract.TABLE_NAME,
                 new String[]{NotificationContract.COLUMN_NAME_JSON},
                 NotificationContract._ID + " = ?", new String[]{Long.toString(id)},
@@ -84,7 +95,7 @@ public class AppStorage {
     }
 
     public void deleteAllOldNotifications(double timestamp) {
-        SQLiteDatabase sqLiteDatabase = dbOpenHelper.getWritableDatabase();
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         try {
             sqLiteDatabase.beginTransaction();
             sqLiteDatabase.delete(NotificationContract.TABLE_NAME,
@@ -97,8 +108,8 @@ public class AppStorage {
         }
     }
 
-    public void deleteNotificationByProductId(String productId) {
-        SQLiteDatabase sqLiteDatabase = dbOpenHelper.getWritableDatabase();
+    private void deleteNotificationByProductId(String productId) {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         try {
             sqLiteDatabase.beginTransaction();
             sqLiteDatabase.delete(NotificationContract.TABLE_NAME,
@@ -124,19 +135,45 @@ public class AppStorage {
         return null;
     }
 
+    private SQLiteDatabase getReadableDatabase() {
+        if (currentConnection == null || !currentConnection.isOpen()) {
+            currentConnection = dbOpenHelper.getReadableDatabase();
+        }
+        return currentConnection;
+    }
+
+    private SQLiteDatabase getWritableDatabase() {
+        if (currentConnection == null || !currentConnection.isOpen()) {
+            currentConnection = dbOpenHelper.getWritableDatabase();
+        }
+        return currentConnection;
+    }
+
+    private void close() {
+        if (currentConnection != null && currentConnection.isOpen()) {
+            currentConnection.close();
+        }
+    }
+
     public static class NotificationLoader extends CursorLoader {
 
         private final double timestamp;
+        private final AppStorage appStorage;
 
         public NotificationLoader(Context context, double timestamp) {
             super(context);
             this.timestamp = timestamp;
+            appStorage = AppStorage.getInstance(context);
         }
 
         @Override
         public Cursor loadInBackground() {
-            AppStorage appStorage = new AppStorage(getContext());
             return appStorage.queryAllNewNotifications(timestamp);
+        }
+
+        @Override
+        protected void onReset() {
+            appStorage.close();
         }
     }
 
@@ -151,7 +188,7 @@ public class AppStorage {
 
         @Override
         protected SmartWishListNotificationTriggerData doInBackground(Long... longs) {
-            AppStorage appStorage = new AppStorage(context);
+            AppStorage appStorage = AppStorage.getInstance(context);
             return appStorage.queryNotificationById(longs[0]);
         }
     }
@@ -167,7 +204,7 @@ public class AppStorage {
 
         @Override
         protected Void doInBackground(String... strings) {
-            AppStorage appStorage = new AppStorage(context);
+            AppStorage appStorage = AppStorage.getInstance(context);
             appStorage.deleteNotificationByProductId(strings[0]);
             return null;
         }

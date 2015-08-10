@@ -233,7 +233,7 @@ public class ApiService {
         @Override
         protected Void doInBackground(SmartWishListAppNotificationData... smartWishListAppNotificationData) {
             Context context = this.context.getApplicationContext();
-            AppStorage appStorage = new AppStorage(context);
+            AppStorage appStorage = AppStorage.getInstance(context);
             AppPreferences preferences = new AppPreferences(context);
             appStorage.deleteAllOldNotifications(preferences.getLastViewedNotifications());
             appStorage.insertNotifications(smartWishListAppNotificationData[0].getTriggers());
