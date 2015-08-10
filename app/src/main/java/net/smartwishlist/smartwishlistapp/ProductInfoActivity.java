@@ -13,7 +13,7 @@ public class ProductInfoActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             ProductInfoFragment fragment = new ProductInfoFragment();
             fragment.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction().add(R.id.details_layout,
+            getSupportFragmentManager().beginTransaction().replace(R.id.details_layout,
                     fragment).commit();
         }
     }

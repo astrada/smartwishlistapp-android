@@ -31,11 +31,13 @@ public class NotificationActivity extends AppCompatActivity
         super.onNewIntent(intent);
         boolean refresh = intent.getBooleanExtra(REFRESH_EXTRA, false);
         if (refresh) {
-            NotificationItemFragment fragment =
-                    (NotificationItemFragment) getSupportFragmentManager().findFragmentById(R.id.list_fragment);
+            NotificationItemFragment fragment = (NotificationItemFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.list_fragment);
             if (fragment != null) {
                 fragment.restartLoader();
             }
+
+            removeDetailsFragment();
         }
     }
 
@@ -43,8 +45,8 @@ public class NotificationActivity extends AppCompatActivity
         long id = (long) view.getTag();
         FrameLayout detailsFrame = (FrameLayout) findViewById(R.id.details_frame);
         if (detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE) {
-            ProductInfoFragment fragment =
-                    (ProductInfoFragment) getSupportFragmentManager().findFragmentById(R.id.details_frame);
+            ProductInfoFragment fragment = (ProductInfoFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.details_frame);
             if (fragment == null) {
                 fragment = new ProductInfoFragment();
                 Bundle args = new Bundle();
@@ -59,6 +61,17 @@ public class NotificationActivity extends AppCompatActivity
             Intent intent = new Intent(this, ProductInfoActivity.class);
             intent.putExtra(AppStorage.NotificationContract._ID, id);
             startActivity(intent);
+        }
+    }
+
+    private void removeDetailsFragment() {
+        FrameLayout detailsFrame = (FrameLayout) findViewById(R.id.details_frame);
+        if (detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE) {
+            ProductInfoFragment fragment = (ProductInfoFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.details_frame);
+            if (fragment != null) {
+                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
         }
     }
 
