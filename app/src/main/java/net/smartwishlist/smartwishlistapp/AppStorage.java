@@ -135,21 +135,21 @@ public class AppStorage {
         return null;
     }
 
-    private SQLiteDatabase getReadableDatabase() {
+    private synchronized SQLiteDatabase getReadableDatabase() {
         if (currentConnection == null || !currentConnection.isOpen()) {
             currentConnection = dbOpenHelper.getReadableDatabase();
         }
         return currentConnection;
     }
 
-    private SQLiteDatabase getWritableDatabase() {
+    private synchronized SQLiteDatabase getWritableDatabase() {
         if (currentConnection == null || !currentConnection.isOpen()) {
             currentConnection = dbOpenHelper.getWritableDatabase();
         }
         return currentConnection;
     }
 
-    private void close() {
+    private synchronized void close() {
         if (currentConnection != null && currentConnection.isOpen()) {
             currentConnection.close();
         }
