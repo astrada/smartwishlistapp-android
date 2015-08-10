@@ -12,6 +12,8 @@ import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListNotification
 public class NotificationActivity extends AppCompatActivity
         implements NotificationItemFragment.OnItemSelectedListener {
 
+    public static final String REFRESH_EXTRA = "refresh";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +24,19 @@ public class NotificationActivity extends AppCompatActivity
     public void onItemSelected(long id) {
         OpenProductUrlTask task = new OpenProductUrlTask();
         task.execute(id);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        boolean refresh = intent.getBooleanExtra(REFRESH_EXTRA, false);
+        if (refresh) {
+            NotificationItemFragment fragment =
+                    (NotificationItemFragment) getSupportFragmentManager().findFragmentById(R.id.list_fragment);
+            if (fragment != null) {
+                fragment.restartLoader();
+            }
+        }
     }
 
     public void openProductInfo(View view) {

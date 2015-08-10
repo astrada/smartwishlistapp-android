@@ -18,7 +18,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
             // Ignore exception if broadcast receiver was not registered programmatically
         }
         if (intent.getAction().equals(AppNotification.NOTIFICATION_CLICKED_ACTION)) {
-            startProductInfoActivity(context);
+            startNotificationActivity(context);
         } else if (intent.getAction().equals(AppNotification.NOTIFICATION_BUY_ACTION)) {
             NotificationManager notificationManager =
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -36,14 +36,15 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
                     task.execute(productId);
                 }
             } else {
-                startProductInfoActivity(context);
+                startNotificationActivity(context);
             }
         }
     }
 
-    private static void startProductInfoActivity(Context context) {
-        Intent detailIntent = new Intent(context, NotificationActivity.class);
-        detailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(detailIntent);
+    private static void startNotificationActivity(Context context) {
+        Intent notificationIntent = new Intent(context, NotificationActivity.class);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        notificationIntent.putExtra(NotificationActivity.REFRESH_EXTRA, true);
+        context.startActivity(notificationIntent);
     }
 }

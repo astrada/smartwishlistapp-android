@@ -117,7 +117,7 @@ public class AppNotification {
     private PendingIntent getDeleteIntent() {
         Intent intent = new Intent(NOTIFICATION_DELETED_ACTION);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
+                PendingIntent.FLAG_UPDATE_CURRENT);
         BroadcastReceiver broadcastReceiver = new NotificationBroadcastReceiver();
         context.registerReceiver(broadcastReceiver, new IntentFilter(NOTIFICATION_DELETED_ACTION));
         return pendingIntent;
@@ -128,7 +128,7 @@ public class AppNotification {
         intent.putExtra(URL_EXTRA, url);
         intent.putExtra(PRODUCT_ID_EXTRA, productId);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
+                PendingIntent.FLAG_UPDATE_CURRENT);
         BroadcastReceiver broadcastReceiver = new NotificationBroadcastReceiver();
         context.registerReceiver(broadcastReceiver, new IntentFilter(NOTIFICATION_BUY_ACTION));
         return pendingIntent;

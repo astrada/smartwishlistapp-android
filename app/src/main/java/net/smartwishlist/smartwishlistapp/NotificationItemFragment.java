@@ -2,6 +2,7 @@ package net.smartwishlist.smartwishlistapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -78,6 +79,10 @@ public class NotificationItemFragment extends ListFragment
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         adapter.swapCursor(null);
+    }
+
+    public void restartLoader() {
+        getLoaderManager().restartLoader(0, null, this);
     }
 
     private static class NotificationSimpleCursorAdapter extends SimpleCursorAdapter {
