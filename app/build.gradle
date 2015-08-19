@@ -35,7 +35,7 @@ android {
         }
     }
     compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    buildToolsVersion "23.0.0"
 
     defaultConfig {
         applicationId "net.smartwishlist.smartwishlistapp"
@@ -83,7 +83,7 @@ dependencies {
 
     compile 'com.google.http-client:google-http-client-gson:1.20.0' exclude module: 'httpclient'
 
-    compile "com.google.android.gms:play-services-gcm:7.5.0"
+    compile "com.google.android.gms:play-services-gcm:7.8.0"
 
     compile('com.crashlytics.sdk.android:crashlytics:2.2.3@aar') {
         transitive = true;
