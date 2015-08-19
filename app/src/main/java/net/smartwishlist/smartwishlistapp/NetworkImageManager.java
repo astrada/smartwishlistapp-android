@@ -31,7 +31,7 @@ public class NetworkImageManager {
         return instance;
     }
 
-    public RequestQueue getRequestQueue() {
+    public final RequestQueue getRequestQueue() {
         if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(applicationContext);
         }

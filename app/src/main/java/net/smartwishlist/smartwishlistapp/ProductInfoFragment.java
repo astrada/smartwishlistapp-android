@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 
 public class ProductInfoFragment extends Fragment {
 
-    private final long PLACEHOLDER_ID = -1;
+    private static final long PLACEHOLDER_ID = -1;
 
     public ProductInfoFragment() {
     }

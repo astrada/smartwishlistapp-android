@@ -17,9 +17,9 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
         } catch (IllegalArgumentException e) {
             // Ignore exception if broadcast receiver was not registered programmatically
         }
-        if (intent.getAction().equals(AppNotification.NOTIFICATION_CLICKED_ACTION)) {
+        if (AppNotification.NOTIFICATION_CLICKED_ACTION.equals(intent.getAction())) {
             startNotificationActivity(context);
-        } else if (intent.getAction().equals(AppNotification.NOTIFICATION_BUY_ACTION)) {
+        } else if (AppNotification.NOTIFICATION_BUY_ACTION.equals(intent.getAction())) {
             NotificationManager notificationManager =
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(AppNotification.NOTIFICATION_ID);

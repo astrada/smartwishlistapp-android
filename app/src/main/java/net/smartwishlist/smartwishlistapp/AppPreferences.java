@@ -88,11 +88,11 @@ public class AppPreferences {
         setBooleanPreference(NOTIFICATION_ENABLED_PROP, flag);
     }
 
-    public Boolean isGcmTokenSent() {
+    public boolean isGcmTokenSent() {
         return getBooleanPreference(GCM_TOKEN_SENT_PROP);
     }
 
-    public void setGcmTokenSent(Boolean flag) {
+    public void setGcmTokenSent(boolean flag) {
         setBooleanPreference(GCM_TOKEN_SENT_PROP, flag);
     }
 

@@ -49,7 +49,7 @@ public class AppNotification {
             SmartWishListAppNotificationData smartWishListAppNotificationData) {
         List<SmartWishListNotificationTriggerData> triggers =
                 smartWishListAppNotificationData.getTriggers();
-        if (triggers == null || triggers.size() == 0) {
+        if (triggers == null || triggers.isEmpty()) {
             return null;
         }
         Resources resources = context.getResources();

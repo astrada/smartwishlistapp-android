@@ -9,6 +9,7 @@ import com.google.android.gms.iid.InstanceID;
 public class GcmRegistrationIntentService extends IntentService {
 
     private static final String TAG = "RegIntentService";
+    private static final Object SYNC_OBJECT = new Object();
 
     public GcmRegistrationIntentService() {
         super(TAG);
@@ -19,7 +20,7 @@ public class GcmRegistrationIntentService extends IntentService {
         AppPreferences preferences = new AppPreferences(this);
 
         try {
-            synchronized (TAG) {
+            synchronized (SYNC_OBJECT) {
                 InstanceID instanceID = InstanceID.getInstance(this);
                 String token = instanceID.getToken(BuildConfig.GCM_SENDER_ID,
                         GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);

@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class GcmInitialization {
 
-    private static final String TAG = "GcmInitialization";
+    private static final Object SYNC_OBJECT = new Object();
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     public GcmInitialization() {
@@ -52,7 +52,7 @@ public class GcmInitialization {
         }
     }
 
-    private class DeleteGcmTokenTask extends AsyncTask<Void, Void, Boolean> {
+    private static class DeleteGcmTokenTask extends AsyncTask<Void, Void, Boolean> {
 
         private final Activity activity;
         private final Context context;
@@ -65,15 +65,15 @@ public class GcmInitialization {
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {
-                synchronized (TAG) {
+                synchronized (SYNC_OBJECT) {
                     InstanceID.getInstance(context).deleteInstanceID();
                     AppPreferences preferences = new AppPreferences(context);
                     preferences.setGcmTokenSent(false);
-                    return true;
+                    return Boolean.TRUE;
                 }
             } catch (IOException e) {
                 AppLogging.logException(e);
-                return false;
+                return Boolean.FALSE;
             }
         }
 

@@ -147,7 +147,7 @@ public class SetupActivity extends AppCompatActivity {
                     preferences.setToken(token);
                     preferences.setDefaultRegion(defaultRegion);
                     preferences.setNotificationEnabled(true);
-                    if (hasAccount.equals("1")) {
+                    if ("1".equals(hasAccount)) {
                         preferences.setHasAccount(Boolean.toString(true));
                     } else {
                         preferences.setHasAccount(Boolean.toString(false));

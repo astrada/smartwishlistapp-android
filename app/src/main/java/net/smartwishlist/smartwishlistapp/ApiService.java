@@ -102,7 +102,7 @@ public class ApiService {
         protected SmartWishListCheckResult tryInBackground(String... strings)
                 throws IOException {
             Smartwishlist.Client.CheckId checkId = getService().client().checkId(strings[0]);
-            checkId.setIsApp(true);
+            checkId.setIsApp(Boolean.TRUE);
             AppLogging.logDebug("CheckClientIdTask.tryInBackground: URL=[" + checkId.buildHttpRequestUrl().toString() + "]");
             return checkId.execute();
         }
@@ -147,9 +147,9 @@ public class ApiService {
             Smartwishlist.AppNotifications.Register request =
                     getService().appNotifications().register(clientId, timestamp, signature,
                             parameters);
-            request.setIsApp(true);
+            request.setIsApp(Boolean.TRUE);
             request.execute();
-            return true;
+            return Boolean.TRUE;
         }
 
         @Override
@@ -188,7 +188,7 @@ public class ApiService {
                     token, "", timestamp);
             Smartwishlist.AppNotifications.List request = getService().appNotifications().list(
                     clientId, timestamp, signature);
-            request.setIsApp(true);
+            request.setIsApp(Boolean.TRUE);
             return request.execute();
         }
     }

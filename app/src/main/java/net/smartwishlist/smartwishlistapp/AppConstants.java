@@ -13,12 +13,12 @@ import com.google.api.client.json.gson.GsonFactory;
 
 public class AppConstants {
 
-    private static final String TAG = "AppConstants";
+    private static final Object SYNC_OBJECT = new Object();
 
     private static JsonFactory JSON_FACTORY = null;
 
     public static JsonFactory getJsonFactory() {
-        synchronized (TAG) {
+        synchronized (SYNC_OBJECT) {
             if (JSON_FACTORY == null) {
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                     JSON_FACTORY = new AndroidJsonFactory();
