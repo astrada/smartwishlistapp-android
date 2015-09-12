@@ -14,6 +14,7 @@ import android.webkit.WebViewClient;
 public class WebSiteActivity extends AppCompatActivity {
 
     public final static String TARGET_PAGE_EXTRA = "TargetPage";
+    public final static String TARGET_PAGE_QUERY_STRING_EXTRA = "TargetPageQueryString";
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     @Override
@@ -40,6 +41,10 @@ public class WebSiteActivity extends AppCompatActivity {
         String page = getIntent().getStringExtra(TARGET_PAGE_EXTRA);
         if (page != null) {
             url += page;
+        }
+        String queryString = getIntent().getStringExtra(TARGET_PAGE_QUERY_STRING_EXTRA);
+        if (queryString != null) {
+            url += queryString;
         }
         webView.loadUrl(url);
     }

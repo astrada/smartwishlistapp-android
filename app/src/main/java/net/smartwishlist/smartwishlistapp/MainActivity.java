@@ -78,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
                 webSiteActivityIntent.putExtra(WebSiteActivity.TARGET_PAGE_EXTRA, url);
                 startActivity(webSiteActivityIntent);
             } else {
-                Toast toast = Toast.makeText(this, R.string.action_send_error, Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(this, R.string.action_send_error,
+                        Toast.LENGTH_LONG);
                 toast.show();
             }
         }
@@ -126,13 +127,20 @@ public class MainActivity extends AppCompatActivity {
     public void openMyWishLists(View view) {
         Intent intent = new Intent(this, WebSiteActivity.class);
         intent.putExtra(WebSiteActivity.TARGET_PAGE_EXTRA, AppConstants.MY_WISH_LISTS_PAGE);
+        addLanguage(intent);
         startActivity(intent);
     }
 
     public void openSearchPage(View view) {
         Intent intent = new Intent(this, WebSiteActivity.class);
         intent.putExtra(WebSiteActivity.TARGET_PAGE_EXTRA, AppConstants.SEARCH_PAGE);
+        addLanguage(intent);
         startActivity(intent);
+    }
+
+    private static void addLanguage(Intent intent) {
+        String language = Locale.getDefault().getLanguage();
+        intent.putExtra(WebSiteActivity.TARGET_PAGE_QUERY_STRING_EXTRA, "?hl=" + language);
     }
 
     public void reset(View view) {
