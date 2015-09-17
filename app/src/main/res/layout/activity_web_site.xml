@@ -1,6 +1,20 @@
-<WebView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/web_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="net.smartwishlist.smartwishlistapp.WebSiteActivity" />
+    android:orientation="vertical"
+    tools:context="net.smartwishlist.smartwishlistapp.WebSiteActivity">
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:progressDrawable="@drawable/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal" />
+
+    <WebView
+        android:id="@+id/web_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

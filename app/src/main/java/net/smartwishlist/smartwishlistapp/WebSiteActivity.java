@@ -2,14 +2,18 @@ package net.smartwishlist.smartwishlistapp;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 public class WebSiteActivity extends AppCompatActivity {
 
@@ -21,6 +25,8 @@ public class WebSiteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_site);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && BuildConfig.DEBUG) {
             WebView.setWebContentsDebuggingEnabled(true);
@@ -31,7 +37,8 @@ public class WebSiteActivity extends AppCompatActivity {
         webSettings.setAllowFileAccess(false);
         webView.addJavascriptInterface(new WebAppInterface(getApplicationContext()),
                 AppConstants.JAVASCRIPT_INTERFACE);
-        webView.setWebViewClient(new SmartWishListWebViewClient());
+        webView.setWebViewClient(new SmartWishListWebViewClient(progressBar));
+        webView.setWebChromeClient(new SmartWishListWebChromeClient(progressBar));
         String url;
         if (BuildConfig.DEBUG) {
             url = BuildConfig.LOCAL_WEB_SITE_URL;
@@ -62,6 +69,12 @@ public class WebSiteActivity extends AppCompatActivity {
 
     private class SmartWishListWebViewClient extends WebViewClient {
 
+        private final ProgressBar progressBar;
+
+        public SmartWishListWebViewClient(ProgressBar progressBar) {
+            this.progressBar = progressBar;
+        }
+
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (BuildConfig.DEBUG && url.startsWith(BuildConfig.LOCAL_WEB_SITE_URL)) {
@@ -78,6 +91,33 @@ public class WebSiteActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             }
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+    
+    private class SmartWishListWebChromeClient extends WebChromeClient {
+
+        private final ProgressBar progressBar;
+
+        public SmartWishListWebChromeClient(ProgressBar progressBar) {
+            this.progressBar = progressBar;
+        }
+
+        @Override
+        public void onProgressChanged(WebView view, int newProgress) {
+            super.onProgressChanged(view, newProgress);
+            progressBar.setProgress(newProgress);
         }
     }
 }
