@@ -68,6 +68,8 @@ public class AppConstants {
 
     public static final double ONE_SECOND_IN_MILLISECONDS = 1000.0;
 
+    public static final long CLICK_DELAY = 1000;
+
     public static class Version {
 
         private static String APP_VERSION_NAME = null;

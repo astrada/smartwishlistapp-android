@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -21,6 +22,8 @@ public class SetupActivity extends AppCompatActivity {
     private static final int CUSTOM_REQUEST_QR_SCANNER = 0;
     private static final String BS_PACKAGE = "com.google.zxing.client.android";
 
+    private long lastClickTimestamp = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +36,10 @@ public class SetupActivity extends AppCompatActivity {
     }
 
     public void scanQrCode(View view) {
+        if (SystemClock.elapsedRealtime() - lastClickTimestamp < AppConstants.CLICK_DELAY) {
+            return;
+        }
+        lastClickTimestamp = SystemClock.elapsedRealtime();
         Intent intent = new Intent(BS_PACKAGE + ".SCAN");
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         if (!isQrCodeReaderInstalled(intent)) {
@@ -57,6 +64,10 @@ public class SetupActivity extends AppCompatActivity {
         downloadDialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                if (SystemClock.elapsedRealtime() - lastClickTimestamp < AppConstants.CLICK_DELAY) {
+                    return;
+                }
+                lastClickTimestamp = SystemClock.elapsedRealtime();
                 Uri uri = Uri.parse("market://details?id=" + BS_PACKAGE);
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 try {
@@ -100,12 +111,22 @@ public class SetupActivity extends AppCompatActivity {
     }
 
     public void openWebSite(View view) {
+        if (SystemClock.elapsedRealtime() - lastClickTimestamp < AppConstants.CLICK_DELAY) {
+            return;
+        }
+        lastClickTimestamp = SystemClock.elapsedRealtime();
         Intent intent = new Intent(this, WebSiteActivity.class);
+        intent.putExtra(WebSiteActivity.TARGET_PAGE_EXTRA, AppConstants.SEARCH_PAGE);
+        WebSiteActivity.addLanguageToWebSiteIntent(intent);
         startActivity(intent);
         finish();
     }
 
     public void openHelp(View view) {
+        if (SystemClock.elapsedRealtime() - lastClickTimestamp < AppConstants.CLICK_DELAY) {
+            return;
+        }
+        lastClickTimestamp = SystemClock.elapsedRealtime();
         Intent intent = new Intent(this, HelpActivity.class);
         startActivity(intent);
     }

@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,8 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private static final String ACTION_TYPE_TEXT_PLAIN = "text/plain";
+
+    private long lastClickTimestamp = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (Intent.ACTION_SEND.equals(action) && ACTION_TYPE_TEXT_PLAIN.equals(type)) {
             String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
-            if (sharedText != null && sharedText.matches(".*http.?://www.amazon\\..*")) {
+            if (sharedText != null && sharedText.matches(".*https?://www.amazon\\..*")) {
                 int urlStart = sharedText.indexOf("http");
                 String keywords = sharedText.substring(urlStart);
                 AppPreferences preferences = new AppPreferences(getApplicationContext());
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 String url = uriBuilder.build().toString();
                 Intent webSiteActivityIntent = new Intent(this, WebSiteActivity.class);
                 webSiteActivityIntent.putExtra(WebSiteActivity.TARGET_PAGE_EXTRA, url);
+                WebSiteActivity.addLanguageToWebSiteIntent(webSiteActivityIntent);
                 startActivity(webSiteActivityIntent);
             } else {
                 Toast toast = Toast.makeText(this, R.string.action_send_error,
@@ -120,27 +124,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openSettings() {
+        if (SystemClock.elapsedRealtime() - lastClickTimestamp < AppConstants.CLICK_DELAY) {
+            return;
+        }
+        lastClickTimestamp = SystemClock.elapsedRealtime();
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 
     public void openMyWishLists(View view) {
+        if (SystemClock.elapsedRealtime() - lastClickTimestamp < AppConstants.CLICK_DELAY) {
+            return;
+        }
+        lastClickTimestamp = SystemClock.elapsedRealtime();
         Intent intent = new Intent(this, WebSiteActivity.class);
         intent.putExtra(WebSiteActivity.TARGET_PAGE_EXTRA, AppConstants.MY_WISH_LISTS_PAGE);
-        addLanguage(intent);
+        WebSiteActivity.addLanguageToWebSiteIntent(intent);
         startActivity(intent);
     }
 
     public void openSearchPage(View view) {
+        if (SystemClock.elapsedRealtime() - lastClickTimestamp < AppConstants.CLICK_DELAY) {
+            return;
+        }
+        lastClickTimestamp = SystemClock.elapsedRealtime();
         Intent intent = new Intent(this, WebSiteActivity.class);
         intent.putExtra(WebSiteActivity.TARGET_PAGE_EXTRA, AppConstants.SEARCH_PAGE);
-        addLanguage(intent);
+        WebSiteActivity.addLanguageToWebSiteIntent(intent);
         startActivity(intent);
-    }
-
-    private static void addLanguage(Intent intent) {
-        String language = Locale.getDefault().getLanguage();
-        intent.putExtra(WebSiteActivity.TARGET_PAGE_QUERY_STRING_EXTRA, "?hl=" + language);
     }
 
     public void reset(View view) {
@@ -148,6 +159,10 @@ public class MainActivity extends AppCompatActivity {
         builder.setMessage(getString(R.string.confirmation))
                 .setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        if (SystemClock.elapsedRealtime() - lastClickTimestamp < AppConstants.CLICK_DELAY) {
+                            return;
+                        }
+                        lastClickTimestamp = SystemClock.elapsedRealtime();
                         GcmInitialization gcmInitialization = new GcmInitialization();
                         gcmInitialization.deleteGcmToken(MainActivity.this);
                         dialog.dismiss();
@@ -162,6 +177,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void refresh(View view) {
+        if (SystemClock.elapsedRealtime() - lastClickTimestamp < AppConstants.CLICK_DELAY) {
+            return;
+        }
+        lastClickTimestamp = SystemClock.elapsedRealtime();
         ApiService.FetchAppNotificationsTask task = new ApiService.FetchAppNotificationsTask(this);
         task.execute();
     }
