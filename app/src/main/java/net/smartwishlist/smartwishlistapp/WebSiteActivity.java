@@ -10,10 +10,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+
+import java.util.Locale;
 
 public class WebSiteActivity extends AppCompatActivity {
 
@@ -77,7 +80,7 @@ public class WebSiteActivity extends AppCompatActivity {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            if (BuildConfig.DEBUG && url.startsWith(BuildConfig.LOCAL_WEB_SITE_URL)) {
+            if (BuildConfig.DEBUG) {
                 return false;
             } else if (url.startsWith(AppConstants.WEB_SITE_URL) ||
                     url.startsWith(AppConstants.GOOGLE_API_URL) ||
@@ -104,8 +107,19 @@ public class WebSiteActivity extends AppCompatActivity {
             super.onPageFinished(view, url);
             progressBar.setVisibility(View.GONE);
         }
+
+        @Override
+        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+            super.onReceivedError(view, errorCode, description, failingUrl);
+            progressBar.setVisibility(View.GONE);
+        }
     }
-    
+
+    static void addLanguageToWebSiteIntent(Intent intent) {
+        String language = Locale.getDefault().getLanguage();
+        intent.putExtra(TARGET_PAGE_QUERY_STRING_EXTRA, "?hl=" + language);
+    }
+
     private class SmartWishListWebChromeClient extends WebChromeClient {
 
         private final ProgressBar progressBar;
