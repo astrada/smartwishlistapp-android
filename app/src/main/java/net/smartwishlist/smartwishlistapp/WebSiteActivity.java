@@ -53,6 +53,11 @@ public class WebSiteActivity extends AppCompatActivity {
         }
         String queryString = getIntent().getStringExtra(TARGET_PAGE_QUERY_STRING_EXTRA);
         if (queryString != null) {
+            if (url.contains("?")) {
+                url += "&";
+            } else {
+                url += "?";
+            }
             url += queryString;
         }
         webView.loadUrl(url);
@@ -116,7 +121,7 @@ public class WebSiteActivity extends AppCompatActivity {
 
     static void addLanguageToWebSiteIntent(Intent intent) {
         String language = Locale.getDefault().getLanguage();
-        intent.putExtra(TARGET_PAGE_QUERY_STRING_EXTRA, "?hl=" + language);
+        intent.putExtra(TARGET_PAGE_QUERY_STRING_EXTRA, "hl=" + language);
     }
 
     private class SmartWishListWebChromeClient extends WebChromeClient {
