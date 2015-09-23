@@ -48,7 +48,7 @@
     <string name="pref_notification_enabled_summary">Receive price drop notifications</string>
     <string name="refresh_button">Refresh</string>
     <string name="action_send_error">Cannot find a link to an Amazon product.</string>
-    <string name="search_label">Search products</string>
+    <string name="search_label">Product search</string>
     <string name="search_button">Search</string>
     <string name="price_drop_label">Price drop:</string>
     <string name="price_increase_label">Price increase:</string>
