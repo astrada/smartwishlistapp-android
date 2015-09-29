@@ -44,8 +44,9 @@ public class NotificationItemFragment extends ListFragment
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Activity activity = getActivity();
         try {
             onItemSelectedListener = (OnItemSelectedListener) activity;
         } catch (ClassCastException e) {

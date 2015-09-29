@@ -23,7 +23,7 @@ public class GcmRegistrationIntentService extends IntentService {
             synchronized (SYNC_OBJECT) {
                 InstanceID instanceID = InstanceID.getInstance(this);
                 String token = instanceID.getToken(BuildConfig.GCM_SENDER_ID,
-                        GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                        GoogleCloudMessaging.INSTANCE_ID_SCOPE);
                 sendRegistrationToServer(token);
             }
         } catch (Exception e) {
