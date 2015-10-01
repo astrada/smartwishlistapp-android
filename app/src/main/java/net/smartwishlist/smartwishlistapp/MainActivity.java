@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String ACTION_TYPE_TEXT_PLAIN = "text/plain";
 
+    private AppInitialization appInitialization;
     private long lastClickTimestamp = 0;
 
     @Override
@@ -27,23 +28,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        AppInitialization appInitialization = new AppInitialization(getApplicationContext());
+        appInitialization = new AppInitialization(getApplicationContext());
         appInitialization.initializeApp();
-        if (appInitialization.needSetup()) {
-            Intent intent = new Intent(this, SetupActivity.class);
-            startActivity(intent);
-            finish();
-        } else {
-            GcmInitialization gcmInitialization = new GcmInitialization();
-            gcmInitialization.initializeGcmToken(this);
-        }
 
-        receiveData();
+        if (checkInitialization()) {
+            receiveData();
 
-        setContentView(R.layout.activity_main);
-        if (!BuildConfig.DEBUG) {
-            Button refresh = (Button) findViewById(R.id.button_refresh);
-            refresh.setVisibility(View.GONE);
+            setContentView(R.layout.activity_main);
+            if (!BuildConfig.DEBUG) {
+                Button refresh = (Button) findViewById(R.id.button_refresh);
+                refresh.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -93,16 +88,32 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        checkConnectivity();
+        if (checkInitialization()) {
+            checkConnectivity();
+        }
     }
 
-    private void checkConnectivity() {
-        if (!ApiService.isConnected(getApplicationContext())) {
+    private boolean checkInitialization() {
+        boolean needSetup = appInitialization.needSetup();
+        if (needSetup) {
+            Intent intent = new Intent(this, SetupActivity.class);
+            startActivity(intent);
+        } else {
+            GcmInitialization gcmInitialization = new GcmInitialization();
+            gcmInitialization.initializeGcmToken(this);
+        }
+        return !needSetup;
+    }
+
+    private boolean checkConnectivity() {
+        boolean connected = ApiService.isConnected(getApplicationContext());
+        if (!connected) {
             Toast toast = Toast.makeText(this,
                     R.string.no_internet_connection,
                     Toast.LENGTH_LONG);
             toast.show();
         }
+        return connected;
     }
 
     @Override
