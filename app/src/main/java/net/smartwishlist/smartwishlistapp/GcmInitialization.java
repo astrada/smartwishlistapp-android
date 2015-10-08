@@ -22,7 +22,9 @@ public class GcmInitialization {
 
     public void initializeGcmToken(Activity activity) {
         AppPreferences preferences = new AppPreferences(activity.getApplicationContext());
-        if (!preferences.isGcmTokenSent() && checkPlayServices(activity)) {
+        if (!preferences.isGcmTokenSent()
+                && preferences.getClientId() != null
+                && checkPlayServices(activity)) {
             Intent intent = new Intent(activity, GcmRegistrationIntentService.class);
             activity.startService(intent);
         }
