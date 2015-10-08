@@ -16,14 +16,13 @@ public class AppGcmListenerService extends GcmListenerService {
                         AppPreferences preferences = new AppPreferences(getApplicationContext());
                         if (preferences.getNotificationEnabled()) {
                             String clientId = data.getString("client-id");
-                            if (clientId != null) {
-                                if (clientId.equals(preferences.getClientId())) {
-                                    AppLogging.logDebug("Unexpected client ID. Received=" + clientId +
-                                            " Expected=" + preferences.getClientId());
-                                }
+                            if (clientId != null && clientId.equals(preferences.getClientId())) {
                                 ApiService.FetchAppNotificationsTask task =
                                         new ApiService.FetchAppNotificationsTask(this);
                                 task.execute();
+                            } else {
+                                AppLogging.logError("Unexpected client ID. Received=" + clientId +
+                                        " Expected=" + preferences.getClientId());
                             }
                         }
                         break;
