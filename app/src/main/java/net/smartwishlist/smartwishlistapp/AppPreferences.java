@@ -30,6 +30,7 @@ public class AppPreferences {
     }
 
     public void setClientId(String clientId) {
+        String oldClientId = getClientId();
         setStringPreference(CLIENT_ID_PROP, clientId);
         if (!BuildConfig.DEBUG) {
             if (clientId != null) {
@@ -37,6 +38,9 @@ public class AppPreferences {
             } else {
                 Crashlytics.setBool(AppConstants.RESET_CLIENT_ID_TAG, true);
             }
+        }
+        if (!compare(clientId, oldClientId) && isGcmTokenSent()) {
+            setGcmTokenSent(false);
         }
     }
 
@@ -170,5 +174,9 @@ public class AppPreferences {
         } else {
             currentEditor.putBoolean(key, value);
         }
+    }
+
+    private static boolean compare(String s1, String s2) {
+        return (s1 == null ? s2 == null : s1.equals(s2));
     }
 }
