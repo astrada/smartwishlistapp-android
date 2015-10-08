@@ -88,8 +88,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if (checkInitialization()) {
-            checkConnectivity();
+        if (checkInitialization()
+                && checkConnectivity()) {
+            initializeGcm();
         }
     }
 
@@ -98,11 +99,13 @@ public class MainActivity extends AppCompatActivity {
         if (needSetup) {
             Intent intent = new Intent(this, SetupActivity.class);
             startActivity(intent);
-        } else {
-            GcmInitialization gcmInitialization = new GcmInitialization();
-            gcmInitialization.initializeGcmToken(this);
         }
         return !needSetup;
+    }
+
+    private void initializeGcm() {
+        GcmInitialization gcmInitialization = new GcmInitialization();
+        gcmInitialization.initializeGcmToken(this);
     }
 
     private boolean checkConnectivity() {
