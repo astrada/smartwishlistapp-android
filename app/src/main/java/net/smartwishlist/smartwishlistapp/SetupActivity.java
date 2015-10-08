@@ -9,6 +9,7 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -118,7 +119,10 @@ public class SetupActivity extends AppCompatActivity {
         Intent intent = new Intent(this, WebSiteActivity.class);
         intent.putExtra(WebSiteActivity.TARGET_PAGE_EXTRA, AppConstants.SEARCH_PAGE);
         WebSiteActivity.addLanguageToWebSiteIntent(intent);
-        startActivity(intent);
+        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this)
+                .addParentStack(WebSiteActivity.class)
+                .addNextIntent(intent);
+        taskStackBuilder.startActivities();
         finish();
     }
 
