@@ -16,9 +16,9 @@ import java.util.Random;
 
 public class ApiService {
 
-    private static final int MAX_ATTEMPTS = 5;
-    private static final int BACKOFF_MILLI_SECONDS = 2000;
-    private static final Random random = new Random();
+    public static final int MAX_ATTEMPTS = 5;
+    public static final int BACKOFF_MILLI_SECONDS = 2000;
+    public static final Random random = new Random();
 
     public static boolean isConnected(Context context) {
         ConnectivityManager cm =
@@ -28,7 +28,7 @@ public class ApiService {
                 activeNetwork.isConnectedOrConnecting();
     }
 
-    private static Smartwishlist getApiServiceHandle(Context context) {
+    public static Smartwishlist getApiServiceHandle(Context context) {
         Smartwishlist.Builder builder = new Smartwishlist.Builder(AppConstants.HTTP_TRANSPORT,
                 AppConstants.getJsonFactory(), null);
         if (BuildConfig.DEBUG) {
@@ -122,48 +122,6 @@ public class ApiService {
                     R.string.invalid_client_id,
                     Toast.LENGTH_LONG);
             toast.show();
-        }
-    }
-
-    public static class RegisterGcmDeviceTask
-            extends ApiTaskWithExponentialBackOff<String, Boolean> {
-
-        public RegisterGcmDeviceTask(Context context) {
-            super(context);
-        }
-
-        @Override
-        protected Boolean tryInBackground(String... strings) throws IOException {
-            AppPreferences preferences = new AppPreferences(getContext());
-            String clientId = preferences.getClientId();
-            String token = preferences.getToken();
-            double timestamp = ApiSignature.getTimestamp();
-            String registrationId = strings[0];
-            String signature = ApiSignature.generateRequestSignature(
-                    token, registrationId, timestamp);
-            SmartWishListRegisterGcmDeviceParameters parameters =
-                    new SmartWishListRegisterGcmDeviceParameters();
-            parameters.setRegistrationId(registrationId);
-            Smartwishlist.AppNotifications.Register request =
-                    getService().appNotifications().register(clientId, timestamp, signature,
-                            parameters);
-            request.setIsApp(Boolean.TRUE);
-            request.execute();
-            return Boolean.TRUE;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            AppPreferences preferences = new AppPreferences(getContext());
-            if (aBoolean == null) {
-                preferences.setGcmTokenSent(false);
-                Toast toast = Toast.makeText(getContext(),
-                        R.string.gcm_registration_failed,
-                        Toast.LENGTH_LONG);
-                toast.show();
-            } else {
-                preferences.setGcmTokenSent(aBoolean);
-            }
         }
     }
 
