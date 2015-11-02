@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.appspot.smart_wish_list.smartwishlist.Smartwishlist;
+import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListRegisterGcmDeviceParameters;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
 import java.io.IOException;
@@ -51,6 +54,74 @@ public class GcmInitialization {
                 return false;
             }
             return true;
+        }
+    }
+
+    public static class GetTokenAndSendToServerTask
+            extends SyncTaskWithExponentialBackoff {
+
+        private final Context context;
+        private final AppPreferences preferences;
+
+        public GetTokenAndSendToServerTask(Context context) {
+            this.context = context;
+            preferences = new AppPreferences(context);
+        }
+
+        @Override
+        protected void tryDoing() throws IOException {
+            getGcmTokenAndSendToServer();
+        }
+
+        @Override
+        protected void handleFailure(Exception e) {
+            preferences.setGcmTokenSent(false);
+            AppLogging.logException(e);
+        }
+
+        private void getGcmTokenAndSendToServer() throws IOException {
+            if (preferences.isGcmTokenSent() || preferences.getClientId() == null) {
+                return;
+            }
+
+            InstanceID instanceID = InstanceID.getInstance(context);
+            String registrationId = instanceID.getToken(BuildConfig.GCM_SENDER_ID,
+                    GoogleCloudMessaging.INSTANCE_ID_SCOPE);
+            if (registrationId != null) {
+                String clientId = preferences.getClientId();
+                String token = preferences.getToken();
+                double timestamp = ApiSignature.getTimestamp();
+                String signature = ApiSignature.generateRequestSignature(
+                        token, registrationId, timestamp);
+                SmartWishListRegisterGcmDeviceParameters parameters =
+                        new SmartWishListRegisterGcmDeviceParameters();
+                parameters.setRegistrationId(registrationId);
+                Smartwishlist.AppNotifications.Register request =
+                        ApiService.getApiServiceHandle(context).appNotifications().register(
+                                clientId, timestamp, signature, parameters);
+                request.setIsApp(Boolean.TRUE);
+                request.execute();
+                preferences.setGcmTokenSent(true);
+            } else {
+                preferences.setGcmTokenSent(false);
+            }
+        }
+    }
+
+    public static class GetTokenAndSendToServerAsyncTask
+            extends AsyncTask<Void, Void, Void> {
+
+        private final Context context;
+
+        public GetTokenAndSendToServerAsyncTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            GetTokenAndSendToServerTask task = new GetTokenAndSendToServerTask(context);
+            task.doSynchronized();
+            return null;
         }
     }
 

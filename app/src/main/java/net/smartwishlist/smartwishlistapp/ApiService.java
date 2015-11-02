@@ -9,16 +9,10 @@ import android.widget.Toast;
 import com.appspot.smart_wish_list.smartwishlist.Smartwishlist;
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListAppNotificationData;
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListCheckResult;
-import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListRegisterGcmDeviceParameters;
 
 import java.io.IOException;
-import java.util.Random;
 
 public class ApiService {
-
-    public static final int MAX_ATTEMPTS = 5;
-    public static final int BACKOFF_MILLI_SECONDS = 2000;
-    public static final Random random = new Random();
 
     public static boolean isConnected(Context context) {
         ConnectivityManager cm =
@@ -61,15 +55,16 @@ public class ApiService {
         @SafeVarargs
         @Override
         protected final Result doInBackground(Params... params) {
-            long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(1000);
-            for (int i = 1; i <= MAX_ATTEMPTS; i++) {
+            long backoff = SyncTaskWithExponentialBackoff.BACKOFF_MILLI_SECONDS +
+                    SyncTaskWithExponentialBackoff.random.nextInt(1000);
+            for (int i = 1; i <= SyncTaskWithExponentialBackoff.MAX_ATTEMPTS; i++) {
                 if (!isConnected()) break;
                 if (isCancelled()) break;
 
                 try {
                     return tryInBackground(params);
                 } catch (IOException e) {
-                    if (i == MAX_ATTEMPTS) {
+                    if (i == SyncTaskWithExponentialBackoff.MAX_ATTEMPTS) {
                         AppLogging.logException(e);
                         break;
                     }
@@ -103,7 +98,8 @@ public class ApiService {
                 throws IOException {
             Smartwishlist.Client.CheckId checkId = getService().client().checkId(strings[0]);
             checkId.setIsApp(Boolean.TRUE);
-            AppLogging.logDebug("CheckClientIdTask.tryInBackground: URL=[" + checkId.buildHttpRequestUrl().toString() + "]");
+            AppLogging.logDebug("CheckClientIdTask.tryInBackground: URL=[" +
+                    checkId.buildHttpRequestUrl().toString() + "]");
             return checkId.execute();
         }
 
@@ -162,7 +158,8 @@ public class ApiService {
         }
 
         @Override
-        protected void onPostExecute(SmartWishListAppNotificationData smartWishListAppNotificationData) {
+        protected void onPostExecute(
+                SmartWishListAppNotificationData smartWishListAppNotificationData) {
             if (smartWishListAppNotificationData == null) {
                 AppLogging.logError("FetchAppNotificationsTask: no results");
                 return;
@@ -180,7 +177,8 @@ public class ApiService {
         }
     }
 
-    public static class StoreNotificationsTask extends AsyncTask<SmartWishListAppNotificationData, Void, Void> {
+    public static class StoreNotificationsTask
+            extends AsyncTask<SmartWishListAppNotificationData, Void, Void> {
 
         private final Context context;
 
@@ -189,7 +187,8 @@ public class ApiService {
         }
 
         @Override
-        protected Void doInBackground(SmartWishListAppNotificationData... smartWishListAppNotificationData) {
+        protected Void doInBackground(
+                SmartWishListAppNotificationData... smartWishListAppNotificationData) {
             Context context = this.context.getApplicationContext();
             AppStorage appStorage = AppStorage.getInstance(context);
             AppPreferences preferences = new AppPreferences(context);

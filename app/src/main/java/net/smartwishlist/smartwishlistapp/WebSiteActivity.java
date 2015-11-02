@@ -66,6 +66,14 @@ public class WebSiteActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        GcmInitialization.GetTokenAndSendToServerAsyncTask task =
+                new GcmInitialization.GetTokenAndSendToServerAsyncTask(this);
+        task.execute();
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         WebView webView = (WebView) findViewById(R.id.web_view);
         if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
