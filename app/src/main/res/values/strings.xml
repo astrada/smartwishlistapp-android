@@ -56,4 +56,6 @@
     <string name="qr_code_title">QR code reader</string>
     <string name="qr_code_message">This application requires a QR code reader. Would you like to install it?</string>
     <string name="qr_code_error">Cannot install QR code reader!</string>
+    <string name="reset_progress_title">Reset in progress</string>
+    <string name="reset_progress_dialog">Please wait…</string>
 </resources>

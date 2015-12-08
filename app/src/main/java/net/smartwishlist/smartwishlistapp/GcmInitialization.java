@@ -1,6 +1,7 @@
 package net.smartwishlist.smartwishlistapp;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -129,10 +130,19 @@ public class GcmInitialization {
 
         private final Activity activity;
         private final Context context;
+        private ProgressDialog progressDialog;
 
         public DeleteGcmTokenTask(Activity activity) {
             this.activity = activity;
             context = activity.getApplicationContext();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(activity,
+                    activity.getString(R.string.reset_progress_title),
+                    activity.getString(R.string.reset_progress_dialog),
+                    true);
         }
 
         @Override
@@ -152,6 +162,7 @@ public class GcmInitialization {
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
+            progressDialog.dismiss();
             if (aBoolean) {
                 AppPreferences preferences = new AppPreferences(context);
                 preferences.resetAll();
