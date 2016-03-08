@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.appspot.smart_wish_list.smartwishlist.Smartwishlist;
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListRegisterGcmDeviceParameters;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
@@ -43,10 +43,11 @@ public class GcmInitialization {
         if (BuildConfig.DEBUG) {
             return true;
         } else {
-            int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
+            GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+            int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(activity);
             if (resultCode != ConnectionResult.SUCCESS) {
-                if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                    GooglePlayServicesUtil.getErrorDialog(resultCode, activity,
+                if (googleApiAvailability.isUserResolvableError(resultCode)) {
+                    googleApiAvailability.getErrorDialog(activity, resultCode,
                             PLAY_SERVICES_RESOLUTION_REQUEST).show();
                 } else {
                     AppLogging.logError("This device is not supported.");
