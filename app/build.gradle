@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'io.fabric.tools:gradle:1.21.5'
     }
 }
 apply plugin: 'com.android.application'
@@ -46,8 +46,8 @@ android {
         applicationId "net.smartwishlist.smartwishlistapp"
         minSdkVersion 9
         targetSdkVersion 23
-        versionCode 15
-        versionName "1.12"
+        versionCode 16
+        versionName "1.13"
 
         buildConfigField 'String', 'LOCAL_API_URL', LOCAL_API_URL
         buildConfigField 'String', 'LOCAL_WEB_SITE_URL', LOCAL_WEB_SITE_URL
