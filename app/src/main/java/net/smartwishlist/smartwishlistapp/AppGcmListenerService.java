@@ -7,6 +7,13 @@ import com.google.android.gms.gcm.GcmListenerService;
 public class AppGcmListenerService extends GcmListenerService {
 
     @Override
+    public void onCreate() {
+        AppInitialization appInitialization = new AppInitialization(this);
+        appInitialization.initializeApp();
+        super.onCreate();
+    }
+
+    @Override
     public void onMessageReceived(String from, Bundle data) {
         if (data != null && !data.isEmpty()) {
             String messageType = data.getString("type");

@@ -22,7 +22,6 @@ public class AppInitialization {
                 .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
                 .build();
         Fabric.with(context, kit);
-        Crashlytics.setString(AppConstants.CLIENT_ID_TAG, preferences.getClientId());
 
         if (BuildConfig.DEBUG) {
             preferences.beginEdit();
@@ -32,6 +31,9 @@ public class AppInitialization {
             preferences.setHasAccount(BuildConfig.DEBUG_HAS_ACCOUNT);
             preferences.setNotificationEnabled(BuildConfig.DEBUG_NOTIFICATION_ENABLED);
             preferences.apply();
+        }
+        if (!needSetup()) {
+            Crashlytics.setString(AppConstants.CLIENT_ID_TAG, preferences.getClientId());
         }
     }
 
