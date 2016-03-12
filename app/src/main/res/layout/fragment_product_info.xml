@@ -44,6 +44,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/price_target_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="4dp">

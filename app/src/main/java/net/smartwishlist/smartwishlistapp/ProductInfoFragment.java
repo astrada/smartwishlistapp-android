@@ -23,6 +23,7 @@ import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListNotification
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
@@ -92,9 +93,14 @@ public class ProductInfoFragment extends Fragment {
 
                 productTitle.setText(data.getItem().getTitle());
                 productPrice.setText(data.getItem().getFormattedPrice());
-                productTargetPrice.setText(String.format("%s %.2f",
-                        data.getItem().getCurrency(),
-                        data.getPriceThreshold()));
+                if (data.getPriceThreshold() != null) {
+                    productTargetPrice.setText(String.format(Locale.getDefault(), "%s %.2f",
+                            data.getItem().getCurrency(),
+                            data.getPriceThreshold()));
+                } else {
+                    LinearLayout productTargetLayout = (LinearLayout) rootView.findViewById(R.id.price_target_layout);
+                    productTargetLayout.setVisibility(View.GONE);
+                }
                 productAvailability.setChecked(data.getItem().getAvailable());
                 productSoldByAmazon.setChecked(data.getItem().getSoldByAmazon());
                 DateFormat dateFormat = SimpleDateFormat.getDateInstance();
@@ -149,11 +155,11 @@ public class ProductInfoFragment extends Fragment {
     private static String formatPriceDrop(Double priceDrop, Double priceDropPercentage,
                                           String currency) {
         StringBuilder builder = new StringBuilder();
-        builder.append(String.format("%s %,.2f",
+        builder.append(String.format(Locale.getDefault(), "%s %,.2f",
                 currency,
                 priceDrop));
         if (priceDropPercentage != null) {
-            builder.append(String.format(" (%,.2f%%)", priceDropPercentage));
+            builder.append(String.format(Locale.getDefault(), " (%,.2f%%)", priceDropPercentage));
         }
         return builder.toString();
     }
