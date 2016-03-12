@@ -91,6 +91,10 @@ public class GcmInitialization {
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE);
             if (registrationId != null) {
                 String clientId = preferences.getClientId();
+                if (preferences.isGcmTokenSent() || clientId == null) {
+                    return;
+                }
+
                 String token = preferences.getToken();
                 double timestamp = ApiSignature.getTimestamp();
                 String signature = ApiSignature.generateRequestSignature(
