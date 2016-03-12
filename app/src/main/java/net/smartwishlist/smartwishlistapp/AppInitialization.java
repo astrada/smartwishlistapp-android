@@ -3,6 +3,7 @@ package net.smartwishlist.smartwishlistapp;
 import android.content.Context;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -17,9 +18,12 @@ public class AppInitialization {
     }
 
     public void initializeApp() {
-        if (!BuildConfig.DEBUG) {
-            Fabric.with(context, new Crashlytics());
-        }
+        Crashlytics kit = new Crashlytics.Builder()
+                .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+                .build();
+        Fabric.with(context, kit);
+        Crashlytics.setString(AppConstants.CLIENT_ID_TAG, preferences.getClientId());
+
         if (BuildConfig.DEBUG) {
             preferences.beginEdit();
             preferences.setClientId(BuildConfig.DEBUG_CLIENT_ID);
@@ -28,8 +32,6 @@ public class AppInitialization {
             preferences.setHasAccount(BuildConfig.DEBUG_HAS_ACCOUNT);
             preferences.setNotificationEnabled(BuildConfig.DEBUG_NOTIFICATION_ENABLED);
             preferences.apply();
-        } else if (!needSetup()) {
-            Crashlytics.setString(AppConstants.CLIENT_ID_TAG, preferences.getClientId());
         }
     }
 
