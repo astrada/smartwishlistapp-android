@@ -5,7 +5,7 @@
         <clip>
             <shape>
                 <solid
-                    android:color="@color/material_deep_teal_500" />
+                    android:color="#ff009688" />
             </shape>
         </clip>
     </item>
@@ -14,7 +14,7 @@
         <clip>
             <shape>
                 <solid
-                    android:color="@color/material_deep_teal_200" />
+                    android:color="#ff80cbc4" />
             </shape>
         </clip>
     </item>
