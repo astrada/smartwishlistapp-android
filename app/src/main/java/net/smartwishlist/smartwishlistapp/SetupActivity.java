@@ -32,6 +32,7 @@ public class SetupActivity extends AppCompatActivity {
 
         if (!hasCamera()) {
             View qrCodeLayout = findViewById(R.id.qr_code_layout);
+            assert qrCodeLayout != null;
             qrCodeLayout.setVisibility(View.GONE);
         }
     }
@@ -47,7 +48,14 @@ public class SetupActivity extends AppCompatActivity {
             showDownloadDialog();
         } else {
             intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-            startActivityForResult(intent, CUSTOM_REQUEST_QR_SCANNER);
+            try {
+                startActivityForResult(intent, CUSTOM_REQUEST_QR_SCANNER);
+            } catch (Exception e) {
+                AppLogging.logException(e);
+                Toast toast = Toast.makeText(SetupActivity.this,
+                        R.string.qr_code_install_error, Toast.LENGTH_LONG);
+                toast.show();
+            }
         }
     }
 
@@ -76,9 +84,10 @@ public class SetupActivity extends AppCompatActivity {
                 } catch (ActivityNotFoundException e) {
                     AppLogging.logException(e);
                     Toast toast = Toast.makeText(SetupActivity.this,
-                            R.string.qr_code_error, Toast.LENGTH_LONG);
+                            R.string.qr_code_app_error, Toast.LENGTH_LONG);
                     toast.show();
                     Button scan = (Button) findViewById(R.id.button_scan_qr_code);
+                    assert scan != null;
                     scan.setEnabled(false);
                 }
             }

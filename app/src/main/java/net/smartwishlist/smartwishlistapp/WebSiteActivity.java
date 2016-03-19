@@ -30,12 +30,14 @@ public class WebSiteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_site);
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        assert progressBar != null;
         progressBar.setVisibility(View.VISIBLE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && BuildConfig.DEBUG) {
             WebView.setWebContentsDebuggingEnabled(true);
         }
         WebView webView = (WebView) findViewById(R.id.web_view);
+        assert webView != null;
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAllowFileAccess(false);
@@ -76,6 +78,7 @@ public class WebSiteActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         WebView webView = (WebView) findViewById(R.id.web_view);
+        assert webView != null;
         if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
             webView.goBack();
             return true;

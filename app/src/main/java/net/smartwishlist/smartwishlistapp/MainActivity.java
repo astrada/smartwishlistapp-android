@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main);
             if (!BuildConfig.DEBUG) {
                 Button refresh = (Button) findViewById(R.id.button_refresh);
+                assert refresh != null;
                 refresh.setVisibility(View.GONE);
             }
         }
