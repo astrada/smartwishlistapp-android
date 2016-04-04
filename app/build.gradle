@@ -40,14 +40,14 @@ android {
         }
     }
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "net.smartwishlist.smartwishlistapp"
         minSdkVersion 9
         targetSdkVersion 23
-        versionCode 18
-        versionName "1.14"
+        versionCode 19
+        versionName "1.15"
 
         buildConfigField 'String', 'LOCAL_API_URL', LOCAL_API_URL
         buildConfigField 'String', 'LOCAL_WEB_SITE_URL', LOCAL_WEB_SITE_URL
