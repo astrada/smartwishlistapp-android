@@ -87,6 +87,16 @@ public class WebSiteActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        WebView webView = (WebView) findViewById(R.id.web_view);
+        if (webView != null) {
+            webView.removeAllViews();
+            webView.destroy();
+        }
+    }
+
     private class SmartWishListWebViewClient extends WebViewClient {
 
         private final ProgressBar progressBar;
