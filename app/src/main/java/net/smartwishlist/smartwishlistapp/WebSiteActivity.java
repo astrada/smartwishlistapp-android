@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -92,6 +93,10 @@ public class WebSiteActivity extends AppCompatActivity {
         super.onDestroy();
         WebView webView = (WebView) findViewById(R.id.web_view);
         if (webView != null) {
+            ViewGroup viewGroup = (ViewGroup) webView.getParent();
+            if(null != viewGroup){
+                viewGroup.removeView(webView);
+            }
             webView.removeAllViews();
             webView.destroy();
         }
