@@ -47,7 +47,7 @@ android {
         minSdkVersion 9
         targetSdkVersion 23
         versionCode 21
-        versionName "1.15"
+        versionName "1.16"
 
         buildConfigField 'String', 'LOCAL_API_URL', LOCAL_API_URL
         buildConfigField 'String', 'LOCAL_WEB_SITE_URL', LOCAL_WEB_SITE_URL
