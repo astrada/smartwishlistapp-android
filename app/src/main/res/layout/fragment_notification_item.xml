@@ -17,14 +17,18 @@
 
     <ImageButton
         android:id="@+id/button_info"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:background="@drawable/ic_info_outline_black_24dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_info_outline_black_24dp"
+        android:background="@android:color/transparent"
         android:contentDescription="@string/product_info_description"
         android:onClick="openProductInfo" />
 
