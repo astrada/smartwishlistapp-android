@@ -130,23 +130,26 @@ public class ProductInfoFragment extends Fragment {
                 store.setText(data.getItem().getRegion());
                 buyButton.setTag(data.getItem().getProductUrl());
 
-                ImageRequest request = new ImageRequest(data.getItem().getImageUrl(),
-                        new Response.Listener<Bitmap>() {
-                            @Override
-                            public void onResponse(Bitmap bitmap) {
-                                BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(),
-                                        bitmap);
-                                productTitle.setCompoundDrawablesWithIntrinsicBounds(
-                                        bitmapDrawable, null, null, null);
-                            }
-                        }, 0, 0, ImageView.ScaleType.CENTER_INSIDE, null,
-                        new Response.ErrorListener() {
-                            public void onErrorResponse(VolleyError error) {
-                                productTitle.setCompoundDrawablesWithIntrinsicBounds(
-                                        R.drawable.not_available_image, 0, 0, 0);
-                            }
-                        });
-                NetworkImageManager.getInstance(getActivity()).addToRequestQueue(request);
+                // http://stackoverflow.com/questions/10919240/fragment-myfragment-not-attached-to-activity
+                if (isAdded()) {
+                    ImageRequest request = new ImageRequest(data.getItem().getImageUrl(),
+                            new Response.Listener<Bitmap>() {
+                                @Override
+                                public void onResponse(Bitmap bitmap) {
+                                    BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(),
+                                            bitmap);
+                                    productTitle.setCompoundDrawablesWithIntrinsicBounds(
+                                            bitmapDrawable, null, null, null);
+                                }
+                            }, 0, 0, ImageView.ScaleType.CENTER_INSIDE, null,
+                            new Response.ErrorListener() {
+                                public void onErrorResponse(VolleyError error) {
+                                    productTitle.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.not_available_image, 0, 0, 0);
+                                }
+                            });
+                    NetworkImageManager.getInstance(getActivity()).addToRequestQueue(request);
+                }
             }
         }
     }
