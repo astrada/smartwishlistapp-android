@@ -11,7 +11,6 @@
 
     <string name="qr_code_button">Leggi QR code</string>
     <string name="invalid_client_id">Client ID non valido, si prega di riprovare.</string>
-    <string name="gcm_registration_failed">Impossibile registrare il dispositivo per ricevere le notifiche, si prega di riavviare l\'app.</string>
     <string name="price_alert">Avviso</string>
     <string name="buy">Compra</string>
     <plurals name="price_alerts">

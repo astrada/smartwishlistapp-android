@@ -11,7 +11,6 @@
 
     <string name="qr_code_button">Scan QR code</string>
     <string name="invalid_client_id">Invalid client ID, please retry.</string>
-    <string name="gcm_registration_failed">Could not register device to receive notifications, please restart the app.</string>
     <string name="price_alert">Price alert</string>
     <string name="buy">Buy</string>
     <plurals name="price_alerts">
