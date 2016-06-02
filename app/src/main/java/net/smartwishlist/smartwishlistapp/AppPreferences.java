@@ -16,7 +16,6 @@ public class AppPreferences {
     private static final String LAST_VIEWED_NOTIFICATIONS_PROP = "lastViewedNotifications";
     private static final String PENDING_MESSAGES_PROP = "pendingMessages";
     private static final String NOTIFICATION_ENABLED_PROP = "notificationEnabled";
-    private static final String GCM_TOKEN_SENT_PROP = "gcmTokenSent";
 
     private final SharedPreferences sharedPreferences;
     private SharedPreferences.Editor currentEditor;
@@ -30,7 +29,6 @@ public class AppPreferences {
     }
 
     public void setClientId(String clientId) {
-        String oldClientId = getClientId();
         setStringPreference(CLIENT_ID_PROP, clientId);
         if (!BuildConfig.DEBUG) {
             if (clientId != null) {
@@ -38,9 +36,6 @@ public class AppPreferences {
             } else {
                 Crashlytics.setBool(AppConstants.RESET_CLIENT_ID_TAG, true);
             }
-        }
-        if (!compare(clientId, oldClientId) && isGcmTokenSent()) {
-            setGcmTokenSent(false);
         }
     }
 
@@ -90,14 +85,6 @@ public class AppPreferences {
 
     public void setNotificationEnabled(boolean flag) {
         setBooleanPreference(NOTIFICATION_ENABLED_PROP, flag);
-    }
-
-    public boolean isGcmTokenSent() {
-        return getBooleanPreference(GCM_TOKEN_SENT_PROP);
-    }
-
-    public void setGcmTokenSent(boolean flag) {
-        setBooleanPreference(GCM_TOKEN_SENT_PROP, flag);
     }
 
     @SuppressLint("CommitPrefEdits")
@@ -174,9 +161,5 @@ public class AppPreferences {
         } else {
             currentEditor.putBoolean(key, value);
         }
-    }
-
-    private static boolean compare(String s1, String s2) {
-        return (s1 == null ? s2 == null : s1.equals(s2));
     }
 }

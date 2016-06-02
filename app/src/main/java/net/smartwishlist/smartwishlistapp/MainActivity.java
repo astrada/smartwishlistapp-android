@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         appInitialization = new AppInitialization(getApplicationContext());
         appInitialization.initializeApp();
 
+        GoogleServicesHelper.checkPlayServices(this);
         if (checkInitialization()) {
             receiveData();
 
@@ -88,10 +89,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (checkInitialization()
-                && checkConnectivity()) {
-            initializeGcm();
+        if (GoogleServicesHelper.checkPlayServices(this)
+                && checkInitialization()) {
+            checkConnectivity();
         }
     }
 
@@ -102,11 +102,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
         return !needSetup;
-    }
-
-    private void initializeGcm() {
-        GcmInitialization gcmInitialization = new GcmInitialization();
-        gcmInitialization.initializeGcmToken(this);
     }
 
     private boolean checkConnectivity() {
@@ -178,8 +173,6 @@ public class MainActivity extends AppCompatActivity {
                             return;
                         }
                         lastClickTimestamp = SystemClock.elapsedRealtime();
-                        GcmInitialization gcmInitialization = new GcmInitialization();
-                        gcmInitialization.deleteGcmToken(MainActivity.this);
                         dialog.dismiss();
                     }
                 })

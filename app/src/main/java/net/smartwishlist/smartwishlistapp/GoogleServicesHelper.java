@@ -1,45 +1,25 @@
 package net.smartwishlist.smartwishlistapp;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.appspot.smart_wish_list.smartwishlist.Smartwishlist;
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListRegisterGcmDeviceParameters;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.IOException;
 
-public class GcmInitialization {
+public class GoogleServicesHelper {
 
-    private static final Object SYNC_OBJECT = new Object();
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
-    public GcmInitialization() {
+    public GoogleServicesHelper() {
     }
 
-    public void initializeGcmToken(Activity activity) {
-        AppPreferences preferences = new AppPreferences(activity.getApplicationContext());
-        if (!preferences.isGcmTokenSent()
-                && preferences.getClientId() != null
-                && checkPlayServices(activity)) {
-            Intent intent = new Intent(activity, GcmRegistrationIntentService.class);
-            activity.startService(intent);
-        }
-    }
-
-    public void deleteGcmToken(Activity activity) {
-        DeleteGcmTokenTask task = new DeleteGcmTokenTask(activity);
-        task.execute();
-    }
-
-    private static boolean checkPlayServices(Activity activity) {
+    public static boolean checkPlayServices(Activity activity) {
         if (BuildConfig.DEBUG) {
             return true;
         } else {
@@ -77,21 +57,14 @@ public class GcmInitialization {
 
         @Override
         protected void handleFailure(Exception e) {
-            preferences.setGcmTokenSent(false);
             AppLogging.logException(e);
         }
 
         private void getGcmTokenAndSendToServer() throws IOException {
-            if (preferences.isGcmTokenSent() || preferences.getClientId() == null) {
-                return;
-            }
-
-            InstanceID instanceID = InstanceID.getInstance(context);
-            String registrationId = instanceID.getToken(BuildConfig.GCM_SENDER_ID,
-                    GoogleCloudMessaging.INSTANCE_ID_SCOPE);
+            String registrationId = FirebaseInstanceId.getInstance().getToken();
             if (registrationId != null) {
                 String clientId = preferences.getClientId();
-                if (preferences.isGcmTokenSent() || clientId == null) {
+                if (clientId == null) {
                     return;
                 }
 
@@ -107,9 +80,6 @@ public class GcmInitialization {
                                 clientId, timestamp, signature, parameters);
                 request.setIsApp(Boolean.TRUE);
                 request.execute();
-                preferences.setGcmTokenSent(true);
-            } else {
-                preferences.setGcmTokenSent(false);
             }
         }
     }
@@ -128,58 +98,6 @@ public class GcmInitialization {
             GetTokenAndSendToServerTask task = new GetTokenAndSendToServerTask(context);
             task.doSynchronized();
             return null;
-        }
-    }
-
-    private static class DeleteGcmTokenTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final Activity activity;
-        private final Context context;
-        private ProgressDialog progressDialog;
-
-        public DeleteGcmTokenTask(Activity activity) {
-            this.activity = activity;
-            context = activity.getApplicationContext();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = ProgressDialog.show(activity,
-                    activity.getString(R.string.reset_progress_title),
-                    activity.getString(R.string.reset_progress_dialog),
-                    true);
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            try {
-                synchronized (SYNC_OBJECT) {
-                    InstanceID.getInstance(context).deleteInstanceID();
-                    AppPreferences preferences = new AppPreferences(context);
-                    preferences.setGcmTokenSent(false);
-                    return Boolean.TRUE;
-                }
-            } catch (IOException e) {
-                AppLogging.logException(e);
-                return Boolean.FALSE;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            progressDialog.dismiss();
-            if (aBoolean) {
-                AppPreferences preferences = new AppPreferences(context);
-                preferences.resetAll();
-                Intent intent = new Intent(activity, SetupActivity.class);
-                activity.startActivity(intent);
-                activity.finish();
-            } else {
-                Toast toast = Toast.makeText(context,
-                        R.string.error_during_reset,
-                        Toast.LENGTH_LONG);
-                toast.show();
-            }
         }
     }
 }

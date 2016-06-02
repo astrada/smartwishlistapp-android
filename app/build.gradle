@@ -46,8 +46,8 @@ android {
         applicationId "net.smartwishlist.smartwishlistapp"
         minSdkVersion 9
         targetSdkVersion 23
-        versionCode 21
-        versionName "1.16"
+        versionCode 22
+        versionName "1.17"
 
         buildConfigField 'String', 'LOCAL_API_URL', LOCAL_API_URL
         buildConfigField 'String', 'LOCAL_WEB_SITE_URL', LOCAL_WEB_SITE_URL
@@ -76,8 +76,8 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile 'com.android.support:support-v4:23.2.1'
-    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:appcompat-v7:23.4.0'
 
     compile project(':smartwishlist')
     compile project(':volley')
@@ -94,7 +94,7 @@ dependencies {
 
     compile 'com.google.http-client:google-http-client-gson:1.20.0' exclude module: 'httpclient'
 
-    compile "com.google.android.gms:play-services-gcm:8.4.0"
+    compile "com.google.firebase:firebase-messaging:9.0.1"
 
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
@@ -102,3 +102,5 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
 }
+
+apply plugin: 'com.google.gms.google-services'

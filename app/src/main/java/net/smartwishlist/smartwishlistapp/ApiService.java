@@ -121,17 +121,19 @@ public class ApiService {
         }
     }
 
-    public static abstract class ListAppNotificationsTask
-            extends ApiTaskWithExponentialBackOff<Void, SmartWishListAppNotificationData> {
+    private static class FetchAppNotifications {
 
-        protected ListAppNotificationsTask(Context context) {
-            super(context);
+        private final Context context;
+        private final Smartwishlist service;
+
+        public FetchAppNotifications(Context context) {
+            this.context = context;
+            this.service = ApiService.getApiServiceHandle(context);
         }
 
-        @Override
-        protected SmartWishListAppNotificationData tryInBackground(Void... voids)
+        public SmartWishListAppNotificationData getAppNotifications()
                 throws IOException {
-            AppPreferences preferences = new AppPreferences(getContext());
+            AppPreferences preferences = new AppPreferences(context);
             String clientId = preferences.getClientId();
             String token = preferences.getToken();
             if (clientId == null || token == null) {
@@ -140,40 +142,71 @@ public class ApiService {
             double timestamp = ApiSignature.getTimestamp();
             String signature = ApiSignature.generateRequestSignature(
                     token, "", timestamp);
-            Smartwishlist.AppNotifications.List request = getService().appNotifications().list(
+            Smartwishlist.AppNotifications.List request = service.appNotifications().list(
                     clientId, timestamp, signature);
             request.setIsApp(Boolean.TRUE);
             return request.execute();
         }
+
+        public void showNotifications(SmartWishListAppNotificationData data) {
+            if (data == null) {
+                AppLogging.logError("FetchAppNotificationsTask: no results");
+                return;
+            } else if (data.getErrorCode() != AppConstants.NO_ERRORS) {
+                AppLogging.logError("FetchAppNotificationsTask: error code: " +
+                        data.getErrorCode());
+                return;
+            }
+
+            StoreNotificationsTask task = new StoreNotificationsTask(context);
+            task.execute(data);
+
+            AppNotification appNotification = new AppNotification(context.getApplicationContext());
+            appNotification.show(data);
+        }
+    }
+
+    public static class FetchAppNotificationsSyncTask
+            extends SyncTaskWithExponentialBackoff {
+
+        private FetchAppNotifications implementation;
+
+        public FetchAppNotificationsSyncTask(Context context) {
+            this.implementation = new FetchAppNotifications(context);
+        }
+
+        @Override
+        protected void tryDoing() throws IOException {
+            SmartWishListAppNotificationData data = implementation.getAppNotifications();
+            implementation.showNotifications(data);
+        }
+
+        @Override
+        protected void handleFailure(Exception e) {
+            AppLogging.logException(e);
+        }
     }
 
     public static class FetchAppNotificationsTask
-            extends ListAppNotificationsTask {
+            extends ApiTaskWithExponentialBackOff<Void, SmartWishListAppNotificationData> {
 
-        private final Context context;
+        private FetchAppNotifications implementation;
 
         public FetchAppNotificationsTask(Context context) {
             super(context.getApplicationContext());
-            this.context = context;
+            this.implementation = new FetchAppNotifications(context);
+        }
+
+        @Override
+        protected SmartWishListAppNotificationData tryInBackground(Void... voids)
+                throws IOException {
+            return implementation.getAppNotifications();
         }
 
         @Override
         protected void onPostExecute(
                 SmartWishListAppNotificationData smartWishListAppNotificationData) {
-            if (smartWishListAppNotificationData == null) {
-                AppLogging.logError("FetchAppNotificationsTask: no results");
-                return;
-            } else if (smartWishListAppNotificationData.getErrorCode() != AppConstants.NO_ERRORS) {
-                AppLogging.logError("FetchAppNotificationsTask: error code: " +
-                        smartWishListAppNotificationData.getErrorCode());
-                return;
-            }
-
-            StoreNotificationsTask task = new StoreNotificationsTask(context);
-            task.execute(smartWishListAppNotificationData);
-
-            AppNotification appNotification = new AppNotification(context.getApplicationContext());
-            appNotification.show(smartWishListAppNotificationData);
+            implementation.showNotifications(smartWishListAppNotificationData);
         }
     }
 

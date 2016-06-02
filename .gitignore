@@ -8,3 +8,4 @@
 /volley
 *.apk
 /infer-out
+app/google-services.json

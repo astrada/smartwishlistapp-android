@@ -71,8 +71,8 @@ public class WebSiteActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        GcmInitialization.GetTokenAndSendToServerAsyncTask task =
-                new GcmInitialization.GetTokenAndSendToServerAsyncTask(this);
+        GoogleServicesHelper.GetTokenAndSendToServerAsyncTask task =
+                new GoogleServicesHelper.GetTokenAndSendToServerAsyncTask(this);
         task.execute();
     }
 
