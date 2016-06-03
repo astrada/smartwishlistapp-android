@@ -121,19 +121,20 @@ public class ApiService {
         }
     }
 
-    private static class FetchAppNotifications {
+    private static class AppNotificationsHelper {
 
-        private final Context context;
+        private final Context applicationContext;
+        private final AppPreferences preferences;
         private final Smartwishlist service;
 
-        public FetchAppNotifications(Context context) {
-            this.context = context;
+        public AppNotificationsHelper(Context context) {
+            this.applicationContext = context.getApplicationContext();
+            this.preferences = new AppPreferences(applicationContext);
             this.service = ApiService.getApiServiceHandle(context);
         }
 
         public SmartWishListAppNotificationData getAppNotifications()
                 throws IOException {
-            AppPreferences preferences = new AppPreferences(context);
             String clientId = preferences.getClientId();
             String token = preferences.getToken();
             if (clientId == null || token == null) {
@@ -150,35 +151,40 @@ public class ApiService {
 
         public void showNotifications(SmartWishListAppNotificationData data) {
             if (data == null) {
-                AppLogging.logError("FetchAppNotificationsTask: no results");
+                AppLogging.logError("AppNotificationsHelper: no results");
                 return;
             } else if (data.getErrorCode() != AppConstants.NO_ERRORS) {
-                AppLogging.logError("FetchAppNotificationsTask: error code: " +
+                AppLogging.logError("AppNotificationsHelper: error code: " +
                         data.getErrorCode());
                 return;
             }
 
-            StoreNotificationsTask task = new StoreNotificationsTask(context);
-            task.execute(data);
-
-            AppNotification appNotification = new AppNotification(context.getApplicationContext());
+            AppNotification appNotification = new AppNotification(applicationContext);
             appNotification.show(data);
+        }
+
+        public void storeNotifications(
+                SmartWishListAppNotificationData smartWishListAppNotificationData) {
+            AppStorage appStorage = AppStorage.getInstance(applicationContext);
+            appStorage.deleteAllOldNotifications(preferences.getLastViewedNotifications());
+            appStorage.insertNotifications(smartWishListAppNotificationData.getTriggers());
         }
     }
 
     public static class FetchAppNotificationsSyncTask
             extends SyncTaskWithExponentialBackoff {
 
-        private FetchAppNotifications implementation;
+        private final AppNotificationsHelper helper;
 
         public FetchAppNotificationsSyncTask(Context context) {
-            this.implementation = new FetchAppNotifications(context);
+            helper = new AppNotificationsHelper(context);
         }
 
         @Override
         protected void tryDoing() throws IOException {
-            SmartWishListAppNotificationData data = implementation.getAppNotifications();
-            implementation.showNotifications(data);
+            SmartWishListAppNotificationData data = helper.getAppNotifications();
+            helper.showNotifications(data);
+            helper.storeNotifications(data);
         }
 
         @Override
@@ -190,43 +196,44 @@ public class ApiService {
     public static class FetchAppNotificationsTask
             extends ApiTaskWithExponentialBackOff<Void, SmartWishListAppNotificationData> {
 
-        private FetchAppNotifications implementation;
+        private final AppNotificationsHelper helper;
 
         public FetchAppNotificationsTask(Context context) {
             super(context.getApplicationContext());
-            this.implementation = new FetchAppNotifications(context);
+            helper = new AppNotificationsHelper(context);
         }
 
         @Override
         protected SmartWishListAppNotificationData tryInBackground(Void... voids)
                 throws IOException {
-            return implementation.getAppNotifications();
+            SmartWishListAppNotificationData data = helper.getAppNotifications();
+
+            StoreNotificationsTask task = new StoreNotificationsTask(helper);
+            task.execute(data);
+
+            return data;
         }
 
         @Override
         protected void onPostExecute(
                 SmartWishListAppNotificationData smartWishListAppNotificationData) {
-            implementation.showNotifications(smartWishListAppNotificationData);
+            helper.showNotifications(smartWishListAppNotificationData);
         }
     }
 
-    public static class StoreNotificationsTask
+    private static class StoreNotificationsTask
             extends AsyncTask<SmartWishListAppNotificationData, Void, Void> {
 
-        private final Context context;
+        private final AppNotificationsHelper helper;
 
-        public StoreNotificationsTask(Context context) {
-            this.context = context;
+        public StoreNotificationsTask(AppNotificationsHelper helper) {
+            this.helper = helper;
         }
 
         @Override
         protected Void doInBackground(
                 SmartWishListAppNotificationData... smartWishListAppNotificationData) {
-            Context context = this.context.getApplicationContext();
-            AppStorage appStorage = AppStorage.getInstance(context);
-            AppPreferences preferences = new AppPreferences(context);
-            appStorage.deleteAllOldNotifications(preferences.getLastViewedNotifications());
-            appStorage.insertNotifications(smartWishListAppNotificationData[0].getTriggers());
+            helper.storeNotifications(smartWishListAppNotificationData[0]);
             return null;
         }
     }
