@@ -46,7 +46,7 @@ android {
         applicationId "net.smartwishlist.smartwishlistapp"
         minSdkVersion 9
         targetSdkVersion 23
-        versionCode 23
+        versionCode 24
         versionName "1.17"
 
         buildConfigField 'String', 'LOCAL_API_URL', LOCAL_API_URL
