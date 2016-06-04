@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
         appInitialization = new AppInitialization(getApplicationContext());
         appInitialization.initializeApp();
 
-        GoogleServicesHelper.checkPlayServices(this);
-        if (checkInitialization()) {
+        if (AppInitialization.checkPlayServices(this)
+                && checkInitialization()) {
             receiveData();
 
             setContentView(R.layout.activity_main);
@@ -40,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
                 Button refresh = (Button) findViewById(R.id.button_refresh);
                 assert refresh != null;
                 refresh.setVisibility(View.GONE);
+            }
+            if (checkConnectivity()) {
+                appInitialization.sendTokenToServer();
             }
         }
     }
@@ -89,9 +92,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (GoogleServicesHelper.checkPlayServices(this)
-                && checkInitialization()) {
-            checkConnectivity();
+        if (AppInitialization.checkPlayServices(this)
+                && checkInitialization()
+                && checkConnectivity()) {
+            appInitialization.sendTokenToServer();
         }
     }
 
@@ -100,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         if (needSetup) {
             Intent intent = new Intent(this, SetupActivity.class);
             startActivity(intent);
+            finish();
         }
         return !needSetup;
     }
@@ -173,7 +178,9 @@ public class MainActivity extends AppCompatActivity {
                             return;
                         }
                         lastClickTimestamp = SystemClock.elapsedRealtime();
+                        appInitialization.resetClientId();
                         dialog.dismiss();
+                        checkInitialization();
                     }
                 })
                 .setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {

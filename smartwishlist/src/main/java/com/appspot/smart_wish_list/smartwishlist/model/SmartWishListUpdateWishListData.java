@@ -19,7 +19,7 @@
 package com.appspot.smart_wish_list.smartwishlist.model;
 
 /**
- * Wish list content.
+ * Update wish list data.
  *
  * <p> This is the Java data model class that specifies how to parse/serialize into the JSON that is
  * transmitted over HTTP when working with the smartwishlist. For a detailed explanation see:
@@ -29,7 +29,7 @@ package com.appspot.smart_wish_list.smartwishlist.model;
  * @author Google, Inc.
  */
 @SuppressWarnings("javadoc")
-public final class SmartWishListWishListContent extends com.google.api.client.json.GenericJson {
+public final class SmartWishListUpdateWishListData extends com.google.api.client.json.GenericJson {
 
   /**
    * The value may be {@code null}.
@@ -41,19 +41,13 @@ public final class SmartWishListWishListContent extends com.google.api.client.js
    * The value may be {@code null}.
    */
   @com.google.api.client.util.Key
-  private java.util.List<SmartWishListNotificationTriggerData> items;
-
-  static {
-    // hack to force ProGuard to consider SmartWishListNotificationTriggerData used, since otherwise it would be stripped out
-    // see https://github.com/google/google-api-java-client/issues/543
-    com.google.api.client.util.Data.nullOf(SmartWishListNotificationTriggerData.class);
-  }
+  private java.lang.String name;
 
   /**
    * The value may be {@code null}.
    */
-  @com.google.api.client.util.Key
-  private java.lang.String name;
+  @com.google.api.client.util.Key @com.google.api.client.json.JsonString
+  private java.lang.Long originalIndex;
 
   /**
    * @return value or {@code null} for none
@@ -65,23 +59,8 @@ public final class SmartWishListWishListContent extends com.google.api.client.js
   /**
    * @param index index or {@code null} for none
    */
-  public SmartWishListWishListContent setIndex(java.lang.Long index) {
+  public SmartWishListUpdateWishListData setIndex(java.lang.Long index) {
     this.index = index;
-    return this;
-  }
-
-  /**
-   * @return value or {@code null} for none
-   */
-  public java.util.List<SmartWishListNotificationTriggerData> getItems() {
-    return items;
-  }
-
-  /**
-   * @param items items or {@code null} for none
-   */
-  public SmartWishListWishListContent setItems(java.util.List<SmartWishListNotificationTriggerData> items) {
-    this.items = items;
     return this;
   }
 
@@ -95,19 +74,34 @@ public final class SmartWishListWishListContent extends com.google.api.client.js
   /**
    * @param name name or {@code null} for none
    */
-  public SmartWishListWishListContent setName(java.lang.String name) {
+  public SmartWishListUpdateWishListData setName(java.lang.String name) {
     this.name = name;
     return this;
   }
 
-  @Override
-  public SmartWishListWishListContent set(String fieldName, Object value) {
-    return (SmartWishListWishListContent) super.set(fieldName, value);
+  /**
+   * @return value or {@code null} for none
+   */
+  public java.lang.Long getOriginalIndex() {
+    return originalIndex;
+  }
+
+  /**
+   * @param originalIndex originalIndex or {@code null} for none
+   */
+  public SmartWishListUpdateWishListData setOriginalIndex(java.lang.Long originalIndex) {
+    this.originalIndex = originalIndex;
+    return this;
   }
 
   @Override
-  public SmartWishListWishListContent clone() {
-    return (SmartWishListWishListContent) super.clone();
+  public SmartWishListUpdateWishListData set(String fieldName, Object value) {
+    return (SmartWishListUpdateWishListData) super.set(fieldName, value);
+  }
+
+  @Override
+  public SmartWishListUpdateWishListData clone() {
+    return (SmartWishListUpdateWishListData) super.clone();
   }
 
 }

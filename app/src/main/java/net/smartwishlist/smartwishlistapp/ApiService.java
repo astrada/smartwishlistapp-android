@@ -9,6 +9,8 @@ import android.widget.Toast;
 import com.appspot.smart_wish_list.smartwishlist.Smartwishlist;
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListAppNotificationData;
 import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListCheckResult;
+import com.appspot.smart_wish_list.smartwishlist.model.SmartWishListRegisterGcmDeviceParameters;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.IOException;
 
@@ -234,6 +236,129 @@ public class ApiService {
         protected Void doInBackground(
                 SmartWishListAppNotificationData... smartWishListAppNotificationData) {
             helper.storeNotifications(smartWishListAppNotificationData[0]);
+            return null;
+        }
+    }
+
+    public static class GetTokenAndSendToServerSyncTask
+            extends SyncTaskWithExponentialBackoff {
+
+        private final Context context;
+        private final AppPreferences preferences;
+
+        public GetTokenAndSendToServerSyncTask(Context context) {
+            this.context = context;
+            preferences = new AppPreferences(context);
+        }
+
+        @Override
+        protected void tryDoing() throws IOException {
+            getGcmTokenAndSendToServer();
+        }
+
+        @Override
+        protected void handleFailure(Exception e) {
+            preferences.setGcmTokenSent(false);
+            AppLogging.logException(e);
+        }
+
+        private void getGcmTokenAndSendToServer() throws IOException {
+            String registrationId = FirebaseInstanceId.getInstance().getToken();
+            if (registrationId != null) {
+                String clientId = preferences.getClientId();
+                if (clientId == null) {
+                    return;
+                }
+
+                preferences.setGcmTokenSent(true);
+                String token = preferences.getToken();
+                double timestamp = ApiSignature.getTimestamp();
+                String signature = ApiSignature.generateRequestSignature(
+                        token, registrationId, timestamp);
+                SmartWishListRegisterGcmDeviceParameters parameters =
+                        new SmartWishListRegisterGcmDeviceParameters();
+                parameters.setRegistrationId(registrationId);
+                Smartwishlist.AppNotifications.Register request =
+                        getApiServiceHandle(context).appNotifications().register(
+                                clientId, timestamp, signature, parameters);
+                request.setIsApp(Boolean.TRUE);
+                request.execute();
+            }
+        }
+    }
+
+    public static class GetTokenAndSendToServerAsyncTask
+            extends AsyncTask<Void, Void, Void> {
+
+        private final Context context;
+
+        public GetTokenAndSendToServerAsyncTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            GetTokenAndSendToServerSyncTask task = new GetTokenAndSendToServerSyncTask(context);
+            task.doSynchronized();
+            return null;
+        }
+    }
+
+    public static class DeleteTokenFromServerSyncTask
+        extends SyncTaskWithExponentialBackoff{
+
+        private final String oldClientId;
+        private final Context context;
+        private final AppPreferences preferences;
+
+        public DeleteTokenFromServerSyncTask(String oldClientId, Context context) {
+            this.oldClientId = oldClientId;
+            this.context = context;
+            preferences = new AppPreferences(context);
+        }
+
+        @Override
+        protected void tryDoing() throws IOException {
+            String registrationId = FirebaseInstanceId.getInstance().getToken();
+            if (registrationId != null && oldClientId != null) {
+                String token = preferences.getToken();
+                double timestamp = ApiSignature.getTimestamp();
+                String signature = ApiSignature.generateRequestSignature(
+                        token, registrationId, timestamp);
+                SmartWishListRegisterGcmDeviceParameters parameters =
+                        new SmartWishListRegisterGcmDeviceParameters();
+                parameters.setRegistrationId(registrationId);
+                Smartwishlist.AppNotifications.Delete request =
+                        getApiServiceHandle(context).appNotifications().delete(
+                                oldClientId, timestamp, signature, parameters);
+                request.setIsApp(Boolean.TRUE);
+                request.execute();
+            }
+            preferences.resetAll();
+        }
+
+        @Override
+        protected void handleFailure(Exception e) {
+            AppLogging.logException(e);
+        }
+    }
+
+    public static class DeleteTokenFromServerAsyncTask
+            extends AsyncTask<Void, Void, Void> {
+
+        private final String oldClientId;
+        private final Context context;
+
+        public DeleteTokenFromServerAsyncTask(String oldClientId, Context context) {
+            this.oldClientId = oldClientId;
+            this.context = context;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            DeleteTokenFromServerSyncTask task = new DeleteTokenFromServerSyncTask(oldClientId,
+                    context);
+            task.doSynchronized();
             return null;
         }
     }

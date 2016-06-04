@@ -69,14 +69,6 @@ public class WebSiteActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        GoogleServicesHelper.GetTokenAndSendToServerAsyncTask task =
-                new GoogleServicesHelper.GetTokenAndSendToServerAsyncTask(this);
-        task.execute();
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         WebView webView = (WebView) findViewById(R.id.web_view);
         assert webView != null;

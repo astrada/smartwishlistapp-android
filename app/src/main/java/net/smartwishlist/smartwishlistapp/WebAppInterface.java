@@ -41,11 +41,9 @@ public class WebAppInterface {
         AppLogging.logDebug("setItemInStorage: [" + key + "]=[" + value + "]");
         switch (key) {
             case CLIENT_ID_KEY:
-                if (value != null && !value.equals(appPreferences.getClientId())) {
-                    // Re-enable notifications when Client ID changes
-                    appPreferences.setNotificationEnabled(true);
-                }
-                appPreferences.setClientId(value);
+                AppInitialization appInitialization = new AppInitialization(context,
+                        appPreferences);
+                appInitialization.modifyClientId(value);
                 break;
             case TOKEN_KEY:
                 appPreferences.setToken(value);

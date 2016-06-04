@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.crashlytics.android.Crashlytics;
-
 public class AppPreferences {
 
     private static final String CLIENT_ID_PROP = "clientId";
@@ -16,12 +14,13 @@ public class AppPreferences {
     private static final String LAST_VIEWED_NOTIFICATIONS_PROP = "lastViewedNotifications";
     private static final String PENDING_MESSAGES_PROP = "pendingMessages";
     private static final String NOTIFICATION_ENABLED_PROP = "notificationEnabled";
+    private static final String GCM_TOKEN_SENT_PROP = "gcmTokenSent";
 
     private final SharedPreferences sharedPreferences;
     private SharedPreferences.Editor currentEditor;
 
     public AppPreferences(Context context) {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public String getClientId() {
@@ -30,13 +29,6 @@ public class AppPreferences {
 
     public void setClientId(String clientId) {
         setStringPreference(CLIENT_ID_PROP, clientId);
-        if (!BuildConfig.DEBUG) {
-            if (clientId != null) {
-                Crashlytics.setString(AppConstants.CLIENT_ID_TAG, clientId);
-            } else {
-                Crashlytics.setBool(AppConstants.RESET_CLIENT_ID_TAG, true);
-            }
-        }
     }
 
     public String getToken() {
@@ -87,6 +79,14 @@ public class AppPreferences {
         setBooleanPreference(NOTIFICATION_ENABLED_PROP, flag);
     }
 
+    public boolean isGcmTokenSent() {
+        return getBooleanPreference(GCM_TOKEN_SENT_PROP);
+    }
+
+    public void setGcmTokenSent(boolean flag) {
+        setBooleanPreference(GCM_TOKEN_SENT_PROP, flag);
+    }
+
     @SuppressLint("CommitPrefEdits")
     public void beginEdit() {
         currentEditor = sharedPreferences.edit();
@@ -104,6 +104,7 @@ public class AppPreferences {
         setDefaultRegion(null);
         setHasAccount(null);
         setNotificationEnabled(false);
+        setGcmTokenSent(false);
         apply();
     }
 

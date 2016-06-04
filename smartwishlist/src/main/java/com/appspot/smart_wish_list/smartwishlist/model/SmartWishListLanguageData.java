@@ -19,7 +19,7 @@
 package com.appspot.smart_wish_list.smartwishlist.model;
 
 /**
- * Search parameters.
+ * Model definition for SmartWishListLanguageData.
  *
  * <p> This is the Java data model class that specifies how to parse/serialize into the JSON that is
  * transmitted over HTTP when working with the smartwishlist. For a detailed explanation see:
@@ -29,58 +29,37 @@ package com.appspot.smart_wish_list.smartwishlist.model;
  * @author Google, Inc.
  */
 @SuppressWarnings("javadoc")
-public final class SmartWishListSearchParameters extends com.google.api.client.json.GenericJson {
+public final class SmartWishListLanguageData extends com.google.api.client.json.GenericJson {
 
   /**
    * The value may be {@code null}.
    */
   @com.google.api.client.util.Key
-  private java.lang.String keywords;
-
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key
-  private java.lang.String region;
+  private java.lang.String language;
 
   /**
    * @return value or {@code null} for none
    */
-  public java.lang.String getKeywords() {
-    return keywords;
+  public java.lang.String getLanguage() {
+    return language;
   }
 
   /**
-   * @param keywords keywords or {@code null} for none
+   * @param language language or {@code null} for none
    */
-  public SmartWishListSearchParameters setKeywords(java.lang.String keywords) {
-    this.keywords = keywords;
-    return this;
-  }
-
-  /**
-   * @return value or {@code null} for none
-   */
-  public java.lang.String getRegion() {
-    return region;
-  }
-
-  /**
-   * @param region region or {@code null} for none
-   */
-  public SmartWishListSearchParameters setRegion(java.lang.String region) {
-    this.region = region;
+  public SmartWishListLanguageData setLanguage(java.lang.String language) {
+    this.language = language;
     return this;
   }
 
   @Override
-  public SmartWishListSearchParameters set(String fieldName, Object value) {
-    return (SmartWishListSearchParameters) super.set(fieldName, value);
+  public SmartWishListLanguageData set(String fieldName, Object value) {
+    return (SmartWishListLanguageData) super.set(fieldName, value);
   }
 
   @Override
-  public SmartWishListSearchParameters clone() {
-    return (SmartWishListSearchParameters) super.clone();
+  public SmartWishListLanguageData clone() {
+    return (SmartWishListLanguageData) super.clone();
   }
 
 }

@@ -177,7 +177,6 @@ public class SetupActivity extends AppCompatActivity {
                     Context context = getApplicationContext();
                     AppPreferences preferences = new AppPreferences(context);
                     preferences.beginEdit();
-                    preferences.setClientId(clientId);
                     preferences.setToken(token);
                     preferences.setDefaultRegion(defaultRegion);
                     preferences.setNotificationEnabled(true);
@@ -188,6 +187,9 @@ public class SetupActivity extends AppCompatActivity {
                     }
                     preferences.apply();
                     AppLogging.logDebug("storeStateFromQrCode: clientId=[" + clientId + "]");
+                    AppInitialization appInitialization = new AppInitialization(context,
+                            preferences);
+                    appInitialization.modifyClientId(clientId);
                     ApiService.CheckClientIdTask task =
                             new ApiService.CheckClientIdTask(context);
                     task.execute(clientId);

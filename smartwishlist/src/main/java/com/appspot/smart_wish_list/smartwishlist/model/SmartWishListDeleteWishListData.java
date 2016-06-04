@@ -19,7 +19,7 @@
 package com.appspot.smart_wish_list.smartwishlist.model;
 
 /**
- * Search parameters.
+ * Delete wish list data.
  *
  * <p> This is the Java data model class that specifies how to parse/serialize into the JSON that is
  * transmitted over HTTP when working with the smartwishlist. For a detailed explanation see:
@@ -29,58 +29,37 @@ package com.appspot.smart_wish_list.smartwishlist.model;
  * @author Google, Inc.
  */
 @SuppressWarnings("javadoc")
-public final class SmartWishListSearchParameters extends com.google.api.client.json.GenericJson {
+public final class SmartWishListDeleteWishListData extends com.google.api.client.json.GenericJson {
 
   /**
    * The value may be {@code null}.
    */
-  @com.google.api.client.util.Key
-  private java.lang.String keywords;
-
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key
-  private java.lang.String region;
+  @com.google.api.client.util.Key @com.google.api.client.json.JsonString
+  private java.lang.Long index;
 
   /**
    * @return value or {@code null} for none
    */
-  public java.lang.String getKeywords() {
-    return keywords;
+  public java.lang.Long getIndex() {
+    return index;
   }
 
   /**
-   * @param keywords keywords or {@code null} for none
+   * @param index index or {@code null} for none
    */
-  public SmartWishListSearchParameters setKeywords(java.lang.String keywords) {
-    this.keywords = keywords;
-    return this;
-  }
-
-  /**
-   * @return value or {@code null} for none
-   */
-  public java.lang.String getRegion() {
-    return region;
-  }
-
-  /**
-   * @param region region or {@code null} for none
-   */
-  public SmartWishListSearchParameters setRegion(java.lang.String region) {
-    this.region = region;
+  public SmartWishListDeleteWishListData setIndex(java.lang.Long index) {
+    this.index = index;
     return this;
   }
 
   @Override
-  public SmartWishListSearchParameters set(String fieldName, Object value) {
-    return (SmartWishListSearchParameters) super.set(fieldName, value);
+  public SmartWishListDeleteWishListData set(String fieldName, Object value) {
+    return (SmartWishListDeleteWishListData) super.set(fieldName, value);
   }
 
   @Override
-  public SmartWishListSearchParameters clone() {
-    return (SmartWishListSearchParameters) super.clone();
+  public SmartWishListDeleteWishListData clone() {
+    return (SmartWishListDeleteWishListData) super.clone();
   }
 
 }

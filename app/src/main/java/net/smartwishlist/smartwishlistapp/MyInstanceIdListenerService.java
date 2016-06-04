@@ -6,8 +6,8 @@ public class MyInstanceIdListenerService extends FirebaseInstanceIdService {
 
     @Override
     public void onTokenRefresh() {
-        GoogleServicesHelper.GetTokenAndSendToServerTask task =
-                new GoogleServicesHelper.GetTokenAndSendToServerTask(this);
+        ApiService.GetTokenAndSendToServerSyncTask task =
+                new ApiService.GetTokenAndSendToServerSyncTask(this);
         task.doSynchronized();
     }
 }
